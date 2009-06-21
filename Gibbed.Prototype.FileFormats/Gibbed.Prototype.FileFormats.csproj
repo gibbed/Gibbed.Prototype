@@ -47,8 +47,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CementFile.cs" />
-    <Compile Include="DdsFile.cs" />
-    <Compile Include="DdsSquish.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Pure3DFile.cs" />
     <Compile Include="Pure3D\ImageSource.cs" />
@@ -77,14 +75,10 @@
       <Project>{8F4F452E-CD1D-410F-A645-62B1C72EFE48}</Project>
       <Name>Gibbed.Prototype.Helpers</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="squish_32.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="squish_64.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    <ProjectReference Include="..\Gibbed.Squish\Gibbed.Squish.csproj">
+      <Project>{242D0738-AA4C-4C9C-A218-891A8F55559C}</Project>
+      <Name>Gibbed.Squish</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
