@@ -7,6 +7,7 @@ using System.IO;
 using Gibbed.Prototype.Helpers;
 using Gibbed.Prototype.FileFormats;
 using NConsoler;
+using Ionic.Zlib;
 
 namespace Gibbed.Prototype.Cement
 {
@@ -17,7 +18,9 @@ namespace Gibbed.Prototype.Cement
             [Required(Description = "input cement file")]
             string inputPath,
             [Required(Description = "output directory")]
-            string outputPath)
+            string outputPath,
+            [Optional(false, "rz", Description = "unpack compressed data (*.rz)")]
+            bool unpackRz)
         {
             Stream input = File.OpenRead(inputPath);
             Directory.CreateDirectory(outputPath);
@@ -31,6 +34,7 @@ namespace Gibbed.Prototype.Cement
             {
                 CementMetadata metadata = cement.GetMetadata(entry.NameHash);
 
+                bool unpacking = false;
                 string partPath;
                 if (metadata == null)
                 {
@@ -39,6 +43,16 @@ namespace Gibbed.Prototype.Cement
                 else
                 {
                     partPath = metadata.Name;
+                    if (partPath.StartsWith("\\") == true)
+                    {
+                        partPath = partPath.Substring(1);
+                    }
+
+                    if (Path.GetExtension(partPath) == ".rz" && unpackRz == true)
+                    {
+                        unpacking = true;
+                        partPath = Path.ChangeExtension(partPath, null);
+                    }
                 }
 
                 Console.WriteLine(partPath);
@@ -50,14 +64,52 @@ namespace Gibbed.Prototype.Cement
 
                 Stream output = File.Open(entryPath, FileMode.Create, FileAccess.Write, FileShare.Read);
 
-                long left = entry.Size;
-                byte[] data = new byte[4096];
-                while (left > 0)
+                if (unpacking == true)
                 {
-                    int block = (int)(Math.Min(left, 4096));
-                    input.Read(data, 0, block);
-                    output.Write(data, 0, block);
-                    left -= block;
+                    if (input.ReadASCII(4, true) != "RZ")
+                    {
+                        unpacking = false;
+                    }
+                    else
+                    {
+                        UInt32 unknown1 = input.ReadU32();
+                        int uncompressedSize = input.ReadS32();
+                        UInt32 unknown2 = input.ReadU32();
+
+                        if (unknown1 != 0 || unknown2 != 0)
+                        {
+                            throw new Exception();
+                        }
+
+                        ZlibStream zlib = new ZlibStream(input, CompressionMode.Decompress, true);
+					    int left = uncompressedSize;
+					    byte[] block = new byte[4096];
+					    while (left > 0)
+					    {
+						    int read = zlib.Read(block, 0, Math.Min(block.Length, left));
+						    if (read == 0)
+						    {
+							    break;
+						    }
+
+						    output.Write(block, 0, read);
+						    left -= read;
+					    }
+                        zlib.Close();
+                    }
+                }
+
+                if (unpacking == false)
+                {
+                    long left = entry.Size;
+                    byte[] data = new byte[4096];
+                    while (left > 0)
+                    {
+                        int block = (int)(Math.Min(left, 4096));
+                        input.Read(data, 0, block);
+                        output.Write(data, 0, block);
+                        left -= block;
+                    }
                 }
 
                 output.Close();

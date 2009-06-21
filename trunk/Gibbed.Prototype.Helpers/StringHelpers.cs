@@ -9,6 +9,11 @@ namespace Gibbed.Prototype.Helpers
     {
         public static UInt32 PrototypeHash(this string input, UInt32 seed)
         {
+            if (input.StartsWith("\\") == true)
+            {
+                input = input.Substring(1);
+            }
+
             byte[] data = Encoding.ASCII.GetBytes(input);
 
             for (int i = 0; i < data.Length; i++)
