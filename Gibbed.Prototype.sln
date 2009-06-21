@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gibbed.Prototype.Test", "Gi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gibbed.Prototype.Cement", "Gibbed.Prototype.Cement\Gibbed.Prototype.Cement.csproj", "{A3B4C645-5F6D-4574-8A43-A605E8984D38}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gibbed.Prototype.Edit3D", "Gibbed.Prototype.Edit3D\Gibbed.Prototype.Edit3D.csproj", "{D3499931-FFB7-47FF-B0BF-BC43C61F223C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -37,6 +39,10 @@ Global
 		{A3B4C645-5F6D-4574-8A43-A605E8984D38}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A3B4C645-5F6D-4574-8A43-A605E8984D38}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A3B4C645-5F6D-4574-8A43-A605E8984D38}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D3499931-FFB7-47FF-B0BF-BC43C61F223C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D3499931-FFB7-47FF-B0BF-BC43C61F223C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D3499931-FFB7-47FF-B0BF-BC43C61F223C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D3499931-FFB7-47FF-B0BF-BC43C61F223C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
