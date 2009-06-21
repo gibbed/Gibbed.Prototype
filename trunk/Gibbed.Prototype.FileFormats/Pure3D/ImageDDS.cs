@@ -7,6 +7,7 @@ using System.Text;
 using System.IO;
 using Gibbed.Helpers;
 using Gibbed.Prototype.Helpers;
+using Gibbed.Squish;
 
 namespace Gibbed.Prototype.FileFormats.Pure3D
 {
