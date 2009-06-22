@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Drawing;
-using System.Text;
 using System.IO;
+using System.Linq;
 using Gibbed.Helpers;
 using Gibbed.Prototype.Helpers;
 
@@ -55,9 +53,14 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
             this.Unknown7 = input.ReadU32();
         }
 
+        private ImageData GetSubImageDataNode()
+        {
+            return (ImageData)this.Children.SingleOrDefault(candidate => candidate is ImageData);
+        }
+
         public override System.Drawing.Image Preview()
         {
-            ImageData data = (ImageData)this.Children.SingleOrDefault(candidate => candidate is ImageData);
+            ImageData data = this.GetSubImageDataNode();
             if (data == null)
             {
                 return null;
@@ -68,6 +71,52 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
             memory.Seek(0, SeekOrigin.Begin);
 
             return Bitmap.FromStream(memory);
+        }
+
+        public override bool Exportable
+        {
+            get
+            {
+                Node node = this.GetSubImageDataNode();
+                if (node == null)
+                {
+                    return false;
+                }
+                return node.Exportable;
+            }
+        }
+
+        public override void Export(Stream output)
+        {
+            Node node = this.GetSubImageDataNode();
+            if (node == null)
+            {
+                throw new InvalidOperationException();
+            }
+            node.Export(output);
+        }
+
+        public override bool Importable
+        {
+            get
+            {
+                Node node = this.GetSubImageDataNode();
+                if (node == null)
+                {
+                    return false;
+                }
+                return node.Exportable;
+            }
+        }
+
+        public override void Import(Stream input)
+        {
+            Node node = this.GetSubImageDataNode();
+            if (node == null)
+            {
+                throw new InvalidOperationException();
+            }
+            node.Import(input);
         }
     }
 }
