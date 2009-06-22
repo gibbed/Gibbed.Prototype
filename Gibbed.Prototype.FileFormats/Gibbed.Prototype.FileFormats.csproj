@@ -66,10 +66,13 @@
     <Compile Include="Pure3D\TypeIdConverter.cs" />
     <Compile Include="Pure3D\Camera.cs" />
     <Compile Include="Pure3D\NewShader.cs" />
+    <Compile Include="Pure3D\ShaderCode.cs" />
+    <Compile Include="Pure3D\ShaderGlobalVariable.cs" />
     <Compile Include="Pure3D\U00011016.cs" />
     <Compile Include="Pure3D\U00011017.cs" />
     <Compile Include="Pure3D\U00011018.cs" />
     <Compile Include="Pure3D\U00011020.cs" />
+    <Compile Include="Pure3D\U00011115.cs" />
     <Compile Include="Pure3D\U00019008.cs" />
     <Compile Include="Pure3D\U00022001.cs" />
     <Compile Include="Pure3D\TextureData.cs" />
