@@ -133,15 +133,21 @@ namespace Gibbed.Prototype.FileFormats
 
         public void Deserialize(Stream input)
         {
-            if (input.ReadU32() != 0xFF443350)
+            UInt32 magic = input.ReadU32();
+
+            if (magic == 0x503344FF)
             {
-                throw new Exception();
+                throw new FormatException("no support for big-endian Pure3D files");
+            }
+            else if (magic != 0xFF443350)
+            {
+                throw new FormatException("not a Pure3D file");
             }
 
             UInt32 headerSize = input.ReadU32();
             if (headerSize != 12)
             {
-                throw new Exception();
+                throw new FormatException("invalid header size");
             }
 
             UInt32 dataSize = input.ReadU32();
