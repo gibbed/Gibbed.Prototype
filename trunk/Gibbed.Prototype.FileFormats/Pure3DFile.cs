@@ -1,12 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Gibbed.Helpers;
 using System.IO;
-using System.Runtime.InteropServices;
 using System.Reflection;
-using Gibbed.Prototype.Helpers;
+using Gibbed.Helpers;
 
 namespace Gibbed.Prototype.FileFormats
 {
@@ -14,9 +10,41 @@ namespace Gibbed.Prototype.FileFormats
     {
         public List<Pure3D.Node> Nodes;
 
+        private void SerializeNode(Stream output, Pure3D.Node node)
+        {
+            Stream nodeStream = new MemoryStream();
+            node.Serialize(nodeStream);
+
+            Stream childrenStream = new MemoryStream();
+            foreach (Pure3D.Node child in node.Children)
+            {
+                this.SerializeNode(childrenStream, child);
+            }
+
+            output.WriteU32(node.TypeId);
+            output.WriteU32((UInt32)(12 + nodeStream.Length));
+            output.WriteU32((UInt32)(12 + nodeStream.Length + childrenStream.Length));
+
+            nodeStream.Seek(0, SeekOrigin.Begin);
+            output.WriteFromStream(nodeStream, nodeStream.Length);
+
+            childrenStream.Seek(0, SeekOrigin.Begin);
+            output.WriteFromStream(childrenStream, childrenStream.Length);
+        }
+
         public void Serialize(Stream output)
         {
-            throw new NotImplementedException();
+            Stream nodesStream = new MemoryStream();
+            foreach (Pure3D.Node node in this.Nodes)
+            {
+                this.SerializeNode(nodesStream, node);
+            }
+
+            output.WriteU32(0xFF443350);
+            output.WriteU32(12);
+            output.WriteU32((UInt32)(12 + nodesStream.Length));
+            nodesStream.Seek(0, SeekOrigin.Begin);
+            output.WriteFromStream(nodesStream, nodesStream.Length);
         }
 
         #region TypeCache

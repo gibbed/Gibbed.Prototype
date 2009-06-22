@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
-using Gibbed.Helpers;
+﻿using System.IO;
 using Gibbed.Prototype.Helpers;
 
 namespace Gibbed.Prototype.FileFormats.Pure3D

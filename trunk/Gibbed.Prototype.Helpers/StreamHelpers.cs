@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.IO;
-using Gibbed.Helpers;
+﻿using System.IO;
 using System.Text;
+using Gibbed.Helpers;
 
 namespace Gibbed.Prototype.Helpers
 {
@@ -40,15 +37,30 @@ namespace Gibbed.Prototype.Helpers
                 stream.WriteU8(0);
                 return;
             }
-            else if (value.Length > 254)
+            else if (value.Length > 255)
             {
-                value = value.Substring(0, 254);
+                value = value.Substring(0, 255);
             }
 
-            stream.WriteU8((byte)(value.Length + 1));
+            int padding = value.Length % 4;
+            if (padding > 0)
+            {
+                padding = 4 - padding;
+                if (value.Length + padding >= 255)
+                {
+                    padding = 255 - value.Length;
+                }
+            }
+
+            stream.WriteU8((byte)(value.Length + padding));
             byte[] data = Encoding.ASCII.GetBytes(value);
             stream.Write(data, 0, data.Length);
-            stream.WriteByte(0);
+
+            if (padding > 0)
+            {
+                byte[] junk = new byte[padding];
+                stream.Write(junk, 0, junk.Length);
+            }
         }
     }
 

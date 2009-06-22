@@ -1,9 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
+using System.Linq;
 using Gibbed.Helpers;
 using Gibbed.Prototype.Helpers;
 
@@ -63,15 +61,66 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
             this.Unknown9 = input.ReadU32();
         }
 
+        private Node GetSubImageNode()
+        {
+            return this.Children.SingleOrDefault(candidate => (candidate is ImageDDS) || (candidate is ImagePNG));
+        }
+
         public override System.Drawing.Image Preview()
         {
-            Node node = this.Children.SingleOrDefault(candidate => (candidate is ImageDDS) || (candidate is ImagePNG));
+            Node node = this.GetSubImageNode();
             if (node == null)
             {
                 return null;
             }
 
             return node.Preview();
+        }
+
+        public override bool Exportable
+        {
+            get
+            {
+                Node node = this.GetSubImageNode();
+                if (node == null)
+                {
+                    return false;
+                }
+                return node.Exportable;
+            }
+        }
+
+        public override void Export(Stream output)
+        {
+            Node node = this.GetSubImageNode();
+            if (node == null)
+            {
+                throw new InvalidOperationException();
+            }
+            node.Export(output);
+        }
+
+        public override bool Importable
+        {
+            get
+            {
+                Node node = this.GetSubImageNode();
+                if (node == null)
+                {
+                    return false;
+                }
+                return node.Exportable;
+            }
+        }
+
+        public override void Import(Stream input)
+        {
+            Node node = this.GetSubImageNode();
+            if (node == null)
+            {
+                throw new InvalidOperationException();
+            }
+            node.Import(input);
         }
     }
 }

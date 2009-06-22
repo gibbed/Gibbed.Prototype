@@ -40,7 +40,9 @@
             this.newFileButton = new System.Windows.Forms.ToolStripButton();
             this.openFileButton = new System.Windows.Forms.ToolStripButton();
             this.saveFileButton = new System.Windows.Forms.ToolStripButton();
-            this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
+            this.openPure3DFileDialog = new System.Windows.Forms.OpenFileDialog();
+            this.exportNodeFileDialog = new System.Windows.Forms.SaveFileDialog();
+            this.importNodeFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
@@ -136,6 +138,7 @@
             this.exportNodeButton.Name = "exportNodeButton";
             this.exportNodeButton.Size = new System.Drawing.Size(23, 22);
             this.exportNodeButton.Text = "Export Node Data";
+            this.exportNodeButton.Click += new System.EventHandler(this.OnNodeExport);
             // 
             // importNodeButton
             // 
@@ -145,6 +148,7 @@
             this.importNodeButton.Name = "importNodeButton";
             this.importNodeButton.Size = new System.Drawing.Size(23, 22);
             this.importNodeButton.Text = "Import Node Data";
+            this.importNodeButton.Click += new System.EventHandler(this.OnNodeImport);
             // 
             // editorToolStrip
             // 
@@ -176,7 +180,7 @@
             this.openFileButton.Name = "openFileButton";
             this.openFileButton.Size = new System.Drawing.Size(23, 22);
             this.openFileButton.Text = "Open Pure3D File";
-            this.openFileButton.Click += new System.EventHandler(this.OnOpenFile);
+            this.openFileButton.Click += new System.EventHandler(this.OnFileOpen);
             // 
             // saveFileButton
             // 
@@ -186,11 +190,20 @@
             this.saveFileButton.Name = "saveFileButton";
             this.saveFileButton.Size = new System.Drawing.Size(23, 22);
             this.saveFileButton.Text = "Save Pure3D File";
+            this.saveFileButton.Click += new System.EventHandler(this.OnFileSave);
             // 
-            // openFileDialog
+            // openPure3DFileDialog
             // 
-            this.openFileDialog.DefaultExt = "p3d";
-            this.openFileDialog.Filter = "Pure3D Files (*.p3d)|*.p3d|All Files (*.*)|*.*";
+            this.openPure3DFileDialog.DefaultExt = "p3d";
+            this.openPure3DFileDialog.Filter = "Pure3D Files (*.p3d)|*.p3d|All Files (*.*)|*.*";
+            // 
+            // exportNodeFileDialog
+            // 
+            this.exportNodeFileDialog.Filter = "All Files (*.*)|*.*";
+            // 
+            // importNodeFileDialog
+            // 
+            this.importNodeFileDialog.Filter = "All Files (*.*)|*.*";
             // 
             // Editor
             // 
@@ -233,7 +246,9 @@
         private System.Windows.Forms.ToolStripButton exportNodeButton;
         private System.Windows.Forms.ToolStripButton importNodeButton;
         private System.Windows.Forms.PictureBox previewPicture;
-        private System.Windows.Forms.OpenFileDialog openFileDialog;
+        private System.Windows.Forms.OpenFileDialog openPure3DFileDialog;
+        private System.Windows.Forms.SaveFileDialog exportNodeFileDialog;
+        private System.Windows.Forms.OpenFileDialog importNodeFileDialog;
     }
 }
 

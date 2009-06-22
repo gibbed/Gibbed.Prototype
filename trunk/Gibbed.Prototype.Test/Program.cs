@@ -4,8 +4,8 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using Gibbed.Helpers;
-using Gibbed.Prototype.Helpers;
 using Gibbed.Prototype.FileFormats;
+using Gibbed.Prototype.Helpers;
 
 namespace Gibbed.Prototype.Test
 {
