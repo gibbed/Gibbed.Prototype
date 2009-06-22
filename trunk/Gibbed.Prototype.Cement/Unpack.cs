@@ -82,19 +82,19 @@ namespace Gibbed.Prototype.Cement
                         }
 
                         ZlibStream zlib = new ZlibStream(input, CompressionMode.Decompress, true);
-					    int left = uncompressedSize;
-					    byte[] block = new byte[4096];
-					    while (left > 0)
-					    {
-						    int read = zlib.Read(block, 0, Math.Min(block.Length, left));
-						    if (read == 0)
-						    {
-							    break;
-						    }
+                        int left = uncompressedSize;
+                        byte[] block = new byte[4096];
+                        while (left > 0)
+                        {
+                            int read = zlib.Read(block, 0, Math.Min(block.Length, left));
+                            if (read == 0)
+                            {
+                                break;
+                            }
 
-						    output.Write(block, 0, read);
-						    left -= read;
-					    }
+                            output.Write(block, 0, read);
+                            left -= read;
+                        }
                         zlib.Close();
                     }
                 }
