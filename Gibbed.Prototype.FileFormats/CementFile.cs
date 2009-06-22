@@ -14,16 +14,16 @@ namespace Gibbed.Prototype.FileFormats
         public UInt32 Offset;
         public UInt32 Size;
 
-        public void Serialize(Stream output)
+        public void Serialize(Stream output, bool littleEndian)
         {
             throw new NotImplementedException();
         }
 
-        public void Deserialize(Stream input)
+        public void Deserialize(Stream input, bool littleEndian)
         {
-            this.NameHash = input.ReadU32();
-            this.Offset = input.ReadU32();
-            this.Size = input.ReadU32();
+            this.NameHash = input.ReadU32(littleEndian);
+            this.Offset = input.ReadU32(littleEndian);
+            this.Size = input.ReadU32(littleEndian);
         }
     }
 
@@ -35,12 +35,12 @@ namespace Gibbed.Prototype.FileFormats
         public string Name;
         public byte[] Unknown3;
 
-        public void Serialize(Stream output)
+        public void Serialize(Stream output, bool littleEndian)
         {
             throw new NotImplementedException();
         }
 
-        public void Deserialize(Stream input)
+        public void Deserialize(Stream input, bool littleEndian)
         {
             this.TypeHash = input.ReadU32();
             this.Alignment = input.ReadU32();
@@ -60,10 +60,11 @@ namespace Gibbed.Prototype.FileFormats
             public string Magic;
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 8)]
             private byte[] Padding1;
-            public byte VersionA;
-            public byte VersionB;
-            public byte VersionC;
-            public byte VersionD;
+            public byte MajorVersion;
+            public byte MinorVersion;
+            [MarshalAs(UnmanagedType.I1)]
+            public bool BigEndian;
+            public byte Unknown1;
             public UInt32 IndexOffset;
             public UInt32 IndexSize;
             public UInt32 MetadataOffset;
@@ -71,6 +72,11 @@ namespace Gibbed.Prototype.FileFormats
             public UInt32 Unknown2;
             public UInt32 EntryCount;
         }
+
+        public byte MajorVersion;
+        public byte MinorVersion;
+        public bool BigEndian;
+        public byte Unknown1;
 
         public List<CementEntry> Entries;
         public List<CementMetadata> Metadatas;
@@ -91,20 +97,35 @@ namespace Gibbed.Prototype.FileFormats
 
             if (header.Magic != "ATG CORE CEMENT LIBRARY")
             {
-                throw new Exception("not a cement file");
+                throw new FormatException("not a cement file");
             }
 
-            if (header.VersionA != 2 || header.VersionB >= 2 || header.VersionC != 0 || header.VersionD == 0)
+            if (header.MajorVersion != 2 || header.MinorVersion >= 2 || header.Unknown1 == 0)
             {
-                throw new Exception("bad version");
+                throw new FormatException("bad cement version");
             }
+
+            if (header.BigEndian == true)
+            {
+                header.IndexOffset = header.IndexOffset.Swap();
+                header.IndexSize = header.IndexSize.Swap();
+                header.MetadataOffset = header.MetadataOffset.Swap();
+                header.MetadataSize = header.MetadataSize.Swap();
+                header.Unknown2 = header.Unknown2.Swap();
+                header.EntryCount = header.EntryCount.Swap();
+            }
+
+            this.MajorVersion = header.MajorVersion;
+            this.MinorVersion = header.MinorVersion;
+            this.BigEndian = header.BigEndian;
+            this.Unknown1 = header.Unknown1;
 
             input.Seek(header.IndexOffset, SeekOrigin.Begin);
             this.Entries = new List<CementEntry>();
             for (int i = 0; i < header.EntryCount; i++)
             {
                 CementEntry entry = new CementEntry();
-                entry.Deserialize(input);
+                entry.Deserialize(input, header.BigEndian == false);
                 this.Entries.Add(entry);
             }
 
@@ -115,7 +136,7 @@ namespace Gibbed.Prototype.FileFormats
             for (int i = 0; i < header.EntryCount; i++)
             {
                 CementMetadata metadata = new CementMetadata();
-                metadata.Deserialize(input);
+                metadata.Deserialize(input, header.BigEndian == false);
                 this.Metadatas.Add(metadata);
             }
         }

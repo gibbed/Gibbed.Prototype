@@ -50,7 +50,8 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
             }
         }
 
-        public UInt32 Unknown1 { get; set; }
+        [DisplayName("Global Variable Count")]
+        public UInt32 GlobalVariableCount { get; set; }
         public ICode Code { get; set; }
 
         public override string ToString()
@@ -90,7 +91,7 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
         {
             UInt32 dataType = input.ReadU32();
             int length = input.ReadS32();
-            this.Unknown1 = input.ReadU32();
+            this.GlobalVariableCount = input.ReadU32();
 
             Stream codeStream = input.ReadToMemoryStream(length);
             ICode code;
