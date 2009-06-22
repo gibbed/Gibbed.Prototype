@@ -13,12 +13,6 @@ namespace Gibbed.Prototype.Test
     {
         static void Main(string[] args)
         {
-            //Stream input = File.OpenRead("T:\\Projects\\Prototype\\other\\dummy.p3d");
-            //Stream input = File.OpenRead("T:\\Projects\\Prototype\\other\\e09m01_tod.p3d");
-            Stream input = File.OpenRead("T:\\Projects\\Prototype\\other\\manhattanTest_fig.p3d");
-            Pure3DFile p3d = new Pure3DFile();
-            p3d.Deserialize(input);
-            input.Close();
         }
     }
 }
