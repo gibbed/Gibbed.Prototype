@@ -12,14 +12,14 @@ namespace Gibbed.Prototype.FileFormats
 
         private void SerializeNode(Stream output, Pure3D.Node node)
         {
-            Stream nodeStream = new MemoryStream();
-            node.Serialize(nodeStream);
-
             Stream childrenStream = new MemoryStream();
             foreach (Pure3D.Node child in node.Children)
             {
                 this.SerializeNode(childrenStream, child);
             }
+
+            Stream nodeStream = new MemoryStream();
+            node.Serialize(nodeStream);
 
             output.WriteU32(node.TypeId);
             output.WriteU32((UInt32)(12 + nodeStream.Length));
@@ -114,17 +114,18 @@ namespace Gibbed.Prototype.FileFormats
             }
 
             Stream nodeStream = input.ReadToMemoryStream(thisSize);
+            Stream childrenStream = input.ReadToMemoryStream(childrenSize);
+
+            while (childrenStream.Position < childrenStream.Length)
+            {
+                node.Children.Add(this.DeserializeNode(childrenStream));
+            }
+
             node.Deserialize(nodeStream);
 
             if (nodeStream.Position != nodeStream.Length)
             {
                 throw new Exception();
-            }
-
-            Stream childrenStream = input.ReadToMemoryStream(childrenSize);
-            while (childrenStream.Position < childrenStream.Length)
-            {
-                node.Children.Add(this.DeserializeNode(childrenStream));
             }
 
             return node;

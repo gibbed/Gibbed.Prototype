@@ -4,7 +4,7 @@ using Gibbed.Helpers;
 namespace Gibbed.Prototype.FileFormats.Pure3D
 {
     [KnownType(0x07F00001)]
-    public class U07F00001 : Node
+    public class MetaObjectData : Node
     {
         public byte[] Data { get; set; }
 

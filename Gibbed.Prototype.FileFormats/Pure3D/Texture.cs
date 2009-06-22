@@ -8,7 +8,7 @@ using Gibbed.Prototype.Helpers;
 namespace Gibbed.Prototype.FileFormats.Pure3D
 {
     [KnownType(0x00019000)]
-    public class Image : Node
+    public class Texture : Node
     {
         public string Name { get; set; }
         public UInt32 Unknown1 { get; set; }
@@ -30,7 +30,12 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
 
         public override string ToString()
         {
-            return "Image (" + this.Name + ")";
+            if (this.Name == null || this.Name.Length == 0)
+            {
+                return base.ToString();
+            }
+
+            return base.ToString() + " (" + this.Name + ")";
         }
 
         public override void Serialize(Stream output)
@@ -63,7 +68,7 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
 
         private Node GetSubImageNode()
         {
-            return this.Children.SingleOrDefault(candidate => (candidate is ImageDDS) || (candidate is ImagePNG));
+            return this.Children.SingleOrDefault(candidate => (candidate is TextureDDS) || (candidate is TexturePNG));
         }
 
         public override System.Drawing.Image Preview()

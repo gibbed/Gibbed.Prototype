@@ -1,16 +1,24 @@
-﻿using System.IO;
+﻿using System.ComponentModel;
+using System.IO;
 using Gibbed.Helpers;
 
 namespace Gibbed.Prototype.FileFormats.Pure3D
 {
     [KnownType(0x00019002)]
-    public class ImageData : Node
+    public class TextureData : Node
     {
-        public byte[] Data;
+        [Category("Image")]
+        [ReadOnly(true)]
+        public byte[] Data { get; set; }
 
         public override string ToString()
         {
-            return "Image Data (" + this.Data.Length.ToString() + " bytes)";
+            if (this.Data == null || this.Data.Length == 0)
+            {
+                return base.ToString();
+            }
+
+            return base.ToString() + " (" + this.Data.Length.ToString() + " bytes)";
         }
 
         public override void Serialize(Stream output)

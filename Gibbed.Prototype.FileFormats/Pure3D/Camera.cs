@@ -6,9 +6,9 @@ using Gibbed.Prototype.Helpers;
 namespace Gibbed.Prototype.FileFormats.Pure3D
 {
     [KnownType(0x00002200)]
-    public class U00002200 : Node
+    public class Camera : Node
     {
-        public string Unknown1 { get; set; }
+        public string Name { get; set; }
         public UInt32 Unknown2 { get; set; }
         public float Unknown3 { get; set; }
         public float Unknown4 { get; set; }
@@ -18,9 +18,19 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
         public float[] Unknown8 { get; set; }
         public float[] Unknown9 { get; set; }
 
+        public override string ToString()
+        {
+            if (this.Name == null || this.Name.Length == 0)
+            {
+                return base.ToString();
+            }
+
+            return base.ToString() + " (" + this.Name + ")";
+        }
+
         public override void Serialize(Stream output)
         {
-            output.WriteBASCII(this.Unknown1);
+            output.WriteBASCII(this.Name);
             output.WriteU32(this.Unknown2);
             output.WriteF32(this.Unknown3);
             output.WriteF32(this.Unknown4);
@@ -39,7 +49,7 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
 
         public override void Deserialize(Stream input)
         {
-            this.Unknown1 = input.ReadBASCII();
+            this.Name = input.ReadBASCII();
             this.Unknown2 = input.ReadU32();
             this.Unknown3 = input.ReadF32();
             this.Unknown4 = input.ReadF32();
