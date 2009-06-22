@@ -22,6 +22,7 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
         */
 
         [ReadOnly(true)]
+        [Category("Pure3D")]
         public byte[] Data { get; set; }
 
         public override string ToString()

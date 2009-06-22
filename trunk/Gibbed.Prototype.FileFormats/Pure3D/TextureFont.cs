@@ -6,7 +6,7 @@ using Gibbed.Prototype.Helpers;
 namespace Gibbed.Prototype.FileFormats.Pure3D
 {
     [KnownType(0x00022000)]
-    public class Font : Node
+    public class TextureFont : Node
     {
         public UInt32 Unknown1 { get; set; }
         public string Name { get; set; }
@@ -19,7 +19,12 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
 
         public override string ToString()
         {
-            return "Font (" + this.Name.ToString() + ")";
+            if (this.Name == null || this.Name.Length == 0)
+            {
+                return base.ToString();
+            }
+
+            return base.ToString() + " (" + this.Name + ")";
         }
 
         public override void Serialize(Stream output)

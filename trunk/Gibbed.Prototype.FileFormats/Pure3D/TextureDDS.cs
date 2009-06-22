@@ -9,7 +9,7 @@ using Gibbed.Squish;
 namespace Gibbed.Prototype.FileFormats.Pure3D
 {
     [KnownType(0x00019006)]
-    public class ImageDDS : Node
+    public class TextureDDS : Node
     {
         public enum CompressionAlgorithm : uint
         {
@@ -41,10 +41,10 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
         {
             if (this.Name == null || this.Name.Length == 0)
             {
-                return "Image DDS";
+                return base.ToString();
             }
 
-            return "Image DDS (" + this.Name + ")";
+            return base.ToString() + " (" + this.Name + ")";
         }
 
         public override void Serialize(Stream output)
@@ -71,14 +71,14 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
             this.Algorithm = (CompressionAlgorithm)input.ReadU32();
         }
 
-        private ImageData GetSubImageDataNode()
+        private TextureData GetSubImageDataNode()
         {
-            return (ImageData)this.Children.SingleOrDefault(candidate => candidate is ImageData);
+            return (TextureData)this.Children.SingleOrDefault(candidate => candidate is TextureData);
         }
 
         public override System.Drawing.Image Preview()
         {
-            ImageData data = this.GetSubImageDataNode();
+            TextureData data = this.GetSubImageDataNode();
             if (data == null)
             {
                 return null;
@@ -88,10 +88,16 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
             memory.Write(data.Data, 0, data.Data.Length);
             memory.Seek(0, SeekOrigin.Begin);
 
-            DdsFile dds = new DdsFile();
-            dds.Load(memory);
-
-            return dds.Image();
+            try
+            {
+                DdsFile dds = new DdsFile();
+                dds.Load(memory);
+                return dds.Image();
+            }
+            catch (FormatException)
+            {
+                return null;
+            }
         }
 
         public override bool Exportable

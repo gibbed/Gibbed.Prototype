@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -8,12 +9,17 @@ using Gibbed.Prototype.Helpers;
 namespace Gibbed.Prototype.FileFormats.Pure3D
 {
     [KnownType(0x00019001)]
-    public class ImagePNG : Node
+    public class TexturePNG : Node
     {
         public string Name { get; set; }
         public UInt32 Unknown1 { get; set; }
-        public UInt32 Unknown2 { get; set; }
-        public UInt32 Unknown3 { get; set; }
+
+        [Category("Image")]
+        public UInt32 Width { get; set; }
+
+        [Category("Image")]
+        public UInt32 Height { get; set; }
+
         public UInt32 Unknown4 { get; set; }
         public UInt32 Unknown5 { get; set; }
         public UInt32 Unknown6 { get; set; }
@@ -23,18 +29,18 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
         {
             if (this.Name == null || this.Name.Length == 0)
             {
-                return "Image PNG";
+                return base.ToString();
             }
 
-            return "Image PNG (" + this.Name + ")";
+            return base.ToString() + " (" + this.Name + ")";
         }
 
         public override void Serialize(Stream output)
         {
             output.WriteBASCII(this.Name);
             output.WriteU32(this.Unknown1);
-            output.WriteU32(this.Unknown2);
-            output.WriteU32(this.Unknown3);
+            output.WriteU32(this.Width);
+            output.WriteU32(this.Height);
             output.WriteU32(this.Unknown4);
             output.WriteU32(this.Unknown5);
             output.WriteU32(this.Unknown6);
@@ -45,22 +51,22 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
         {
             this.Name = input.ReadBASCII();
             this.Unknown1 = input.ReadU32();
-            this.Unknown2 = input.ReadU32();
-            this.Unknown3 = input.ReadU32();
+            this.Width = input.ReadU32();
+            this.Height = input.ReadU32();
             this.Unknown4 = input.ReadU32();
             this.Unknown5 = input.ReadU32();
             this.Unknown6 = input.ReadU32();
             this.Unknown7 = input.ReadU32();
         }
 
-        private ImageData GetSubImageDataNode()
+        private TextureData GetSubImageDataNode()
         {
-            return (ImageData)this.Children.SingleOrDefault(candidate => candidate is ImageData);
+            return (TextureData)this.Children.SingleOrDefault(candidate => candidate is TextureData);
         }
 
         public override System.Drawing.Image Preview()
         {
-            ImageData data = this.GetSubImageDataNode();
+            TextureData data = this.GetSubImageDataNode();
             if (data == null)
             {
                 return null;
