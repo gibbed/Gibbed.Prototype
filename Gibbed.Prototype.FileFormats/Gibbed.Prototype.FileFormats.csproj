@@ -47,6 +47,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CementFile.cs" />
+    <Compile Include="FightFile.cs" />
+    <Compile Include="FightHashes.cs" />
+    <Compile Include="Fight\BranchBase.cs" />
+    <Compile Include="Fight\BranchCache.cs" />
+    <Compile Include="Fight\ConditionBase.cs" />
+    <Compile Include="Fight\ConditionCache.cs" />
+    <Compile Include="Fight\ContextBase.cs" />
+    <Compile Include="Fight\Branch\Bank.cs" />
+    <Compile Include="Fight\Context\PropLogic.cs" />
+    <Compile Include="Fight\KnownBranchAttribute.cs" />
+    <Compile Include="Fight\KnownConditionAttribute.cs" />
+    <Compile Include="Fight\KnownContextAttribute.cs" />
+    <Compile Include="Fight\Context\Scenario.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Pure3DFile.cs" />
     <Compile Include="Pure3D\CompositeDrawable.cs" />
@@ -81,9 +94,9 @@
     <Compile Include="Pure3D\U00022006.cs" />
     <Compile Include="Pure3D\Animation.cs" />
     <Compile Include="Pure3D\U00121006.cs" />
-    <Compile Include="Pure3D\MetaObject.cs" />
+    <Compile Include="Pure3D\MetaObjectDefinition.cs" />
     <Compile Include="Pure3D\MetaObjectData.cs" />
-    <Compile Include="Pure3D\Fight.cs" />
+    <Compile Include="Pure3D\FightDefinition.cs" />
     <Compile Include="Pure3D\FightData.cs" />
     <Compile Include="Pure3D\Unknown.cs" />
     <Compile Include="Pure3D\VertexOffsetExpressionMixer.cs" />
@@ -101,6 +114,9 @@
       <Project>{242D0738-AA4C-4C9C-A218-891A8F55559C}</Project>
       <Name>Gibbed.Squish</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Fight\Condition\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

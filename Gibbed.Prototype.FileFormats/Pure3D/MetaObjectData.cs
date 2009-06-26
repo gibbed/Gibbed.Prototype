@@ -20,5 +20,32 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
             this.Data = new byte[length];
             input.Read(this.Data, 0, this.Data.Length);
         }
+
+        public override bool Exportable
+        {
+            get
+            {
+                return this.Data != null && this.Data.Length > 0;
+            }
+        }
+
+        public override void Export(Stream output)
+        {
+            output.Write(this.Data, 0, this.Data.Length);
+        }
+
+        public override bool Importable
+        {
+            get
+            {
+                return true;
+            }
+        }
+
+        public override void Import(Stream input)
+        {
+            this.Data = new byte[input.Length];
+            input.Read(this.Data, 0, this.Data.Length);
+        }
     }
 }

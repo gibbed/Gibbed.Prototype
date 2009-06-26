@@ -1,12 +1,13 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using Gibbed.Helpers;
 using Gibbed.Prototype.Helpers;
 
 namespace Gibbed.Prototype.FileFormats.Pure3D
 {
     [KnownType(0x07F00000)]
-    public class MetaObject : Node
+    public class MetaObjectDefinition : Node
     {
         public string LongName { get; set; }
         public string ShortName { get; set; }
@@ -43,6 +44,57 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
             this.Unknown4 = input.ReadU16();
             this.Unknown5 = input.ReadU16();
             this.Unknown6 = input.ReadU32();
+        }
+
+        private MetaObjectData GetChildData()
+        {
+            return (MetaObjectData)this.Children.SingleOrDefault(candidate => candidate is MetaObjectData);
+        }
+
+        public override bool Exportable
+        {
+            get
+            {
+                Node node = this.GetChildData();
+                if (node == null)
+                {
+                    return false;
+                }
+                return node.Exportable;
+            }
+        }
+
+        public override void Export(Stream output)
+        {
+            Node node = this.GetChildData();
+            if (node == null)
+            {
+                throw new InvalidOperationException();
+            }
+            node.Export(output);
+        }
+
+        public override bool Importable
+        {
+            get
+            {
+                Node node = this.GetChildData();
+                if (node == null)
+                {
+                    return false;
+                }
+                return node.Exportable;
+            }
+        }
+
+        public override void Import(Stream input)
+        {
+            Node node = this.GetChildData();
+            if (node == null)
+            {
+                throw new InvalidOperationException();
+            }
+            node.Import(input);
         }
     }
 }
