@@ -11,47 +11,6 @@ namespace Gibbed.Prototype.FileFormats
 {
     public class FightFile
     {
-        #region ContextCache
-        // Lame ass way to do this but, it'll work for now.
-        private static class ContextCache
-        {
-            private static Dictionary<UInt64, Type> Lookup = null;
-
-            private static void BuildLookup()
-            {
-                Lookup = new Dictionary<UInt64, Type>();
-
-                foreach (Type type in Assembly.GetAssembly(typeof(ContextCache)).GetTypes())
-                {
-                    if (type.IsSubclassOf(typeof(Fight.ContextBase)) == true)
-                    {
-                        object[] attributes = type.GetCustomAttributes(typeof(Fight.KnownContextAttribute), false);
-                        if (attributes.Length == 1)
-                        {
-                            Fight.KnownContextAttribute attribute = (Fight.KnownContextAttribute)attributes[0];
-                            Lookup.Add(attribute.Hash, type);
-                        }
-                    }
-                }
-            }
-
-            public static Type GetContext(UInt64 hash)
-            {
-                if (Lookup == null)
-                {
-                    BuildLookup();
-                }
-
-                if (Lookup.ContainsKey(hash))
-                {
-                    return Lookup[hash];
-                }
-
-                return null;
-            }
-        }
-        #endregion
-
         public UInt64 ReadHash100F4(Stream stream)
         {
             if (this.HashesArePrecalculated)
@@ -126,7 +85,7 @@ namespace Gibbed.Prototype.FileFormats
                 throw new Exception();
             }
 
-            Type contextType = ContextCache.GetContext(contextHash);
+            Type contextType = Fight.ContextCache.GetContext(contextHash);
             if (contextType == null)
             {
                 throw new InvalidOperationException("unknown context type (" + contextHash.ToString("X16") + ")");
