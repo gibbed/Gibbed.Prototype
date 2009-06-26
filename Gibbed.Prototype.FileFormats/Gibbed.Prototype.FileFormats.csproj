@@ -55,6 +55,7 @@
     <Compile Include="Fight\ConditionCache.cs" />
     <Compile Include="Fight\ContextBase.cs" />
     <Compile Include="Fight\Branch\Bank.cs" />
+    <Compile Include="Fight\ContextCache.cs" />
     <Compile Include="Fight\Context\PropLogic.cs" />
     <Compile Include="Fight\KnownBranchAttribute.cs" />
     <Compile Include="Fight\KnownConditionAttribute.cs" />

@@ -4,7 +4,7 @@ using System.Reflection;
 
 namespace Gibbed.Prototype.FileFormats.Fight
 {
-    public static class ConditionCache
+    internal static class ConditionCache
     {
         private static Dictionary<Type, Dictionary<UInt64, Type>> Lookup = null;
 
