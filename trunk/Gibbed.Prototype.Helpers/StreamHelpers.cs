@@ -6,6 +6,14 @@ namespace Gibbed.Prototype.Helpers
 {
     public static partial class StreamHelpers
     {
+        public static string ReadAlignedASCII(this Stream stream)
+        {
+            int length = stream.ReadS32();
+            byte[] data = new byte[length];
+            stream.ReadAligned(data, 0, data.Length, 4);
+            return Encoding.ASCII.GetString(data);
+        }
+
         public static string ReadBASCII(this Stream stream)
         {
             byte size = stream.ReadU8();
