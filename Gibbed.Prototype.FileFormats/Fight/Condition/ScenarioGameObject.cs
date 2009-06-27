@@ -100,7 +100,7 @@ namespace Gibbed.Prototype.FileFormats.Fight.Condition
             }
             this.GameObjectSlot = (ScenarioGameObjectSlot)(type);
 
-            this.GameObjectNameHash = fight.ReadHash100F4(input);
+            this.GameObjectNameHash = fight.ReadNameHash(input);
         }
     }
 }

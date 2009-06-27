@@ -29,8 +29,8 @@ namespace Gibbed.Prototype.FileFormats.Fight.Condition
 
         public override void Deserialize(Stream input, FightFile fight)
         {
-            this.GameObjectNameHash = fight.ReadHash100F4(input);
-            this.TriggerNameHash = fight.ReadHash100F4(input);
+            this.GameObjectNameHash = fight.ReadNameHash(input);
+            this.TriggerNameHash = fight.ReadNameHash(input);
             this.Direction = fight.ReadEnum<Direction>(input);
         }
     }

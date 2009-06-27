@@ -21,7 +21,7 @@ namespace Gibbed.Prototype.FileFormats
             return (T)Enum.ToObject(typeof(T), value);
         }
 
-        public UInt64 ReadHash100F4(Stream stream)
+        public UInt64 ReadNameHash(Stream stream)
         {
             if (this.HashesArePrecalculated)
             {
@@ -83,9 +83,9 @@ namespace Gibbed.Prototype.FileFormats
             this.Unknown2 = input.ReadU32();
             this.Unknown3 = input.ReadU32();
 
-            this.NameHash = this.ReadHash100F4(input);
+            this.NameHash = this.ReadNameHash(input);
             
-            UInt64 contextHash = this.ReadHash100F4(input);
+            UInt64 contextHash = this.ReadNameHash(input);
 
             this.Path = input.ReadAlignedASCII();
             this.Unknown4 = input.ReadU32();

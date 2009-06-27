@@ -72,7 +72,7 @@ namespace Gibbed.Prototype.FileFormats.Fight
 
             while (true)
             {
-                UInt64 hash = fight.ReadHash100F4(input);
+                UInt64 hash = fight.ReadNameHash(input);
                 if (hash == 0)
                 {
                     break;
