@@ -3,18 +3,16 @@ using Gibbed.Helpers;
 
 namespace Gibbed.Prototype.FileFormats.Fight
 {
-    public class KnownContextAttribute : Attribute
+    public class KnownContextAttribute : KnownHashAttribute
     {
-        public UInt64 Hash;
-        
         public KnownContextAttribute(UInt64 hash)
+            : base(hash)
         {
-            this.Hash = hash;
         }
 
         public KnownContextAttribute(string name)
+            : base(name)
         {
-            this.Hash = name.Hash1003F();
         }
     }
 }

@@ -11,6 +11,16 @@ namespace Gibbed.Prototype.FileFormats
 {
     public class FightFile
     {
+        public T ReadEnum<T>(Stream stream)
+        {
+            UInt64 value = stream.ReadU64();
+            if (Enum.IsDefined(typeof(T), value) == false)
+            {
+                throw new Exception(FightHashes.Lookup(value));
+            }
+            return (T)Enum.ToObject(typeof(T), value);
+        }
+
         public UInt64 ReadHash100F4(Stream stream)
         {
             if (this.HashesArePrecalculated)
@@ -65,7 +75,7 @@ namespace Gibbed.Prototype.FileFormats
             this.Flags = input.ReadU32();
             this.Unknown1 = input.ReadU32();
 
-            if (input.ReadU64() != FightHashes.Chunk)
+            if (input.ReadU64() != (UInt64)FightHash.Chunk)
             {
                 throw new FormatException("containing fight type is not chunk");
             }
@@ -88,7 +98,7 @@ namespace Gibbed.Prototype.FileFormats
             Type contextType = Fight.ContextCache.GetContext(contextHash);
             if (contextType == null)
             {
-                throw new InvalidOperationException("unknown context type (" + contextHash.ToString("X16") + ")");
+                throw new InvalidOperationException("unknown context type (" + FightHashes.Lookup(contextHash) + ")");
             }
 
             try

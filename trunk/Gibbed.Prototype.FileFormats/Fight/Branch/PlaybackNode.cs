@@ -9,11 +9,9 @@ using Gibbed.Prototype.Helpers;
 
 namespace Gibbed.Prototype.FileFormats.Fight.Branch
 {
-    [KnownBranch("bank")]
-    public class Bank : BranchBase
+    [KnownBranch("playbackNode")]
+    public class PlaybackNode : BranchBase
     {
-        public List<ConditionBase> Conditions;
-
         public override void SerializeProperties(Stream input, FightFile fight)
         {
             throw new NotImplementedException();
@@ -21,7 +19,7 @@ namespace Gibbed.Prototype.FileFormats.Fight.Branch
 
         public override void DeserializeProperties(Stream input, FightFile fight)
         {
-            this.Conditions = ConditionBase.DeserializeConditions("conditions", input, fight);
+            throw new NotImplementedException();
         }
     }
 }

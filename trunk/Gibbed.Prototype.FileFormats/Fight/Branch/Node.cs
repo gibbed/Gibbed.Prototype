@@ -9,10 +9,12 @@ using Gibbed.Prototype.Helpers;
 
 namespace Gibbed.Prototype.FileFormats.Fight.Branch
 {
-    [KnownBranch("bank")]
-    public class Bank : BranchBase
+    [KnownBranch("node")]
+    public class Node : BranchBase
     {
+        public bool Override;
         public List<ConditionBase> Conditions;
+        public List<TrackBase> Tracks;
 
         public override void SerializeProperties(Stream input, FightFile fight)
         {
@@ -21,7 +23,9 @@ namespace Gibbed.Prototype.FileFormats.Fight.Branch
 
         public override void DeserializeProperties(Stream input, FightFile fight)
         {
+            this.Override = input.ReadU32() == 0 ? false : true;
             this.Conditions = ConditionBase.DeserializeConditions("conditions", input, fight);
+            this.Tracks = TrackBase.DeserializeTracks("tracks", input, fight);
         }
     }
 }
