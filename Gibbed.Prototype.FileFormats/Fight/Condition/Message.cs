@@ -18,7 +18,7 @@ namespace Gibbed.Prototype.FileFormats.Fight.Condition
         SetPropLogicState = 0xE27C5F6E2CBC200A,
     }
 
-    //[KnownCondition("message")]
+    [KnownCondition(typeof(Context.PropLogic), "message")]
     public class Message : ConditionBase
     {
         public MessageType Type;
