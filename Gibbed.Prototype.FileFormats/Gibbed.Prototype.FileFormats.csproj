@@ -98,6 +98,7 @@
     <Compile Include="Fight\Track\Mixer.cs" />
     <Compile Include="Fight\Track\Music.cs" />
     <Compile Include="Fight\Track\Playback.cs" />
+    <Compile Include="Fight\Track\StateMachineTransition.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Pure3DFile.cs" />
     <Compile Include="Pure3D\CompositeDrawable.cs" />
