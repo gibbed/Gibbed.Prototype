@@ -46,9 +46,9 @@ namespace Gibbed.Prototype.FileFormats.Fight.Track
         public override void DeserializeProperties(Stream input, FightFile fight)
         {
             this.TimeBegin = input.ReadF32();
-            this.GroupHash = fight.ReadHash100F4(input);
-            this.CueHash = fight.ReadHash100F4(input);
-            this.PartHash = fight.ReadHash100F4(input);
+            this.GroupHash = fight.ReadNameHash(input);
+            this.CueHash = fight.ReadNameHash(input);
+            this.PartHash = fight.ReadNameHash(input);
 
             UInt64 priority = input.ReadU64();
             if (Enum.IsDefined(typeof(MusicPriority), priority) == false)

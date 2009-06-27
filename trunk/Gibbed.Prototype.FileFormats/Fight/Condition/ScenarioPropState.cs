@@ -21,7 +21,7 @@ namespace Gibbed.Prototype.FileFormats.Fight.Condition
 
         public override void Deserialize(Stream input, FightFile fight)
         {
-            this.StateHash = fight.ReadHash100F4(input);
+            this.StateHash = fight.ReadNameHash(input);
         }
     }
 }

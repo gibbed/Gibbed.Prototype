@@ -25,8 +25,8 @@ namespace Gibbed.Prototype.FileFormats.Fight.Track
         {
             this.TimeBegin = input.ReadF32();
             this.FadeTime = input.ReadF32();
-            this.MixerHash = fight.ReadHash100F4(input);
-            this.CategoryHash = fight.ReadHash100F4(input);
+            this.MixerHash = fight.ReadNameHash(input);
+            this.CategoryHash = fight.ReadNameHash(input);
             this.FadeIn = input.ReadU32() == 0 ? false : true;
             this.UninstallOnExit = input.ReadU32() == 0 ? false : true;
         }

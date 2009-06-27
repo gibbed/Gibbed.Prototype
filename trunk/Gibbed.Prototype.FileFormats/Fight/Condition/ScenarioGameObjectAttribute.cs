@@ -25,7 +25,7 @@ namespace Gibbed.Prototype.FileFormats.Fight.Condition
         {
             this.GameObjectSlot = fight.ReadEnum<ScenarioGameObjectSlot>(input);
             this.AttributeKey = input.ReadAlignedASCII();
-            this.ValueHash = fight.ReadHash100F4(input);
+            this.ValueHash = fight.ReadNameHash(input);
         }
     }
 }
