@@ -13,6 +13,11 @@ namespace Gibbed.Prototype.Test
     {
         static void Main(string[] args)
         {
+            Stream input = File.OpenRead("..\\other\\testfiles\\e10m04.fig");
+            //Stream input = File.OpenRead("..\\other\\testfiles\\1_state.fig");
+            FightFile fight = new FightFile();
+            fight.Deserialize(input);
+            input.Close();
         }
     }
 }
