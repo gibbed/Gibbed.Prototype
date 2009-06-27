@@ -9,6 +9,12 @@ namespace Gibbed.Prototype.Helpers
         public static string ReadAlignedASCII(this Stream stream)
         {
             int length = stream.ReadS32();
+
+            if (length == 0)
+            {
+                return null;
+            }
+            
             byte[] data = new byte[length];
             stream.ReadAligned(data, 0, data.Length, 4);
             return Encoding.ASCII.GetString(data);
