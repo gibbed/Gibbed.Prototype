@@ -21,7 +21,7 @@ namespace Gibbed.Prototype.FileFormats.Fight.Condition
 
         public override void Deserialize(Stream input, FightFile fight)
         {
-            throw new NotImplementedException();
+            this.Conditions = ConditionBase.DeserializeConditions("conditions", input, fight);
         }
     }
 }
