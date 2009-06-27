@@ -51,8 +51,35 @@
     <Compile Include="FightHashes.cs" />
     <Compile Include="Fight\BranchBase.cs" />
     <Compile Include="Fight\BranchCache.cs" />
+    <Compile Include="Fight\Branch\NISNode.cs" />
+    <Compile Include="Fight\Branch\NISRootNode.cs" />
+    <Compile Include="Fight\Branch\Node.cs" />
+    <Compile Include="Fight\Branch\PlaybackNode.cs" />
+    <Compile Include="Fight\Branch\PlaybackSet.cs" />
+    <Compile Include="Fight\Branch\Reference.cs" />
+    <Compile Include="Fight\Branch\State.cs" />
+    <Compile Include="Fight\Branch\StateMachine.cs" />
+    <Compile Include="Fight\Branch\Store.cs" />
+    <Compile Include="Fight\Branch\Transition.cs" />
+    <Compile Include="Fight\Cache.cs" />
     <Compile Include="Fight\ConditionBase.cs" />
     <Compile Include="Fight\ConditionCache.cs" />
+    <Compile Include="Fight\Condition\ConditionGroup.cs" />
+    <Compile Include="Fight\Condition\CurrentState.cs" />
+    <Compile Include="Fight\Condition\Event.cs" />
+    <Compile Include="Fight\Condition\False.cs" />
+    <Compile Include="Fight\Condition\HasTag.cs" />
+    <Compile Include="Fight\Condition\IsPlayerCharacter.cs" />
+    <Compile Include="Fight\Condition\Lua.cs" />
+    <Compile Include="Fight\Condition\Message.cs" />
+    <Compile Include="Fight\Condition\Not.cs" />
+    <Compile Include="Fight\Condition\Or.cs" />
+    <Compile Include="Fight\Condition\ScenarioGameObject.cs" />
+    <Compile Include="Fight\Condition\ScenarioGameObjectAttribute.cs" />
+    <Compile Include="Fight\Condition\ScenarioGameObjectTouchesTrigger.cs" />
+    <Compile Include="Fight\Condition\ScenarioMessage.cs" />
+    <Compile Include="Fight\Condition\ScenarioPropState.cs" />
+    <Compile Include="Fight\Condition\ScenarioString.cs" />
     <Compile Include="Fight\ContextBase.cs" />
     <Compile Include="Fight\Branch\Bank.cs" />
     <Compile Include="Fight\ContextCache.cs" />
@@ -61,6 +88,16 @@
     <Compile Include="Fight\KnownConditionAttribute.cs" />
     <Compile Include="Fight\KnownContextAttribute.cs" />
     <Compile Include="Fight\Context\Scenario.cs" />
+    <Compile Include="Fight\KnownHashAttribute.cs" />
+    <Compile Include="Fight\KnownHashForContextAttribute.cs" />
+    <Compile Include="Fight\KnownTrackAttribute.cs" />
+    <Compile Include="Fight\TrackBase.cs" />
+    <Compile Include="Fight\TrackCache.cs" />
+    <Compile Include="Fight\Track\FMV.cs" />
+    <Compile Include="Fight\Track\Lua.cs" />
+    <Compile Include="Fight\Track\Mixer.cs" />
+    <Compile Include="Fight\Track\Music.cs" />
+    <Compile Include="Fight\Track\Playback.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Pure3DFile.cs" />
     <Compile Include="Pure3D\CompositeDrawable.cs" />
@@ -115,9 +152,6 @@
       <Project>{242D0738-AA4C-4C9C-A218-891A8F55559C}</Project>
       <Name>Gibbed.Squish</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Fight\Condition\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
