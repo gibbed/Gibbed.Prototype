@@ -41,8 +41,8 @@ namespace Gibbed.Prototype.FileFormats.Fight.Track
 
         public override void DeserializeProperties(Stream input, FightFile fight)
         {
-            this.TimeBegin = input.ReadF32();
-            this.TimeEnd = input.ReadF32();
+            this.TimeBegin = fight.ReadPropertyFloat(input);
+            this.TimeEnd = fight.ReadPropertyFloat(input);
 
             int length = input.ReadS32();
             this.Script = new byte[length];

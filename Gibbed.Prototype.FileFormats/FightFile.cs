@@ -6,22 +6,13 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using Gibbed.Helpers;
 using Gibbed.Prototype.Helpers;
+using System.Xml;
 
 namespace Gibbed.Prototype.FileFormats
 {
     public class FightFile
     {
-        public T ReadEnum<T>(Stream stream)
-        {
-            UInt64 value = stream.ReadU64();
-            if (Enum.IsDefined(typeof(T), value) == false)
-            {
-                throw new Exception(FightHashes.Lookup(value));
-            }
-            return (T)Enum.ToObject(typeof(T), value);
-        }
-
-        public UInt64 ReadNameHash(Stream stream)
+        public UInt64 ReadHash(Stream stream)
         {
             if (this.HashesArePrecalculated)
             {
@@ -33,6 +24,55 @@ namespace Gibbed.Prototype.FileFormats
                 // suspected that this is a uint32 + string rather than the hash
                 return stream.ReadASCII(stream.ReadU32()).Hash1003F();
             }
+        }
+
+        public T ReadPropertyEnum<T>(Stream stream)
+        {
+            UInt64 value = stream.ReadU64();
+            if (Enum.IsDefined(typeof(T), value) == false)
+            {
+                throw new Exception(FightHashes.Lookup(value));
+            }
+            return (T)Enum.ToObject(typeof(T), value);
+        }
+
+        public UInt64 ReadPropertyName(Stream stream)
+        {
+            return this.ReadHash(stream);
+        }
+
+        public string ReadPropertyString(Stream stream)
+        {
+            return stream.ReadAlignedASCII();
+        }
+
+        public int ReadPropertyInt(Stream stream)
+        {
+            return stream.ReadS32();
+        }
+
+        public float ReadPropertyFloat(Stream stream)
+        {
+            return stream.ReadF32();
+        }
+
+        public bool ReadPropertyBool(Stream stream)
+        {
+            return stream.ReadU32() == 0 ? false : true;
+        }
+
+        public Fight.BranchReference ReadPropertyBranch(Stream stream)
+        {
+            Fight.BranchReference rez = new Fight.BranchReference();
+
+            rez.Name = stream.ReadAlignedASCII();
+
+            if (rez.Name == null || rez.Name.Length == 0)
+            {
+                rez.Index = stream.ReadU32();
+            }
+
+            return rez;
         }
 
         public UInt32 Flags;
@@ -83,9 +123,9 @@ namespace Gibbed.Prototype.FileFormats
             this.Unknown2 = input.ReadU32();
             this.Unknown3 = input.ReadU32();
 
-            this.NameHash = this.ReadNameHash(input);
+            this.NameHash = this.ReadHash(input);
             
-            UInt64 contextHash = this.ReadNameHash(input);
+            UInt64 contextHash = this.ReadHash(input);
 
             this.Path = input.ReadAlignedASCII();
             this.Unknown4 = input.ReadU32();

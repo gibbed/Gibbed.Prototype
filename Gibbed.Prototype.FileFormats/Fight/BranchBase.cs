@@ -26,7 +26,7 @@ namespace Gibbed.Prototype.FileFormats.Fight
 
         public void Deserialize(Stream input, FightFile fight)
         {
-            this.NameHash = fight.ReadNameHash(input);
+            this.NameHash = fight.ReadHash(input);
             this.Path = input.ReadAlignedASCII();
             this.SiblingIndex = input.ReadU32();
 
@@ -82,7 +82,7 @@ namespace Gibbed.Prototype.FileFormats.Fight
 
             while (true)
             {
-                UInt64 hash = fight.ReadNameHash(input);
+                UInt64 hash = fight.ReadHash(input);
                 if (hash == 0)
                 {
                     break;

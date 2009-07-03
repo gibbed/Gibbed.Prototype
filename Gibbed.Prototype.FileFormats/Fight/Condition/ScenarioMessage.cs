@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using Gibbed.Helpers;
+using System.Xml.Serialization;
 
 namespace Gibbed.Prototype.FileFormats.Fight.Condition
 {
@@ -91,17 +92,12 @@ namespace Gibbed.Prototype.FileFormats.Fight.Condition
 
         public override void Serialize(Stream output, FightFile fight)
         {
-            output.WriteU64((UInt64)(this.Type));
+            throw new NotImplementedException();
         }
 
         public override void Deserialize(Stream input, FightFile fight)
         {
-            UInt64 type = input.ReadU64();
-            if (Enum.IsDefined(typeof(ScenarioMessageType), type) == false)
-            {
-                throw new Exception(FightHashes.Lookup(type));
-            }
-            this.Type = (ScenarioMessageType)(type);
+            this.Type = fight.ReadPropertyEnum<ScenarioMessageType>(input);
         }
     }
 }

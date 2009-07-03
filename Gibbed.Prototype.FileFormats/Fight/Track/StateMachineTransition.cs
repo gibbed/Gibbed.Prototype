@@ -14,8 +14,7 @@ namespace Gibbed.Prototype.FileFormats.Fight.Track
     {
         public float TimeBegin;
         public float TimeEnd;
-        public string TransitionBranch;
-        public UInt32 Unknown;
+        public BranchReference TransitionBranch;
 
         public override void SerializeProperties(Stream input, FightFile fight)
         {
@@ -24,13 +23,9 @@ namespace Gibbed.Prototype.FileFormats.Fight.Track
 
         public override void DeserializeProperties(Stream input, FightFile fight)
         {
-            this.TimeBegin = input.ReadF32();
-            this.TimeEnd = input.ReadF32();
-            this.TransitionBranch = input.ReadAlignedASCII();
-            if (this.TransitionBranch == null)
-            {
-                this.Unknown = input.ReadU32();
-            }
+            this.TimeBegin = fight.ReadPropertyFloat(input);
+            this.TimeEnd = fight.ReadPropertyFloat(input);
+            this.TransitionBranch = fight.ReadPropertyBranch(input);
         }
     }
 }

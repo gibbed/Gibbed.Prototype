@@ -12,8 +12,7 @@ namespace Gibbed.Prototype.FileFormats.Fight.Condition
     [KnownCondition(typeof(Context.Scenario), "stateMachine_CurrentState")]
     public class CurrentState : ConditionBase
     {
-        public string State;
-        public UInt32 Unknown;
+        public BranchReference State;
 
         public override void Serialize(Stream output, FightFile fight)
         {
@@ -22,11 +21,7 @@ namespace Gibbed.Prototype.FileFormats.Fight.Condition
 
         public override void Deserialize(Stream input, FightFile fight)
         {
-            this.State = input.ReadAlignedASCII();
-            if (this.State == null)
-            {
-                this.Unknown = input.ReadU32();
-            }
+            this.State = fight.ReadPropertyBranch(input);
         }
     }
 }

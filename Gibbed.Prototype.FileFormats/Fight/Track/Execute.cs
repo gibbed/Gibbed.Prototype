@@ -1,18 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Reflection;
-using System.Linq;
-using System.Runtime.InteropServices;
+using System.Text;
 using Gibbed.Helpers;
-using Gibbed.Prototype.Helpers;
 
-namespace Gibbed.Prototype.FileFormats.Fight.Branch
+namespace Gibbed.Prototype.FileFormats.Fight.Track
 {
-    [KnownBranch("transition")]
-    public class Transition : BranchBase
+    [KnownTrack(typeof(Context.Scenario), "execute")]
+    public class Execute : TrackBase
     {
-        public BranchReference ToState;
+        public float TimeBegin;
+        public float TimeEnd;
+        public BranchReference Branch;
         public List<ConditionBase> Conditions;
 
         public override void SerializeProperties(Stream input, FightFile fight)
@@ -22,7 +21,9 @@ namespace Gibbed.Prototype.FileFormats.Fight.Branch
 
         public override void DeserializeProperties(Stream input, FightFile fight)
         {
-            this.ToState = fight.ReadPropertyBranch(input);
+            this.TimeBegin = fight.ReadPropertyFloat(input);
+            this.TimeEnd = fight.ReadPropertyFloat(input);
+            this.Branch = fight.ReadPropertyBranch(input);
             this.Conditions = ConditionBase.DeserializeConditions("conditions", input, fight);
         }
     }
