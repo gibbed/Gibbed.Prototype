@@ -93,12 +93,15 @@
     <Compile Include="Fight\KnownTrackAttribute.cs" />
     <Compile Include="Fight\TrackBase.cs" />
     <Compile Include="Fight\TrackCache.cs" />
+    <Compile Include="Fight\Track\Execute.cs" />
     <Compile Include="Fight\Track\FMV.cs" />
     <Compile Include="Fight\Track\Lua.cs" />
     <Compile Include="Fight\Track\Mixer.cs" />
     <Compile Include="Fight\Track\Music.cs" />
     <Compile Include="Fight\Track\Playback.cs" />
     <Compile Include="Fight\Track\StateMachineTransition.cs" />
+    <Compile Include="Fight\Track\TimeOfDayBlend.cs" />
+    <Compile Include="Fight\BranchReference.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Pure3DFile.cs" />
     <Compile Include="Pure3D\CompositeDrawable.cs" />

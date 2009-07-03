@@ -23,12 +23,12 @@ namespace Gibbed.Prototype.FileFormats.Fight.Track
 
         public override void DeserializeProperties(Stream input, FightFile fight)
         {
-            this.TimeBegin = input.ReadF32();
-            this.FadeTime = input.ReadF32();
-            this.MixerHash = fight.ReadNameHash(input);
-            this.CategoryHash = fight.ReadNameHash(input);
-            this.FadeIn = input.ReadU32() == 0 ? false : true;
-            this.UninstallOnExit = input.ReadU32() == 0 ? false : true;
+            this.TimeBegin = fight.ReadPropertyFloat(input);
+            this.FadeTime = fight.ReadPropertyFloat(input);
+            this.MixerHash = fight.ReadPropertyName(input);
+            this.CategoryHash = fight.ReadPropertyName(input);
+            this.FadeIn = fight.ReadPropertyBool(input);
+            this.UninstallOnExit = fight.ReadPropertyBool(input);
         }
     }
 }

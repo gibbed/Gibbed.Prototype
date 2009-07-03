@@ -26,14 +26,7 @@ namespace Gibbed.Prototype.FileFormats.Fight.Condition
         public override void Deserialize(Stream input, FightFile fight)
         {
             this.EventHash = input.ReadU64();
-
-            UInt64 type = input.ReadU64();
-            if (Enum.IsDefined(typeof(EventWhenType), type) == false)
-            {
-                throw new Exception();
-            }
-
-            this.When = (EventWhenType)(type);
+            this.When = fight.ReadPropertyEnum<EventWhenType>(input);
         }
     }
 }

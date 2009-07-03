@@ -16,7 +16,9 @@ namespace Gibbed.Prototype.Cement
             [Required(Description = "output directory")]
             string outputPath,
             [Optional(false, "rz", Description = "unpack compressed data (*.rz)")]
-            bool unpackRz)
+            bool unpackRz,
+            [Optional(false, "ow", Description = "overwrite existing files")]
+            bool overwrite)
         {
             Stream input = File.OpenRead(inputPath);
             Directory.CreateDirectory(outputPath);
@@ -26,8 +28,13 @@ namespace Gibbed.Prototype.Cement
 
             Console.WriteLine("{0} files in cement file.", cement.Entries.Count);
 
+            long counter = 0;
+            long skipped = 0;
+            long totalCount = cement.Entries.Count;
             foreach (CementEntry entry in cement.Entries)
             {
+                counter++;
+
                 CementMetadata metadata = cement.GetMetadata(entry.NameHash);
 
                 bool unpacking = false;
@@ -51,10 +58,19 @@ namespace Gibbed.Prototype.Cement
                     }
                 }
 
-                Console.WriteLine(partPath);
-
                 Directory.CreateDirectory(Path.Combine(outputPath, Path.GetDirectoryName(partPath)));
                 string entryPath = Path.Combine(outputPath, partPath);
+
+                if (overwrite == false && File.Exists(entryPath) == true)
+                {
+                    Console.WriteLine("{1:D4}/{2:D4} !! {0}", partPath, counter, totalCount);
+                    skipped++;
+                    continue;
+                }
+                else
+                {
+                    Console.WriteLine("{1:D4}/{2:D4} => {0}", partPath, counter, totalCount);
+                }
 
                 input.Seek(entry.Offset, SeekOrigin.Begin);
 
@@ -112,6 +128,11 @@ namespace Gibbed.Prototype.Cement
             }
 
             input.Close();
+
+            if (skipped > 0)
+            {
+                Console.WriteLine("{0} files not overwritten.", skipped);
+            }
         }
     }
 }

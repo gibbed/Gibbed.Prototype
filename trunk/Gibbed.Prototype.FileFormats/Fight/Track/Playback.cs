@@ -21,10 +21,10 @@ namespace Gibbed.Prototype.FileFormats.Fight.Track
 
         public override void DeserializeProperties(Stream input, FightFile fight)
         {
-            this.TimeBegin = input.ReadF32();
-            this.StateHash = input.ReadU64();
-            this.SpecificPlaybackSetHash = input.ReadU64();
-            this.NotifyOnPlaybackFinished = input.ReadU32() == 0 ? false : true;
+            this.TimeBegin = fight.ReadPropertyFloat(input);
+            this.StateHash = fight.ReadPropertyName(input);
+            this.SpecificPlaybackSetHash = fight.ReadPropertyName(input);
+            this.NotifyOnPlaybackFinished = fight.ReadPropertyBool(input);
         }
     }
 }

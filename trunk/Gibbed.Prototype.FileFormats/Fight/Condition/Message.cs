@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Xml.Serialization;
 using Gibbed.Helpers;
 
 namespace Gibbed.Prototype.FileFormats.Fight.Condition
@@ -30,13 +31,7 @@ namespace Gibbed.Prototype.FileFormats.Fight.Condition
 
         public override void Deserialize(Stream input, FightFile fight)
         {
-            UInt64 type = input.ReadU64();
-            if (Enum.IsDefined(typeof(MessageType), type) == false)
-            {
-                throw new Exception();
-            }
-
-            this.Type = (MessageType)(type);
+            this.Type = fight.ReadPropertyEnum<MessageType>(input);
         }
     }
 }

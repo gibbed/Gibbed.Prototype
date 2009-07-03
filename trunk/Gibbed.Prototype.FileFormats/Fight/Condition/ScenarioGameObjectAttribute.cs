@@ -6,6 +6,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using Gibbed.Helpers;
 using Gibbed.Prototype.Helpers;
+using System.Xml.Serialization;
 
 namespace Gibbed.Prototype.FileFormats.Fight.Condition
 {
@@ -23,9 +24,9 @@ namespace Gibbed.Prototype.FileFormats.Fight.Condition
 
         public override void Deserialize(Stream input, FightFile fight)
         {
-            this.GameObjectSlot = fight.ReadEnum<ScenarioGameObjectSlot>(input);
-            this.AttributeKey = input.ReadAlignedASCII();
-            this.ValueHash = fight.ReadNameHash(input);
+            this.GameObjectSlot = fight.ReadPropertyEnum<ScenarioGameObjectSlot>(input);
+            this.AttributeKey = fight.ReadPropertyString(input);
+            this.ValueHash = fight.ReadPropertyName(input);
         }
     }
 }

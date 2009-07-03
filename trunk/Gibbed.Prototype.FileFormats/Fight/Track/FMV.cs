@@ -33,20 +33,20 @@ namespace Gibbed.Prototype.FileFormats.Fight.Track
 
         public override void DeserializeProperties(Stream input, FightFile fight)
         {
-            this.TimeBegin = input.ReadF32();
-            this.TimeEnd = input.ReadF32();
-            this.Filename = input.ReadAlignedASCII();
-            this.UseFMVState = input.ReadU32() == 0 ? false : true;
-            this.ClearSubtitles = input.ReadU32() == 0 ? false : true;
-            this.IsPreLoaded = input.ReadU32() == 0 ? false : true;
-            this.UseBlackFades = input.ReadU32() == 0 ? false : true;
-            this.FadeInOnEnter = input.ReadU32() == 0 ? false : true;
-            this.StayFadedOnExit = input.ReadU32() == 0 ? false : true;
-            this.FadeUpOnExit = input.ReadU32() == 0 ? false : true;
-            this.DelayUninstall = input.ReadU32() == 0 ? false : true;
-            this.UninstallDelayTime = input.ReadF32();
-            this.WhiteFadeTime = input.ReadF32();
-            this.Timer = input.ReadF32();
+            this.TimeBegin = fight.ReadPropertyFloat(input);
+            this.TimeEnd = fight.ReadPropertyFloat(input);
+            this.Filename = fight.ReadPropertyString(input);
+            this.UseFMVState = fight.ReadPropertyBool(input);
+            this.ClearSubtitles = fight.ReadPropertyBool(input);
+            this.IsPreLoaded = fight.ReadPropertyBool(input);
+            this.UseBlackFades = fight.ReadPropertyBool(input);
+            this.FadeInOnEnter = fight.ReadPropertyBool(input);
+            this.StayFadedOnExit = fight.ReadPropertyBool(input);
+            this.FadeUpOnExit = fight.ReadPropertyBool(input);
+            this.DelayUninstall = fight.ReadPropertyBool(input);
+            this.UninstallDelayTime = fight.ReadPropertyFloat(input);
+            this.WhiteFadeTime = fight.ReadPropertyFloat(input);
+            this.Timer = fight.ReadPropertyFloat(input);
         }
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Xml.Serialization;
 using Gibbed.Helpers;
 
 namespace Gibbed.Prototype.FileFormats.Fight.Track
@@ -19,24 +20,25 @@ namespace Gibbed.Prototype.FileFormats.Fight.Track
         public UInt64 GroupHash;
         public UInt64 CueHash;
         public UInt64 PartHash;
+
         public MusicPriority Priority;
         public bool ResetPriority;
         
         public bool OverrideFadeOut;
-        public UInt32 FadeoutStartBar;
-        public UInt32 FadeoutStartBeat;
-        public UInt32 FadeoutStartNote;
-        public UInt32 FadeoutLengthBar;
-        public UInt32 FadeoutLengthBeat;
-        public UInt32 FadeoutLengthNote;
+        public int FadeoutStartBar;
+        public int FadeoutStartBeat;
+        public int FadeoutStartNote;
+        public int FadeoutLengthBar;
+        public int FadeoutLengthBeat;
+        public int FadeoutLengthNote;
         
         public bool OverrideFadeIn;
-        public UInt32 FadeinStartBar;
-        public UInt32 FadeinStartBeat;
-        public UInt32 FadeinStartNote;
-        public UInt32 FadeinLengthBar;
-        public UInt32 FadeinLengthBeat;
-        public UInt32 FadeinLengthNote;
+        public int FadeinStartBar;
+        public int FadeinStartBeat;
+        public int FadeinStartNote;
+        public int FadeinLengthBar;
+        public int FadeinLengthBeat;
+        public int FadeinLengthNote;
 
         public override void SerializeProperties(Stream input, FightFile fight)
         {
@@ -45,35 +47,28 @@ namespace Gibbed.Prototype.FileFormats.Fight.Track
 
         public override void DeserializeProperties(Stream input, FightFile fight)
         {
-            this.TimeBegin = input.ReadF32();
-            this.GroupHash = fight.ReadNameHash(input);
-            this.CueHash = fight.ReadNameHash(input);
-            this.PartHash = fight.ReadNameHash(input);
+            this.TimeBegin = fight.ReadPropertyFloat(input);
+            this.GroupHash = fight.ReadPropertyName(input);
+            this.CueHash = fight.ReadPropertyName(input);
+            this.PartHash = fight.ReadPropertyName(input);
+            this.Priority = fight.ReadPropertyEnum<MusicPriority>(input);
+            this.ResetPriority = fight.ReadPropertyBool(input);
 
-            UInt64 priority = input.ReadU64();
-            if (Enum.IsDefined(typeof(MusicPriority), priority) == false)
-            {
-                throw new Exception(FightHashes.Lookup(priority));
-            }
-            this.Priority = (MusicPriority)(priority);
+            this.OverrideFadeOut = fight.ReadPropertyBool(input);
+            this.FadeoutStartBar = fight.ReadPropertyInt(input);
+            this.FadeoutStartBeat = fight.ReadPropertyInt(input);
+            this.FadeoutStartNote = fight.ReadPropertyInt(input);
+            this.FadeoutLengthBar = fight.ReadPropertyInt(input);
+            this.FadeoutLengthBeat = fight.ReadPropertyInt(input);
+            this.FadeoutLengthNote = fight.ReadPropertyInt(input);
 
-            this.ResetPriority = input.ReadU32() == 0 ? false : true;
-
-            this.OverrideFadeOut = input.ReadU32() == 0 ? false : true;
-            this.FadeoutStartBar = input.ReadU32();
-            this.FadeoutStartBeat = input.ReadU32();
-            this.FadeoutStartNote = input.ReadU32();
-            this.FadeoutLengthBar = input.ReadU32();
-            this.FadeoutLengthBeat = input.ReadU32();
-            this.FadeoutLengthNote = input.ReadU32();
-
-            this.OverrideFadeIn = input.ReadU32() == 0 ? false : true;
-            this.FadeinStartBar = input.ReadU32();
-            this.FadeinStartBeat = input.ReadU32();
-            this.FadeinStartNote = input.ReadU32();
-            this.FadeinLengthBar = input.ReadU32();
-            this.FadeinLengthBeat = input.ReadU32();
-            this.FadeinLengthNote = input.ReadU32();
+            this.OverrideFadeIn = fight.ReadPropertyBool(input);
+            this.FadeinStartBar = fight.ReadPropertyInt(input);
+            this.FadeinStartBeat = fight.ReadPropertyInt(input);
+            this.FadeinStartNote = fight.ReadPropertyInt(input);
+            this.FadeinLengthBar = fight.ReadPropertyInt(input);
+            this.FadeinLengthBeat = fight.ReadPropertyInt(input);
+            this.FadeinLengthNote = fight.ReadPropertyInt(input);
         }
     }
 }

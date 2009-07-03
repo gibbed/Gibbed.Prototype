@@ -93,14 +93,8 @@ namespace Gibbed.Prototype.FileFormats.Fight.Condition
 
         public override void Deserialize(Stream input, FightFile fight)
         {
-            UInt64 type = input.ReadU64();
-            if (Enum.IsDefined(typeof(ScenarioGameObjectSlot), type) == false)
-            {
-                throw new Exception(FightHashes.Lookup(type));
-            }
-            this.GameObjectSlot = (ScenarioGameObjectSlot)(type);
-
-            this.GameObjectNameHash = fight.ReadNameHash(input);
+            this.GameObjectSlot = fight.ReadPropertyEnum<ScenarioGameObjectSlot>(input);
+            this.GameObjectNameHash = fight.ReadPropertyName(input);
         }
     }
 }
