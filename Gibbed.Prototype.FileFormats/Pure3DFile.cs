@@ -8,12 +8,12 @@ namespace Gibbed.Prototype.FileFormats
 {
     public class Pure3DFile
     {
-        public List<Pure3D.Node> Nodes;
+        public List<Pure3D.BaseNode> Nodes;
 
-        private void SerializeNode(Stream output, Pure3D.Node node)
+        private void SerializeNode(Stream output, Pure3D.BaseNode node)
         {
             Stream childrenStream = new MemoryStream();
-            foreach (Pure3D.Node child in node.Children)
+            foreach (Pure3D.BaseNode child in node.Children)
             {
                 this.SerializeNode(childrenStream, child);
             }
@@ -35,7 +35,7 @@ namespace Gibbed.Prototype.FileFormats
         public void Serialize(Stream output)
         {
             Stream nodesStream = new MemoryStream();
-            foreach (Pure3D.Node node in this.Nodes)
+            foreach (Pure3D.BaseNode node in this.Nodes)
             {
                 this.SerializeNode(nodesStream, node);
             }
@@ -59,7 +59,7 @@ namespace Gibbed.Prototype.FileFormats
 
                 foreach (Type type in Assembly.GetAssembly(typeof(TypeCache)).GetTypes())
                 {
-                    if (type.IsSubclassOf(typeof(Pure3D.Node)) == true)
+                    if (type.IsSubclassOf(typeof(Pure3D.BaseNode)) == true)
                     {
                         object[] attributes = type.GetCustomAttributes(typeof(Pure3D.KnownTypeAttribute), false);
                         if (attributes.Length == 1)
@@ -88,20 +88,20 @@ namespace Gibbed.Prototype.FileFormats
         }
         #endregion
 
-        private Pure3D.Node DeserializeNode(Stream input)
+        private Pure3D.BaseNode DeserializeNode(Stream input)
         {
             UInt32 typeId = input.ReadU32();
             UInt32 thisSize = input.ReadU32() - 12;
             UInt32 childrenSize = input.ReadU32() - thisSize - 12;
 
-            Pure3D.Node node;
+            Pure3D.BaseNode node;
             Type type = TypeCache.GetType(typeId);
 
             if (type != null)
             {
                 try
                 {
-                    node = (Pure3D.Node)System.Activator.CreateInstance(type);
+                    node = (Pure3D.BaseNode)System.Activator.CreateInstance(type);
                 }
                 catch (TargetInvocationException e)
                 {
@@ -153,7 +153,7 @@ namespace Gibbed.Prototype.FileFormats
             UInt32 dataSize = input.ReadU32();
 
             Stream nodesStream = input.ReadToMemoryStream(dataSize - 12);
-            this.Nodes = new List<Pure3D.Node>();
+            this.Nodes = new List<Pure3D.BaseNode>();
             while (nodesStream.Position < nodesStream.Length)
             {
                 this.Nodes.Add(this.DeserializeNode(nodesStream));

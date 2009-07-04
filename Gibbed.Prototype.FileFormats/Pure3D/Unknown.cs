@@ -4,7 +4,7 @@ using System.IO;
 
 namespace Gibbed.Prototype.FileFormats.Pure3D
 {
-    public class Unknown : Node
+    public class Unknown : BaseNode
     {
         private UInt32 _TypeId;
         public override uint TypeId { get { return this._TypeId; } }
@@ -24,6 +24,16 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
         [ReadOnly(true)]
         [Category("Pure3D")]
         public byte[] Data { get; set; }
+
+        [ReadOnly(true)]
+        [Category("Pure3D")]
+        public int Length
+        {
+            get
+            {
+                return this.Data == null ? -1 : this.Data.Length;
+            }
+        }
 
         public override string ToString()
         {

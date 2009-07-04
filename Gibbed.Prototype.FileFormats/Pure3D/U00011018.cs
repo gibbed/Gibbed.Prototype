@@ -5,7 +5,7 @@ using Gibbed.Prototype.Helpers;
 namespace Gibbed.Prototype.FileFormats.Pure3D
 {
     [KnownType(0x00011018)]
-    public class U00011018 : Node
+    public class U00011018 : BaseNode
     {
         public string Name { get; set; }
         public float ValueA { get; set; }

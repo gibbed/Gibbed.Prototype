@@ -6,7 +6,7 @@ using Gibbed.Prototype.Helpers;
 namespace Gibbed.Prototype.FileFormats.Pure3D
 {
     [KnownType(0x00022000)]
-    public class TextureFont : Node
+    public class TextureFont : BaseNode
     {
         public UInt32 Unknown1 { get; set; }
         public string Name { get; set; }

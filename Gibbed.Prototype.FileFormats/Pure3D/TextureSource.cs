@@ -5,7 +5,7 @@ using Gibbed.Prototype.Helpers;
 namespace Gibbed.Prototype.FileFormats.Pure3D
 {
     [KnownType(0x00019003)]
-    public class TextureSource : Node
+    public class TextureSource : BaseNode
     {
         [Category("Image")]
         public string FileName { get; set; }

@@ -5,7 +5,7 @@ using Gibbed.Helpers;
 namespace Gibbed.Prototype.FileFormats.Pure3D
 {
     //[KnownType(0x00022001)]
-    public class U00022001 : Node
+    public class U00022001 : BaseNode
     {
         public override void Serialize(Stream output)
         {
