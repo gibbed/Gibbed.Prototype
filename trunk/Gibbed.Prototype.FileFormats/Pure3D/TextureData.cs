@@ -5,7 +5,7 @@ using Gibbed.Helpers;
 namespace Gibbed.Prototype.FileFormats.Pure3D
 {
     [KnownType(0x00019002)]
-    public class TextureData : Node
+    public class TextureData : BaseNode
     {
         [Category("Image")]
         [ReadOnly(true)]

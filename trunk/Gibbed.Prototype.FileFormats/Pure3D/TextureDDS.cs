@@ -9,7 +9,7 @@ using Gibbed.Squish;
 namespace Gibbed.Prototype.FileFormats.Pure3D
 {
     [KnownType(0x00019006)]
-    public class TextureDDS : Node
+    public class TextureDDS : BaseNode
     {
         public enum CompressionAlgorithm : uint
         {
@@ -104,7 +104,7 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
         {
             get
             {
-                Node node = this.GetSubImageDataNode();
+                BaseNode node = this.GetSubImageDataNode();
                 if (node == null)
                 {
                     return false;
@@ -115,7 +115,7 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
 
         public override void Export(Stream output)
         {
-            Node node = this.GetSubImageDataNode();
+            BaseNode node = this.GetSubImageDataNode();
             if (node == null)
             {
                 throw new InvalidOperationException();
@@ -127,7 +127,7 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
         {
             get
             {
-                Node node = this.GetSubImageDataNode();
+                BaseNode node = this.GetSubImageDataNode();
                 if (node == null)
                 {
                     return false;
@@ -138,7 +138,7 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
 
         public override void Import(Stream input)
         {
-            Node node = this.GetSubImageDataNode();
+            BaseNode node = this.GetSubImageDataNode();
             if (node == null)
             {
                 throw new InvalidOperationException();

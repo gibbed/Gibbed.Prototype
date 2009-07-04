@@ -5,7 +5,7 @@ using System.IO;
 
 namespace Gibbed.Prototype.FileFormats.Pure3D
 {
-    public abstract class Node
+    public abstract class BaseNode
     {
         #region public UInt32 TypeId;
         [DisplayName("Type ID")]
@@ -32,7 +32,7 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
             return this.GetType().Name;
         }
 
-        public List<Node> Children = new List<Node>();
+        public List<BaseNode> Children = new List<BaseNode>();
         #region public int ChildCount
         [DisplayName("Child Count")]
         [Category("Pure3D")]

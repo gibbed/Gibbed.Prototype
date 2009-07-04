@@ -5,7 +5,7 @@ using Gibbed.Helpers;
 namespace Gibbed.Prototype.FileFormats.Pure3D
 {
     [KnownType(0x00011020)]
-    public class U00011020 : Node
+    public class U00011020 : BaseNode
     {
         public UInt16 Unknown1 { get; set; }
         public UInt16 Unknown2 { get; set; }

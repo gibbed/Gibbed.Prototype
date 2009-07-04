@@ -7,7 +7,7 @@ using Gibbed.Prototype.Helpers;
 namespace Gibbed.Prototype.FileFormats.Pure3D
 {
     [KnownType(0x20000701)]
-    public class FightDefinition : Node
+    public class FightDefinition : BaseNode
     {
         public string Name { get; set; }
         public UInt16 Unknown2 { get; set; }
@@ -49,7 +49,7 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
         {
             get
             {
-                Node node = this.GetChildData();
+                BaseNode node = this.GetChildData();
                 if (node == null)
                 {
                     return false;
@@ -60,7 +60,7 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
 
         public override void Export(Stream output)
         {
-            Node node = this.GetChildData();
+            BaseNode node = this.GetChildData();
             if (node == null)
             {
                 throw new InvalidOperationException();
@@ -72,7 +72,7 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
         {
             get
             {
-                Node node = this.GetChildData();
+                BaseNode node = this.GetChildData();
                 if (node == null)
                 {
                     return false;
@@ -83,7 +83,7 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
 
         public override void Import(Stream input)
         {
-            Node node = this.GetChildData();
+            BaseNode node = this.GetChildData();
             if (node == null)
             {
                 throw new InvalidOperationException();

@@ -104,16 +104,23 @@
     <Compile Include="Fight\BranchReference.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Pure3DFile.cs" />
+    <Compile Include="Pure3D\Billboard.cs" />
     <Compile Include="Pure3D\CompositeDrawable.cs" />
+    <Compile Include="Pure3D\CompositeDrawablePolySkinReference.cs" />
+    <Compile Include="Pure3D\Expression.cs" />
     <Compile Include="Pure3D\ExpressionGroup.cs" />
+    <Compile Include="Pure3D\Geometry.cs" />
+    <Compile Include="Pure3D\ParticleSystem.cs" />
+    <Compile Include="Pure3D\TextBibleHolder.cs" />
     <Compile Include="Pure3D\Physics.cs" />
     <Compile Include="Pure3D\PolySkin.cs" />
     <Compile Include="Pure3D\ShaderProgram.cs" />
     <Compile Include="Pure3D\ShaderTemplate.cs" />
     <Compile Include="Pure3D\Skeleton.cs" />
+    <Compile Include="Pure3D\TextBibleStorage.cs" />
     <Compile Include="Pure3D\TextureSource.cs" />
     <Compile Include="Pure3D\KnownTypeAttribute.cs" />
-    <Compile Include="Pure3D\Node.cs" />
+    <Compile Include="Pure3D\BaseNode.cs" />
     <Compile Include="Pure3D\Texture.cs" />
     <Compile Include="Pure3D\TexturePNG.cs" />
     <Compile Include="Pure3D\TextureFont.cs" />
@@ -123,6 +130,7 @@
     <Compile Include="Pure3D\NewShader.cs" />
     <Compile Include="Pure3D\ShaderCode.cs" />
     <Compile Include="Pure3D\ShaderGlobalVariable.cs" />
+    <Compile Include="Pure3D\U00010020.cs" />
     <Compile Include="Pure3D\U00011016.cs" />
     <Compile Include="Pure3D\U00011017.cs" />
     <Compile Include="Pure3D\U00011018.cs" />
@@ -140,8 +148,11 @@
     <Compile Include="Pure3D\MetaObjectData.cs" />
     <Compile Include="Pure3D\FightDefinition.cs" />
     <Compile Include="Pure3D\FightData.cs" />
+    <Compile Include="Pure3D\CompositeDrawableExpressionMixerReference.cs" />
     <Compile Include="Pure3D\Unknown.cs" />
-    <Compile Include="Pure3D\VertexOffsetExpressionMixer.cs" />
+    <Compile Include="Pure3D\ExpressionMixer.cs" />
+    <Compile Include="Vector3.cs" />
+    <Compile Include="Vector4.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Gibbed.Helpers\Gibbed.Helpers.csproj">

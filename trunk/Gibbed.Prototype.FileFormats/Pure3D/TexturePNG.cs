@@ -9,7 +9,7 @@ using Gibbed.Prototype.Helpers;
 namespace Gibbed.Prototype.FileFormats.Pure3D
 {
     [KnownType(0x00019001)]
-    public class TexturePNG : Node
+    public class TexturePNG : BaseNode
     {
         public string Name { get; set; }
         public UInt32 Unknown1 { get; set; }
@@ -83,7 +83,7 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
         {
             get
             {
-                Node node = this.GetSubImageDataNode();
+                BaseNode node = this.GetSubImageDataNode();
                 if (node == null)
                 {
                     return false;
@@ -94,7 +94,7 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
 
         public override void Export(Stream output)
         {
-            Node node = this.GetSubImageDataNode();
+            BaseNode node = this.GetSubImageDataNode();
             if (node == null)
             {
                 throw new InvalidOperationException();
@@ -106,7 +106,7 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
         {
             get
             {
-                Node node = this.GetSubImageDataNode();
+                BaseNode node = this.GetSubImageDataNode();
                 if (node == null)
                 {
                     return false;
@@ -117,7 +117,7 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
 
         public override void Import(Stream input)
         {
-            Node node = this.GetSubImageDataNode();
+            BaseNode node = this.GetSubImageDataNode();
             if (node == null)
             {
                 throw new InvalidOperationException();

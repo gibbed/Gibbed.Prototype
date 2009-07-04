@@ -6,11 +6,11 @@ using Gibbed.Prototype.Helpers;
 namespace Gibbed.Prototype.FileFormats.Pure3D
 {
     [KnownType(0x00011015)]
-    public class NewShader : Node
+    public class NewShader : BaseNode
     {
         public string Name { get; set; }
         public UInt32 Unknown2 { get; set; }
-        public string Unknown3 { get; set; }
+        public string ShaderTemplateName { get; set; }
         public UInt32 Unknown4 { get; set; }
 
         public override string ToString()
@@ -27,7 +27,7 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
         {
             output.WriteBASCII(this.Name);
             output.WriteU32(this.Unknown2);
-            output.WriteBASCII(this.Unknown3);
+            output.WriteBASCII(this.ShaderTemplateName);
             output.WriteU32(this.Unknown4);
         }
 
@@ -35,7 +35,7 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
         {
             this.Name = input.ReadBASCII();
             this.Unknown2 = input.ReadU32();
-            this.Unknown3 = input.ReadBASCII();
+            this.ShaderTemplateName = input.ReadBASCII();
             this.Unknown4 = input.ReadU32();
         }
     }

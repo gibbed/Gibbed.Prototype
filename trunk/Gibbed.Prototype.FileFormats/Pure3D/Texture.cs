@@ -8,7 +8,7 @@ using Gibbed.Prototype.Helpers;
 namespace Gibbed.Prototype.FileFormats.Pure3D
 {
     [KnownType(0x00019000)]
-    public class Texture : Node
+    public class Texture : BaseNode
     {
         public string Name { get; set; }
         public UInt32 Unknown1 { get; set; }
@@ -66,14 +66,14 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
             this.Unknown9 = input.ReadU32();
         }
 
-        private Node GetSubImageNode()
+        private BaseNode GetSubImageNode()
         {
             return this.Children.SingleOrDefault(candidate => (candidate is TextureDDS) || (candidate is TexturePNG));
         }
 
         public override System.Drawing.Image Preview()
         {
-            Node node = this.GetSubImageNode();
+            BaseNode node = this.GetSubImageNode();
             if (node == null)
             {
                 return null;
@@ -86,7 +86,7 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
         {
             get
             {
-                Node node = this.GetSubImageNode();
+                BaseNode node = this.GetSubImageNode();
                 if (node == null)
                 {
                     return false;
@@ -97,7 +97,7 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
 
         public override void Export(Stream output)
         {
-            Node node = this.GetSubImageNode();
+            BaseNode node = this.GetSubImageNode();
             if (node == null)
             {
                 throw new InvalidOperationException();
@@ -109,7 +109,7 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
         {
             get
             {
-                Node node = this.GetSubImageNode();
+                BaseNode node = this.GetSubImageNode();
                 if (node == null)
                 {
                     return false;
@@ -120,7 +120,7 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
 
         public override void Import(Stream input)
         {
-            Node node = this.GetSubImageNode();
+            BaseNode node = this.GetSubImageNode();
             if (node == null)
             {
                 throw new InvalidOperationException();

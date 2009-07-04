@@ -7,7 +7,7 @@ using Gibbed.Prototype.Helpers;
 namespace Gibbed.Prototype.FileFormats.Pure3D
 {
     [KnownType(0x0001100C)]
-    public class ShaderCode : Node
+    public class ShaderCode : BaseNode
     {
         [TypeConverter(typeof(ExpandableObjectConverter))]
         public interface ICode

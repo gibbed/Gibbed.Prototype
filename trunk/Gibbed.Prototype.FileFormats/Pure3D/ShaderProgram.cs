@@ -6,7 +6,7 @@ using Gibbed.Prototype.Helpers;
 namespace Gibbed.Prototype.FileFormats.Pure3D
 {
     [KnownType(0x0001100B)]
-    public class ShaderProgram : Node
+    public class ShaderProgram : BaseNode
     {
         public string Name { get; set; }
         public UInt32 Unknown02 { get; set; }
