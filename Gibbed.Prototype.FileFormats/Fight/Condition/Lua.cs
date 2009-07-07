@@ -39,7 +39,7 @@ namespace Gibbed.Prototype.FileFormats.Fight.Condition
 
         public override void Deserialize(Stream input, FightFile fight)
         {
-            int length = input.ReadS32();
+            int length = input.ReadValueS32();
             this.Script = new byte[length];
             input.ReadAligned(this.Script, 0, length, 4);
         }

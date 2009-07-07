@@ -44,7 +44,7 @@ namespace Gibbed.Prototype.FileFormats.Fight.Track
             this.TimeBegin = fight.ReadPropertyFloat(input);
             this.TimeEnd = fight.ReadPropertyFloat(input);
 
-            int length = input.ReadS32();
+            int length = input.ReadValueS32();
             this.Script = new byte[length];
             input.ReadAligned(this.Script, 0, length, 4);
         }

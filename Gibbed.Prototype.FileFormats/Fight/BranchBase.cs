@@ -28,7 +28,7 @@ namespace Gibbed.Prototype.FileFormats.Fight
         {
             this.NameHash = fight.ReadHash(input);
             this.Path = input.ReadAlignedASCII();
-            this.SiblingIndex = input.ReadU32();
+            this.SiblingIndex = input.ReadValueU32();
 
             if ((fight.Flags & 1) == 0)
             {
@@ -46,7 +46,7 @@ namespace Gibbed.Prototype.FileFormats.Fight
                 throw new InvalidOperationException("unknown branch type (" + FightHashes.Lookup(hash) + ")");
             }
 
-            UInt32 length = input.ReadU32();
+            UInt32 length = input.ReadValueU32();
             //long current = input.Position;
 
             BranchBase branch;

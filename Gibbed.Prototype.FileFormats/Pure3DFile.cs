@@ -21,9 +21,9 @@ namespace Gibbed.Prototype.FileFormats
             Stream nodeStream = new MemoryStream();
             node.Serialize(nodeStream);
 
-            output.WriteU32(node.TypeId);
-            output.WriteU32((UInt32)(12 + nodeStream.Length));
-            output.WriteU32((UInt32)(12 + nodeStream.Length + childrenStream.Length));
+            output.WriteValueU32(node.TypeId);
+            output.WriteValueU32((UInt32)(12 + nodeStream.Length));
+            output.WriteValueU32((UInt32)(12 + nodeStream.Length + childrenStream.Length));
 
             nodeStream.Seek(0, SeekOrigin.Begin);
             output.WriteFromStream(nodeStream, nodeStream.Length);
@@ -40,9 +40,9 @@ namespace Gibbed.Prototype.FileFormats
                 this.SerializeNode(nodesStream, node);
             }
 
-            output.WriteU32(0xFF443350);
-            output.WriteU32(12);
-            output.WriteU32((UInt32)(12 + nodesStream.Length));
+            output.WriteValueU32(0xFF443350);
+            output.WriteValueU32(12);
+            output.WriteValueU32((UInt32)(12 + nodesStream.Length));
             nodesStream.Seek(0, SeekOrigin.Begin);
             output.WriteFromStream(nodesStream, nodesStream.Length);
         }
@@ -90,9 +90,9 @@ namespace Gibbed.Prototype.FileFormats
 
         private Pure3D.BaseNode DeserializeNode(Stream input)
         {
-            UInt32 typeId = input.ReadU32();
-            UInt32 thisSize = input.ReadU32() - 12;
-            UInt32 childrenSize = input.ReadU32() - thisSize - 12;
+            UInt32 typeId = input.ReadValueU32();
+            UInt32 thisSize = input.ReadValueU32() - 12;
+            UInt32 childrenSize = input.ReadValueU32() - thisSize - 12;
 
             Pure3D.BaseNode node;
             Type type = TypeCache.GetType(typeId);
@@ -133,7 +133,7 @@ namespace Gibbed.Prototype.FileFormats
 
         public void Deserialize(Stream input)
         {
-            UInt32 magic = input.ReadU32();
+            UInt32 magic = input.ReadValueU32();
 
             if (magic == 0x503344FF)
             {
@@ -144,13 +144,13 @@ namespace Gibbed.Prototype.FileFormats
                 throw new FormatException("not a Pure3D file");
             }
 
-            UInt32 headerSize = input.ReadU32();
+            UInt32 headerSize = input.ReadValueU32();
             if (headerSize != 12)
             {
                 throw new FormatException("invalid header size");
             }
 
-            UInt32 dataSize = input.ReadU32();
+            UInt32 dataSize = input.ReadValueU32();
 
             Stream nodesStream = input.ReadToMemoryStream(dataSize - 12);
             this.Nodes = new List<Pure3D.BaseNode>();

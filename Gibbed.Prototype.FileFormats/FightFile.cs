@@ -16,19 +16,19 @@ namespace Gibbed.Prototype.FileFormats
         {
             if (this.HashesArePrecalculated)
             {
-                return stream.ReadU64();
+                return stream.ReadValueU64();
             }
             else
             {
                 throw new InvalidOperationException("unsure how to handle this");
                 // suspected that this is a uint32 + string rather than the hash
-                return stream.ReadASCII(stream.ReadU32()).Hash1003F();
+                return stream.ReadStringASCII(stream.ReadValueU32()).Hash1003F();
             }
         }
 
         public T ReadPropertyEnum<T>(Stream stream)
         {
-            UInt64 value = stream.ReadU64();
+            UInt64 value = stream.ReadValueU64();
             if (Enum.IsDefined(typeof(T), value) == false)
             {
                 throw new Exception(FightHashes.Lookup(value));
@@ -48,17 +48,17 @@ namespace Gibbed.Prototype.FileFormats
 
         public int ReadPropertyInt(Stream stream)
         {
-            return stream.ReadS32();
+            return stream.ReadValueS32();
         }
 
         public float ReadPropertyFloat(Stream stream)
         {
-            return stream.ReadF32();
+            return stream.ReadValueF32();
         }
 
         public bool ReadPropertyBool(Stream stream)
         {
-            return stream.ReadU32() == 0 ? false : true;
+            return stream.ReadValueU32() == 0 ? false : true;
         }
 
         public Fight.BranchReference ReadPropertyBranch(Stream stream)
@@ -69,7 +69,7 @@ namespace Gibbed.Prototype.FileFormats
 
             if (rez.Name == null || rez.Name.Length == 0)
             {
-                rez.Index = stream.ReadU32();
+                rez.Index = stream.ReadValueU32();
             }
 
             return rez;
@@ -107,28 +107,28 @@ namespace Gibbed.Prototype.FileFormats
 
         public void Deserialize(Stream input)
         {
-            if (input.ReadASCII(4) != "fig0")
+            if (input.ReadStringASCII(4) != "fig0")
             {
                 throw new FormatException("not a fight file");
             }
 
-            this.Flags = input.ReadU32();
-            this.Unknown1 = input.ReadU32();
+            this.Flags = input.ReadValueU32();
+            this.Unknown1 = input.ReadValueU32();
 
-            if (input.ReadU64() != (UInt64)FightHash.Chunk)
+            if (input.ReadValueU64() != (UInt64)FightHash.Chunk)
             {
                 throw new FormatException("containing fight type is not chunk");
             }
 
-            this.Unknown2 = input.ReadU32();
-            this.Unknown3 = input.ReadU32();
+            this.Unknown2 = input.ReadValueU32();
+            this.Unknown3 = input.ReadValueU32();
 
             this.NameHash = this.ReadHash(input);
             
             UInt64 contextHash = this.ReadHash(input);
 
             this.Path = input.ReadAlignedASCII();
-            this.Unknown4 = input.ReadU32();
+            this.Unknown4 = input.ReadValueU32();
 
             if ((this.Flags & 1) == 0)
             {

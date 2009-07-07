@@ -31,21 +31,21 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
 
         public override void Deserialize(Stream input)
         {
-            this.Unknown1 = input.ReadU32();
+            this.Unknown1 = input.ReadValueU32();
             this.Name = input.ReadBASCII();
             
-            uint count = input.ReadU32();
+            uint count = input.ReadValueU32();
 
             this.Unknown3 = new List<float>();
             for (uint i = 0; i < count; i++)
             {
-                this.Unknown3.Add(input.ReadF32());
+                this.Unknown3.Add(input.ReadValueF32());
             }
 
             this.Unknown4 = new List<UInt32>();
             for (uint i = 0; i < count; i++)
             {
-                this.Unknown4.Add(input.ReadU32());
+                this.Unknown4.Add(input.ReadValueU32());
             }
         }
     }

@@ -26,7 +26,7 @@ namespace Gibbed.Prototype.FileFormats.Fight.Condition
 
         public override void Serialize(Stream output, FightFile fight)
         {
-            output.WriteU64((UInt64)(this.Type));
+            output.WriteValueU64((UInt64)(this.Type));
         }
 
         public override void Deserialize(Stream input, FightFile fight)

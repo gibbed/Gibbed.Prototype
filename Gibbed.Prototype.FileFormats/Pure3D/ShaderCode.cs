@@ -40,13 +40,12 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
 
             public void Serialize(Stream output)
             {
-                output.WriteASCII(this.Text);
-                output.WriteU8(0);
+                output.WriteStringASCIIZ(this.Text);
             }
 
             public void Deserialize(Stream input)
             {
-                this.Text = input.ReadASCII((UInt32)(input.Length), true);
+                this.Text = input.ReadStringASCII((UInt32)(input.Length), true);
             }
         }
 
@@ -68,11 +67,11 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
         {
             if (this.Code is SourceCode)
             {
-                output.WriteU32(1);
+                output.WriteValueU32(1);
             }
             else if (this.Code is CompiledCode)
             {
-                output.WriteU32(5);
+                output.WriteValueU32(5);
             }
             else
             {
@@ -83,15 +82,15 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
             this.Code.Serialize(codeStream);
             codeStream.Seek(0, SeekOrigin.Begin);
 
-            output.WriteS32((int)codeStream.Length);
+            output.WriteValueS32((int)codeStream.Length);
             output.WriteFromStream(codeStream, codeStream.Length);
         }
 
         public override void Deserialize(Stream input)
         {
-            UInt32 dataType = input.ReadU32();
-            int length = input.ReadS32();
-            this.GlobalVariableCount = input.ReadU32();
+            UInt32 dataType = input.ReadValueU32();
+            int length = input.ReadValueS32();
+            this.GlobalVariableCount = input.ReadValueU32();
 
             Stream codeStream = input.ReadToMemoryStream(length);
             ICode code;

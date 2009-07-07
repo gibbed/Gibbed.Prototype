@@ -23,13 +23,13 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
 
         public override void Serialize(Stream output)
         {
-            output.WriteS32(this.Data.Length);
+            output.WriteValueS32(this.Data.Length);
             output.Write(this.Data, 0, this.Data.Length);
         }
 
         public override void Deserialize(Stream input)
         {
-            int length = input.ReadS32();
+            int length = input.ReadValueS32();
             this.Data = new byte[length];
             input.Read(this.Data, 0, this.Data.Length);
         }

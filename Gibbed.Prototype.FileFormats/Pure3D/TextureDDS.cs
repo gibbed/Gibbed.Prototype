@@ -50,25 +50,25 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
         public override void Serialize(Stream output)
         {
             output.WriteBASCII(this.Name);
-            output.WriteU32(this.Unknown1);
-            output.WriteU32(this.Width);
-            output.WriteU32(this.Height);
-            output.WriteU32(this.Unknown4);
-            output.WriteU32(this.Unknown5);
-            output.WriteU32(this.Mips);
-            output.WriteU32((UInt32)this.Algorithm);
+            output.WriteValueU32(this.Unknown1);
+            output.WriteValueU32(this.Width);
+            output.WriteValueU32(this.Height);
+            output.WriteValueU32(this.Unknown4);
+            output.WriteValueU32(this.Unknown5);
+            output.WriteValueU32(this.Mips);
+            output.WriteValueU32((UInt32)this.Algorithm);
         }
 
         public override void Deserialize(Stream input)
         {
             this.Name = input.ReadBASCII();
-            this.Unknown1 = input.ReadU32();
-            this.Width = input.ReadU32();
-            this.Height = input.ReadU32();
-            this.Unknown4 = input.ReadU32();
-            this.Unknown5 = input.ReadU32();
-            this.Mips = input.ReadU32();
-            this.Algorithm = (CompressionAlgorithm)input.ReadU32();
+            this.Unknown1 = input.ReadValueU32();
+            this.Width = input.ReadValueU32();
+            this.Height = input.ReadValueU32();
+            this.Unknown4 = input.ReadValueU32();
+            this.Unknown5 = input.ReadValueU32();
+            this.Mips = input.ReadValueU32();
+            this.Algorithm = (CompressionAlgorithm)input.ReadValueU32();
         }
 
         private TextureData GetSubImageDataNode()

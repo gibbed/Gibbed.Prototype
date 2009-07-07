@@ -38,41 +38,41 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
         public override void Serialize(Stream output)
         {
             output.WriteBASCII(this.Name);
-            output.WriteU32(this.Unknown02);
-            output.WriteU32(this.Unknown03);
-            output.WriteU32(this.Unknown04);
-            output.WriteU32(this.Unknown05);
-            output.WriteU32(this.Unknown06);
-            output.WriteU32(this.Unknown07);
-            output.WriteU32(this.Unknown08);
-            output.WriteU32(this.Unknown09);
-            output.WriteU32(this.Unknown10);
-            output.WriteU32(this.Unknown11);
-            output.WriteU32(this.Unknown12);
-            output.WriteU32(this.Unknown13);
-            output.WriteU32(this.Unknown14);
-            output.WriteU32(this.Unknown15);
-            output.WriteU32(this.Unknown16);
+            output.WriteValueU32(this.Unknown02);
+            output.WriteValueU32(this.Unknown03);
+            output.WriteValueU32(this.Unknown04);
+            output.WriteValueU32(this.Unknown05);
+            output.WriteValueU32(this.Unknown06);
+            output.WriteValueU32(this.Unknown07);
+            output.WriteValueU32(this.Unknown08);
+            output.WriteValueU32(this.Unknown09);
+            output.WriteValueU32(this.Unknown10);
+            output.WriteValueU32(this.Unknown11);
+            output.WriteValueU32(this.Unknown12);
+            output.WriteValueU32(this.Unknown13);
+            output.WriteValueU32(this.Unknown14);
+            output.WriteValueU32(this.Unknown15);
+            output.WriteValueU32(this.Unknown16);
         }
 
         public override void Deserialize(Stream input)
         {
             this.Name = input.ReadBASCII();
-            this.Unknown02 = input.ReadU32();
-            this.Unknown03 = input.ReadU32();
-            this.Unknown04 = input.ReadU32();
-            this.Unknown05 = input.ReadU32();
-            this.Unknown06 = input.ReadU32();
-            this.Unknown07 = input.ReadU32();
-            this.Unknown08 = input.ReadU32();
-            this.Unknown09 = input.ReadU32();
-            this.Unknown10 = input.ReadU32();
-            this.Unknown11 = input.ReadU32();
-            this.Unknown12 = input.ReadU32();
-            this.Unknown13 = input.ReadU32();
-            this.Unknown14 = input.ReadU32();
-            this.Unknown15 = input.ReadU32();
-            this.Unknown16 = input.ReadU32();
+            this.Unknown02 = input.ReadValueU32();
+            this.Unknown03 = input.ReadValueU32();
+            this.Unknown04 = input.ReadValueU32();
+            this.Unknown05 = input.ReadValueU32();
+            this.Unknown06 = input.ReadValueU32();
+            this.Unknown07 = input.ReadValueU32();
+            this.Unknown08 = input.ReadValueU32();
+            this.Unknown09 = input.ReadValueU32();
+            this.Unknown10 = input.ReadValueU32();
+            this.Unknown11 = input.ReadValueU32();
+            this.Unknown12 = input.ReadValueU32();
+            this.Unknown13 = input.ReadValueU32();
+            this.Unknown14 = input.ReadValueU32();
+            this.Unknown15 = input.ReadValueU32();
+            this.Unknown16 = input.ReadValueU32();
         }
     }
 }

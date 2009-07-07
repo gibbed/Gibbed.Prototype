@@ -31,9 +31,9 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
             output.WriteBASCII(this.LongName);
             output.WriteBASCII(this.ShortName);
             output.WriteBASCII(this.TypeName);
-            output.WriteU16(this.Unknown4);
-            output.WriteU16(this.Unknown5);
-            output.WriteU32(this.Unknown6);
+            output.WriteValueU16(this.Unknown4);
+            output.WriteValueU16(this.Unknown5);
+            output.WriteValueU32(this.Unknown6);
         }
 
         public override void Deserialize(Stream input)
@@ -41,9 +41,9 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
             this.LongName = input.ReadBASCII();
             this.ShortName = input.ReadBASCII();
             this.TypeName = input.ReadBASCII();
-            this.Unknown4 = input.ReadU16();
-            this.Unknown5 = input.ReadU16();
-            this.Unknown6 = input.ReadU32();
+            this.Unknown4 = input.ReadValueU16();
+            this.Unknown5 = input.ReadValueU16();
+            this.Unknown6 = input.ReadValueU32();
         }
 
         private MetaObjectData GetChildData()

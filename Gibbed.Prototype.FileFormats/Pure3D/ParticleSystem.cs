@@ -29,28 +29,28 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
 
         public override void Serialize(Stream output)
         {
-            output.WriteU32(this.Unknown1);
+            output.WriteValueU32(this.Unknown1);
             output.WriteBASCII(this.Name);
-            output.WriteU32(this.Unknown3);
-            output.WriteU32(this.Unknown4);
-            output.WriteU32(this.Unknown5);
+            output.WriteValueU32(this.Unknown3);
+            output.WriteValueU32(this.Unknown4);
+            output.WriteValueU32(this.Unknown5);
             this.Unknown6.Serialize(output);
             this.Unknown7.Serialize(output);
-            output.WriteU32(this.Unknown8);
+            output.WriteValueU32(this.Unknown8);
         }
 
         public override void Deserialize(Stream input)
         {
-            this.Unknown1 = input.ReadU32();
+            this.Unknown1 = input.ReadValueU32();
             this.Name = input.ReadBASCII();
-            this.Unknown3 = input.ReadU32();
-            this.Unknown4 = input.ReadU32();
-            this.Unknown5 = input.ReadU32();
+            this.Unknown3 = input.ReadValueU32();
+            this.Unknown4 = input.ReadValueU32();
+            this.Unknown5 = input.ReadValueU32();
             this.Unknown6 = new Vector4();
             this.Unknown6.Deserialize(input);
             this.Unknown7 = new Vector3();
             this.Unknown7.Deserialize(input);
-            this.Unknown8 = input.ReadU32();
+            this.Unknown8 = input.ReadValueU32();
         }
     }
 }
