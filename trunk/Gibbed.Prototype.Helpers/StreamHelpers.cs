@@ -8,7 +8,7 @@ namespace Gibbed.Prototype.Helpers
     {
         public static string ReadAlignedASCII(this Stream stream)
         {
-            int length = stream.ReadS32();
+            int length = stream.ReadValueS32();
 
             if (length == 0)
             {
@@ -22,7 +22,7 @@ namespace Gibbed.Prototype.Helpers
 
         public static string ReadBASCII(this Stream stream)
         {
-            byte size = stream.ReadU8();
+            byte size = stream.ReadValueU8();
 
             if (size == 0)
             {
@@ -48,7 +48,7 @@ namespace Gibbed.Prototype.Helpers
         {
             if (value.Length == 0)
             {
-                stream.WriteU8(0);
+                stream.WriteValueU8(0);
                 return;
             }
             else if (value.Length > 255)
@@ -66,7 +66,7 @@ namespace Gibbed.Prototype.Helpers
                 }
             }
 
-            stream.WriteU8((byte)(value.Length + padding));
+            stream.WriteValueU8((byte)(value.Length + padding));
             byte[] data = Encoding.ASCII.GetBytes(value);
             stream.Write(data, 0, data.Length);
 

@@ -16,16 +16,16 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
 
         public override void Deserialize(Stream input)
         {
-            this.Unknown1 = input.ReadF32();
+            this.Unknown1 = input.ReadValueF32();
 
-            int count = input.ReadS32();
+            int count = input.ReadValueS32();
             for (int i = 0; i < count; i++)
             {
-                input.ReadU32();
-                input.ReadU32();
-                input.ReadU32();
-                input.ReadU32();
-                input.ReadU32();
+                input.ReadValueU32();
+                input.ReadValueU32();
+                input.ReadValueU32();
+                input.ReadValueU32();
+                input.ReadValueU32();
             }
         }
     }

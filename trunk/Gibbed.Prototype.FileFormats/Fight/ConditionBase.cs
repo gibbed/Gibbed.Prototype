@@ -24,7 +24,7 @@ namespace Gibbed.Prototype.FileFormats.Fight
                 throw new InvalidOperationException("unknown condition type (" + FightHashes.Lookup(hash) + ")");
             }
 
-            UInt32 length = input.ReadU32();
+            UInt32 length = input.ReadValueU32();
 
             ConditionBase condition;
 
@@ -38,19 +38,19 @@ namespace Gibbed.Prototype.FileFormats.Fight
             }
 
             condition.Deserialize(input, fight);
-            condition.UnknownHash = input.ReadU64();
+            condition.UnknownHash = input.ReadValueU64();
 
             return condition;
         }
 
         public static List<ConditionBase> DeserializeConditions(string name, Stream input, FightFile fight)
         {
-            if (input.ReadU64() != name.Hash1003F())
+            if (input.ReadValueU64() != name.Hash1003F())
             {
                 throw new Exception();
             }
 
-            if (input.ReadU32() != 0)
+            if (input.ReadValueU32() != 0)
             {
                 throw new Exception();
             }

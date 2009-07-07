@@ -21,9 +21,9 @@ namespace Gibbed.Prototype.FileFormats
 
         public void Deserialize(Stream input, bool littleEndian)
         {
-            this.NameHash = input.ReadU32(littleEndian);
-            this.Offset = input.ReadU32(littleEndian);
-            this.Size = input.ReadU32(littleEndian);
+            this.NameHash = input.ReadValueU32(littleEndian);
+            this.Offset = input.ReadValueU32(littleEndian);
+            this.Size = input.ReadValueU32(littleEndian);
         }
     }
 
@@ -42,10 +42,10 @@ namespace Gibbed.Prototype.FileFormats
 
         public void Deserialize(Stream input, bool littleEndian)
         {
-            this.TypeHash = input.ReadU32();
-            this.Alignment = input.ReadU32();
-            this.Unknown2 = input.ReadU32();
-            this.Name = input.ReadASCII(input.ReadU32(), true);
+            this.TypeHash = input.ReadValueU32();
+            this.Alignment = input.ReadValueU32();
+            this.Unknown2 = input.ReadValueU32();
+            this.Name = input.ReadStringASCII(input.ReadValueU32(), true);
             this.Unknown3 = new byte[3];
             input.Read(this.Unknown3, 0, this.Unknown3.Length);
         }
@@ -130,8 +130,8 @@ namespace Gibbed.Prototype.FileFormats
             }
 
             input.Seek(header.MetadataOffset, SeekOrigin.Begin);
-            UInt32 namesAlignment = input.ReadU32();
-            UInt32 namesUnknown = input.ReadU32();
+            UInt32 namesAlignment = input.ReadValueU32();
+            UInt32 namesUnknown = input.ReadValueU32();
             this.Metadatas = new List<CementMetadata>();
             for (int i = 0; i < header.EntryCount; i++)
             {

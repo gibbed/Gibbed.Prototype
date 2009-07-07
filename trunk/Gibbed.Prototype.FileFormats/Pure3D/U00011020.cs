@@ -12,14 +12,14 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
 
         public override void Serialize(Stream output)
         {
-            output.WriteU16(this.Unknown1);
-            output.WriteU16(this.Unknown2);
+            output.WriteValueU16(this.Unknown1);
+            output.WriteValueU16(this.Unknown2);
         }
 
         public override void Deserialize(Stream input)
         {
-            this.Unknown1 = input.ReadU16();
-            this.Unknown2 = input.ReadU16();
+            this.Unknown1 = input.ReadValueU16();
+            this.Unknown2 = input.ReadValueU16();
         }
     }
 }

@@ -23,7 +23,7 @@ namespace Gibbed.Prototype.FileFormats.Fight
 
         public void Deserialize(Stream input, FightFile fight)
         {
-            this.Slave = input.ReadU32();
+            this.Slave = input.ReadValueU32();
         }
 
         public abstract void DeserializeProperties(Stream input, FightFile fight);
@@ -36,7 +36,7 @@ namespace Gibbed.Prototype.FileFormats.Fight
                 throw new InvalidOperationException("unknown track type (" + FightHashes.Lookup(hash) + ")");
             }
 
-            UInt32 unknown = input.ReadU32();
+            UInt32 unknown = input.ReadValueU32();
 
             TrackBase track;
 
@@ -51,19 +51,19 @@ namespace Gibbed.Prototype.FileFormats.Fight
 
             track.Deserialize(input, fight);
             track.DeserializeProperties(input, fight);
-            track.UnknownHash = input.ReadU64();
+            track.UnknownHash = input.ReadValueU64();
 
             return track;
         }
 
         public static List<TrackBase> DeserializeTracks(string name, Stream input, FightFile fight)
         {
-            if (input.ReadU64() != name.Hash1003F())
+            if (input.ReadValueU64() != name.Hash1003F())
             {
                 throw new Exception();
             }
 
-            if (input.ReadU32() != 0)
+            if (input.ReadValueU32() != 0)
             {
                 throw new Exception();
             }

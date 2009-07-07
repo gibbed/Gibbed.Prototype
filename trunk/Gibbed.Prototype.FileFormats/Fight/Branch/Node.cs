@@ -23,7 +23,7 @@ namespace Gibbed.Prototype.FileFormats.Fight.Branch
 
         public override void DeserializeProperties(Stream input, FightFile fight)
         {
-            this.Override = input.ReadU32() == 0 ? false : true;
+            this.Override = input.ReadValueU32() == 0 ? false : true;
             this.Conditions = ConditionBase.DeserializeConditions("conditions", input, fight);
             this.Tracks = TrackBase.DeserializeTracks("tracks", input, fight);
         }

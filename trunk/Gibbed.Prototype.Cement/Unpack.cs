@@ -78,15 +78,15 @@ namespace Gibbed.Prototype.Cement
 
                 if (unpacking == true)
                 {
-                    if (input.ReadASCII(4, true) != "RZ")
+                    if (input.ReadStringASCII(4, true) != "RZ")
                     {
                         unpacking = false;
                     }
                     else
                     {
-                        UInt32 unknown1 = input.ReadU32();
-                        int uncompressedSize = input.ReadS32();
-                        UInt32 unknown2 = input.ReadU32();
+                        UInt32 unknown1 = input.ReadValueU32();
+                        int uncompressedSize = input.ReadValueS32();
+                        UInt32 unknown2 = input.ReadValueU32();
 
                         if (unknown1 != 0 || unknown2 != 0)
                         {

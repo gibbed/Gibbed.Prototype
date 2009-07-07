@@ -24,32 +24,32 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
 
         public override void Serialize(Stream output)
         {
-            output.WriteU32(this.Unknown01);
+            output.WriteValueU32(this.Unknown01);
             output.WriteBASCII(this.ShaderName);
-            output.WriteU32(this.Unknown03);
-            output.WriteU32(this.Unknown04);
-            output.WriteU32(this.Unknown05);
-            output.WriteU32(this.Unknown06);
-            output.WriteU32(this.Unknown07);
-            output.WriteU32(this.Unknown08);
-            output.WriteU32(this.Unknown09);
-            output.WriteU32(this.Unknown10);
-            output.WriteU32(this.Unknown11);
+            output.WriteValueU32(this.Unknown03);
+            output.WriteValueU32(this.Unknown04);
+            output.WriteValueU32(this.Unknown05);
+            output.WriteValueU32(this.Unknown06);
+            output.WriteValueU32(this.Unknown07);
+            output.WriteValueU32(this.Unknown08);
+            output.WriteValueU32(this.Unknown09);
+            output.WriteValueU32(this.Unknown10);
+            output.WriteValueU32(this.Unknown11);
         }
 
         public override void Deserialize(Stream input)
         {
-            this.Unknown01 = input.ReadU32();
+            this.Unknown01 = input.ReadValueU32();
             this.ShaderName = input.ReadBASCII();
-            this.Unknown03 = input.ReadU32();
-            this.Unknown04 = input.ReadU32();
-            this.Unknown05 = input.ReadU32();
-            this.Unknown06 = input.ReadU32();
-            this.Unknown07 = input.ReadU32();
-            this.Unknown08 = input.ReadU32();
-            this.Unknown09 = input.ReadU32();
-            this.Unknown10 = input.ReadU32();
-            this.Unknown11 = input.ReadU32();
+            this.Unknown03 = input.ReadValueU32();
+            this.Unknown04 = input.ReadValueU32();
+            this.Unknown05 = input.ReadValueU32();
+            this.Unknown06 = input.ReadValueU32();
+            this.Unknown07 = input.ReadValueU32();
+            this.Unknown08 = input.ReadValueU32();
+            this.Unknown09 = input.ReadValueU32();
+            this.Unknown10 = input.ReadValueU32();
+            this.Unknown11 = input.ReadValueU32();
         }
     }
 }
