@@ -111,6 +111,7 @@
     <Compile Include="Pure3D\ExpressionGroup.cs" />
     <Compile Include="Pure3D\Geometry.cs" />
     <Compile Include="Pure3D\ParticleSystem.cs" />
+    <Compile Include="Pure3D\Registry2.cs" />
     <Compile Include="Pure3D\TextBibleHolder.cs" />
     <Compile Include="Pure3D\Physics.cs" />
     <Compile Include="Pure3D\PolySkin.cs" />
