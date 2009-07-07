@@ -26,8 +26,8 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
         public override void Serialize(Stream output)
         {
             output.WriteValueU32(this.Unknown1);
-            output.WriteBASCII(this.Name);
-            output.WriteBASCII(this.CompositeDrawableName);
+            output.WriteStringBASCII(this.Name);
+            output.WriteStringBASCII(this.CompositeDrawableName);
             output.WriteValueS32(this.Unknown4.Length);
             for (int i = 0; i < this.Unknown4.Length; i++)
             {
@@ -38,8 +38,8 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
         public override void Deserialize(Stream input)
         {
             this.Unknown1 = input.ReadValueU32();
-            this.Name = input.ReadBASCII();
-            this.CompositeDrawableName = input.ReadBASCII();
+            this.Name = input.ReadStringBASCII();
+            this.CompositeDrawableName = input.ReadStringBASCII();
 
             int count = input.ReadValueS32();
             this.Unknown4 = new UInt32[count];

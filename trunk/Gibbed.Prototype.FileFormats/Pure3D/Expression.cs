@@ -32,7 +32,7 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
         public override void Deserialize(Stream input)
         {
             this.Unknown1 = input.ReadValueU32();
-            this.Name = input.ReadBASCII();
+            this.Name = input.ReadStringBASCII();
             
             uint count = input.ReadValueU32();
 

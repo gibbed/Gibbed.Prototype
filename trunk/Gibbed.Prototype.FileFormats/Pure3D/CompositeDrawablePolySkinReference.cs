@@ -18,7 +18,7 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
         {
             output.WriteValueU32(this.Unknown1);
             output.WriteValueU32(this.Unknown2);
-            output.WriteBASCII(this.PolySkinName);
+            output.WriteStringBASCII(this.PolySkinName);
             output.WriteValueU32(this.Unknown4);
             output.WriteValueU32(this.Unknown5);
         }
@@ -27,7 +27,7 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
         {
             this.Unknown1 = input.ReadValueU32();
             this.Unknown2 = input.ReadValueU32();
-            this.PolySkinName = input.ReadBASCII();
+            this.PolySkinName = input.ReadStringBASCII();
             this.Unknown4 = input.ReadValueU32();
             this.Unknown5 = input.ReadValueU32();
         }
