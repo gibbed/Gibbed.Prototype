@@ -6,7 +6,7 @@ namespace Gibbed.Prototype.Helpers
 {
     public static partial class StreamHelpers
     {
-        public static string ReadAlignedASCII(this Stream stream)
+        public static string ReadStringAlignedASCII(this Stream stream)
         {
             int length = stream.ReadValueS32();
 
@@ -20,7 +20,7 @@ namespace Gibbed.Prototype.Helpers
             return Encoding.ASCII.GetString(data);
         }
 
-        public static string ReadBASCII(this Stream stream)
+        public static string ReadStringBASCII(this Stream stream)
         {
             byte size = stream.ReadValueU8();
 
@@ -44,7 +44,7 @@ namespace Gibbed.Prototype.Helpers
             return Encoding.ASCII.GetString(data, 0, length);
         }
 
-        public static void WriteBASCII(this Stream stream, string value)
+        public static void WriteStringBASCII(this Stream stream, string value)
         {
             if (value.Length == 0)
             {

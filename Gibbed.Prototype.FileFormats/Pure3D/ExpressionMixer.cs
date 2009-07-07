@@ -27,19 +27,19 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
         public override void Serialize(Stream output)
         {
             output.WriteValueU32(this.Unknown1);
-            output.WriteBASCII(this.Name);
+            output.WriteStringBASCII(this.Name);
             output.WriteValueU32(this.Unknown3);
-            output.WriteBASCII(this.CompositeDrawableName);
-            output.WriteBASCII(this.ExpressionGroupName);
+            output.WriteStringBASCII(this.CompositeDrawableName);
+            output.WriteStringBASCII(this.ExpressionGroupName);
         }
 
         public override void Deserialize(Stream input)
         {
             this.Unknown1 = input.ReadValueU32();
-            this.Name = input.ReadBASCII();
+            this.Name = input.ReadStringBASCII();
             this.Unknown3 = input.ReadValueU32();
-            this.CompositeDrawableName = input.ReadBASCII();
-            this.ExpressionGroupName = input.ReadBASCII();
+            this.CompositeDrawableName = input.ReadStringBASCII();
+            this.ExpressionGroupName = input.ReadStringBASCII();
         }
     }
 }

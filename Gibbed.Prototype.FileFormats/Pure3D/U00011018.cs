@@ -13,14 +13,14 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
 
         public override void Serialize(Stream output)
         {
-            output.WriteBASCII(this.Name);
+            output.WriteStringBASCII(this.Name);
             output.WriteValueF32(this.ValueA);
             output.WriteValueF32(this.ValueB);
         }
 
         public override void Deserialize(Stream input)
         {
-            this.Name = input.ReadBASCII();
+            this.Name = input.ReadStringBASCII();
             this.ValueA = input.ReadValueF32();
             this.ValueB = input.ReadValueF32();
         }

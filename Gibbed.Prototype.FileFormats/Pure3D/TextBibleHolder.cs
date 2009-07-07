@@ -22,7 +22,7 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
 
         public override void Deserialize(Stream input)
         {
-            this.Language = input.ReadBASCII();
+            this.Language = input.ReadStringBASCII();
             this.Unknown2 = input.ReadValueU32();
             
             uint count = input.ReadValueU32();
@@ -30,7 +30,7 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
             this.Keys = new List<string>();
             for (uint i = 0; i < count; i++)
             {
-                this.Keys.Add(input.ReadBASCII());
+                this.Keys.Add(input.ReadStringBASCII());
             }
 
             this.StringStarts = new List<UInt32>();

@@ -43,7 +43,7 @@ namespace Gibbed.Prototype.FileFormats
 
         public string ReadPropertyString(Stream stream)
         {
-            return stream.ReadAlignedASCII();
+            return stream.ReadStringAlignedASCII();
         }
 
         public int ReadPropertyInt(Stream stream)
@@ -65,7 +65,7 @@ namespace Gibbed.Prototype.FileFormats
         {
             Fight.BranchReference rez = new Fight.BranchReference();
 
-            rez.Name = stream.ReadAlignedASCII();
+            rez.Name = stream.ReadStringAlignedASCII();
 
             if (rez.Name == null || rez.Name.Length == 0)
             {
@@ -127,7 +127,7 @@ namespace Gibbed.Prototype.FileFormats
             
             UInt64 contextHash = this.ReadHash(input);
 
-            this.Path = input.ReadAlignedASCII();
+            this.Path = input.ReadStringAlignedASCII();
             this.Unknown4 = input.ReadValueU32();
 
             if ((this.Flags & 1) == 0)

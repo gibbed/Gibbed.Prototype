@@ -26,16 +26,16 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
         public override void Serialize(Stream output)
         {
             output.WriteValueU32(this.Unknown1);
-            output.WriteBASCII(this.Name);
-            output.WriteBASCII(this.SkeletonName);
+            output.WriteStringBASCII(this.Name);
+            output.WriteStringBASCII(this.SkeletonName);
             output.WriteValueU32(this.PolySkinReferenceCount);
         }
 
         public override void Deserialize(Stream input)
         {
             this.Unknown1 = input.ReadValueU32();
-            this.Name = input.ReadBASCII();
-            this.SkeletonName = input.ReadBASCII();
+            this.Name = input.ReadStringBASCII();
+            this.SkeletonName = input.ReadStringBASCII();
             this.PolySkinReferenceCount = input.ReadValueU32();
         }
     }

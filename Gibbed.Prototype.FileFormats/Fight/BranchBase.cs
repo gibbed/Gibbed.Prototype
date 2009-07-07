@@ -27,7 +27,7 @@ namespace Gibbed.Prototype.FileFormats.Fight
         public void Deserialize(Stream input, FightFile fight)
         {
             this.NameHash = fight.ReadHash(input);
-            this.Path = input.ReadAlignedASCII();
+            this.Path = input.ReadStringAlignedASCII();
             this.SiblingIndex = input.ReadValueU32();
 
             if ((fight.Flags & 1) == 0)

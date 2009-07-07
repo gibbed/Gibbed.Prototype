@@ -28,9 +28,9 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
 
         public override void Serialize(Stream output)
         {
-            output.WriteBASCII(this.LongName);
-            output.WriteBASCII(this.ShortName);
-            output.WriteBASCII(this.TypeName);
+            output.WriteStringBASCII(this.LongName);
+            output.WriteStringBASCII(this.ShortName);
+            output.WriteStringBASCII(this.TypeName);
             output.WriteValueU16(this.Unknown4);
             output.WriteValueU16(this.Unknown5);
             output.WriteValueU32(this.Unknown6);
@@ -38,9 +38,9 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
 
         public override void Deserialize(Stream input)
         {
-            this.LongName = input.ReadBASCII();
-            this.ShortName = input.ReadBASCII();
-            this.TypeName = input.ReadBASCII();
+            this.LongName = input.ReadStringBASCII();
+            this.ShortName = input.ReadStringBASCII();
+            this.TypeName = input.ReadStringBASCII();
             this.Unknown4 = input.ReadValueU16();
             this.Unknown5 = input.ReadValueU16();
             this.Unknown6 = input.ReadValueU32();
