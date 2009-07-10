@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
+using System.Linq;
 
 namespace Gibbed.Prototype.FileFormats.Pure3D
 {
@@ -32,6 +33,8 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
             return this.GetType().Name;
         }
 
+        public BaseNode ParentNode;
+        public Pure3DFile ParentFile;
         public List<BaseNode> Children = new List<BaseNode>();
         #region public int ChildCount
         [DisplayName("Child Count")]
@@ -67,8 +70,47 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
             throw new InvalidOperationException();
         }
 
-        public virtual System.Drawing.Image Preview()
+        public virtual object Preview()
         {
+            return null;
+        }
+
+        public T GetParentNode<T>() where T : BaseNode
+        {
+            BaseNode node = this.ParentNode;
+
+            if (node is T)
+            {
+                return node as T;
+            }
+            else if (node != null)
+            {
+                return node.GetParentNode<T>();
+            }
+            
+            return null;
+        }
+
+        public List<T> GetChildNodes<T>() where T : BaseNode
+        {
+            List<T> list = new List<T>();
+            
+            if (this.ChildCount > 0)
+            {
+                foreach (var child in this.Children)
+                {
+                    if (child is T)
+                    {
+                        list.Add(child as T);
+                    }
+                }
+            }
+
+            if (list.Count > 0)
+            {
+                return list;
+            }
+
             return null;
         }
     }

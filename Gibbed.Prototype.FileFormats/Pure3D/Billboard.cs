@@ -8,14 +8,14 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
     [KnownType(0x00017006)]
     public class Billboard : BaseNode
     {
-        public UInt32 Unknown1 { get; set; }
+        public UInt32 Version { get; set; }
         public string Name { get; set; }
         public string NewShaderName { get; set; }
-        public UInt32 Unknown4 { get; set; }
-        public UInt32 Unknown5 { get; set; }
-        public UInt32 Unknown6 { get; set; }
-        public UInt32 Unknown7 { get; set; }
-        public UInt32 Unknown8 { get; set; }
+        public UInt32 CutOffEnabled { get; set; }
+        public UInt32 ZTest { get; set; }
+        public UInt32 ZWrite { get; set; }
+        public UInt32 OcclusionCulling { get; set; }
+        public UInt32 NumQuads { get; set; }
 
         public override string ToString()
         {
@@ -29,26 +29,26 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
 
         public override void Serialize(Stream output)
         {
-            output.WriteValueU32(this.Unknown1);
+            output.WriteValueU32(this.Version);
             output.WriteStringBASCII(this.Name);
             output.WriteStringBASCII(this.NewShaderName);
-            output.WriteValueU32(this.Unknown4);
-            output.WriteValueU32(this.Unknown5);
-            output.WriteValueU32(this.Unknown6);
-            output.WriteValueU32(this.Unknown7);
-            output.WriteValueU32(this.Unknown8);
+            output.WriteValueU32(this.CutOffEnabled);
+            output.WriteValueU32(this.ZTest);
+            output.WriteValueU32(this.ZWrite);
+            output.WriteValueU32(this.OcclusionCulling);
+            output.WriteValueU32(this.NumQuads);
         }
 
         public override void Deserialize(Stream input)
         {
-            this.Unknown1 = input.ReadValueU32();
+            this.Version = input.ReadValueU32();
             this.Name = input.ReadStringBASCII();
             this.NewShaderName = input.ReadStringBASCII();
-            this.Unknown4 = input.ReadValueU32();
-            this.Unknown5 = input.ReadValueU32();
-            this.Unknown6 = input.ReadValueU32();
-            this.Unknown7 = input.ReadValueU32();
-            this.Unknown8 = input.ReadValueU32();
+            this.CutOffEnabled = input.ReadValueU32();
+            this.ZTest = input.ReadValueU32();
+            this.ZWrite = input.ReadValueU32();
+            this.OcclusionCulling = input.ReadValueU32();
+            this.NumQuads = input.ReadValueU32();
         }
     }
 }

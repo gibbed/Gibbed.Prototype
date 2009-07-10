@@ -9,14 +9,14 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
     public class Camera : BaseNode
     {
         public string Name { get; set; }
-        public UInt32 Unknown2 { get; set; }
-        public float Unknown3 { get; set; }
-        public float Unknown4 { get; set; }
-        public float Unknown5 { get; set; }
-        public float Unknown6 { get; set; }
-        public Vector3 Unknown7 { get; set; }
-        public Vector3 Unknown8 { get; set; }
-        public Vector3 Unknown9 { get; set; }
+        public UInt32 Version { get; set; }
+        public float FOV { get; set; }
+        public float AspectRatio { get; set; }
+        public float NearClip { get; set; }
+        public float FarClip { get; set; }
+        public Vector3 Position { get; set; }
+        public Vector3 Look { get; set; }
+        public Vector3 Up { get; set; }
 
         public override string ToString()
         {
@@ -31,30 +31,27 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
         public override void Serialize(Stream output)
         {
             output.WriteStringBASCII(this.Name);
-            output.WriteValueU32(this.Unknown2);
-            output.WriteValueF32(this.Unknown3);
-            output.WriteValueF32(this.Unknown4);
-            output.WriteValueF32(this.Unknown5);
-            output.WriteValueF32(this.Unknown6);
-            this.Unknown7.Serialize(output);
-            this.Unknown8.Serialize(output);
-            this.Unknown9.Serialize(output);
+            output.WriteValueU32(this.Version);
+            output.WriteValueF32(this.FOV);
+            output.WriteValueF32(this.AspectRatio);
+            output.WriteValueF32(this.NearClip);
+            output.WriteValueF32(this.FarClip);
+            this.Position.Serialize(output);
+            this.Look.Serialize(output);
+            this.Up.Serialize(output);
         }
 
         public override void Deserialize(Stream input)
         {
             this.Name = input.ReadStringBASCII();
-            this.Unknown2 = input.ReadValueU32();
-            this.Unknown3 = input.ReadValueF32();
-            this.Unknown4 = input.ReadValueF32();
-            this.Unknown5 = input.ReadValueF32();
-            this.Unknown6 = input.ReadValueF32();
-            this.Unknown7 = new Vector3();
-            this.Unknown7.Deserialize(input);
-            this.Unknown8 = new Vector3();
-            this.Unknown8.Deserialize(input);
-            this.Unknown9 = new Vector3();
-            this.Unknown9.Deserialize(input);
+            this.Version = input.ReadValueU32();
+            this.FOV = input.ReadValueF32();
+            this.AspectRatio = input.ReadValueF32();
+            this.NearClip = input.ReadValueF32();
+            this.FarClip = input.ReadValueF32();
+            this.Position = new Vector3(input);
+            this.Look = new Vector3(input);
+            this.Up = new Vector3(input);
         }
     }
 }

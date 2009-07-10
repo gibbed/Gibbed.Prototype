@@ -9,8 +9,8 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
     public class Geometry : BaseNode
     {
         public string Name { get; set; }
-        public UInt32 Unknown2 { get; set; }
-        public UInt32 Unknown3 { get; set; }
+        public UInt32 Version { get; set; }
+        public UInt32 NumPrimitiveGroups { get; set; }
 
         public override string ToString()
         {
@@ -25,15 +25,15 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
         public override void Serialize(Stream output)
         {
             output.WriteStringBASCII(this.Name);
-            output.WriteValueU32(this.Unknown2);
-            output.WriteValueU32(this.Unknown3);
+            output.WriteValueU32(this.Version);
+            output.WriteValueU32(this.NumPrimitiveGroups);
         }
 
         public override void Deserialize(Stream input)
         {
             this.Name = input.ReadStringBASCII();
-            this.Unknown2 = input.ReadValueU32();
-            this.Unknown3 = input.ReadValueU32();
+            this.Version = input.ReadValueU32();
+            this.NumPrimitiveGroups = input.ReadValueU32();
         }
     }
 }

@@ -9,10 +9,10 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
     public class Skeleton : BaseNode
     {
         public string Name { get; set; }
-        public UInt32 Unknown1 { get; set; }
-        public UInt32 Unknown2 { get; set; }
-        public UInt32 Unknown3 { get; set; }
-        public UInt32 Unknown4 { get; set; }
+        public UInt32 Version { get; set; }
+        public UInt32 NumJoints { get; set; }
+        public UInt32 NumPartitions { get; set; }
+        public UInt32 NumLimbs { get; set; }
 
         public override string ToString()
         {
@@ -27,19 +27,19 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
         public override void Serialize(Stream output)
         {
             output.WriteStringBASCII(this.Name);
-            output.WriteValueU32(this.Unknown1);
-            output.WriteValueU32(this.Unknown2);
-            output.WriteValueU32(this.Unknown3);
-            output.WriteValueU32(this.Unknown4);
+            output.WriteValueU32(this.Version);
+            output.WriteValueU32(this.NumJoints);
+            output.WriteValueU32(this.NumPartitions);
+            output.WriteValueU32(this.NumLimbs);
         }
 
         public override void Deserialize(Stream input)
         {
             this.Name = input.ReadStringBASCII();
-            this.Unknown1 = input.ReadValueU32();
-            this.Unknown2 = input.ReadValueU32();
-            this.Unknown3 = input.ReadValueU32();
-            this.Unknown4 = input.ReadValueU32();
+            this.Version = input.ReadValueU32();
+            this.NumJoints = input.ReadValueU32();
+            this.NumPartitions = input.ReadValueU32();
+            this.NumLimbs = input.ReadValueU32();
         }
     }
 }

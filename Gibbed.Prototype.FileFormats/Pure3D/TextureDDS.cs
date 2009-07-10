@@ -20,7 +20,7 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
         }
 
         public string Name { get; set; }
-        public UInt32 Unknown1 { get; set; }
+        public UInt32 Version { get; set; }
 
         [Category("Image")]
         public UInt32 Width { get; set; }
@@ -32,7 +32,7 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
         public UInt32 Unknown5 { get; set; }
 
         [Category("Image")]
-        public UInt32 Mips { get; set; }
+        public UInt32 NumMipMaps { get; set; }
 
         [Category("Image")]
         public CompressionAlgorithm Algorithm { get; set; }
@@ -50,24 +50,24 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
         public override void Serialize(Stream output)
         {
             output.WriteStringBASCII(this.Name);
-            output.WriteValueU32(this.Unknown1);
+            output.WriteValueU32(this.Version);
             output.WriteValueU32(this.Width);
             output.WriteValueU32(this.Height);
             output.WriteValueU32(this.Unknown4);
             output.WriteValueU32(this.Unknown5);
-            output.WriteValueU32(this.Mips);
+            output.WriteValueU32(this.NumMipMaps);
             output.WriteValueU32((UInt32)this.Algorithm);
         }
 
         public override void Deserialize(Stream input)
         {
             this.Name = input.ReadStringBASCII();
-            this.Unknown1 = input.ReadValueU32();
+            this.Version = input.ReadValueU32();
             this.Width = input.ReadValueU32();
             this.Height = input.ReadValueU32();
             this.Unknown4 = input.ReadValueU32();
             this.Unknown5 = input.ReadValueU32();
-            this.Mips = input.ReadValueU32();
+            this.NumMipMaps = input.ReadValueU32();
             this.Algorithm = (CompressionAlgorithm)input.ReadValueU32();
         }
 
@@ -76,7 +76,7 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
             return (TextureData)this.Children.SingleOrDefault(candidate => candidate is TextureData);
         }
 
-        public override System.Drawing.Image Preview()
+        public override object Preview()
         {
             TextureData data = this.GetSubImageDataNode();
             if (data == null)

@@ -11,7 +11,7 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
     public class Texture : BaseNode
     {
         public string Name { get; set; }
-        public UInt32 Unknown1 { get; set; }
+        public UInt32 Version { get; set; }
 
         [Category("Image")]
         public UInt32 Width { get; set; }
@@ -20,13 +20,13 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
         public UInt32 Height { get; set; }
 
         [Category("Image")]
-        public UInt32 Format { get; set; }
+        public UInt32 Bpp { get; set; }
 
-        public UInt32 Unknown5 { get; set; }
-        public UInt32 Unknown6 { get; set; }
-        public UInt32 Unknown7 { get; set; }
-        public UInt32 Unknown8 { get; set; }
-        public UInt32 Unknown9 { get; set; }
+        public UInt32 AlphaDepth { get; set; }
+        public UInt32 NumMipMaps { get; set; }
+        public UInt32 TextureType { get; set; }
+        public UInt32 Usage { get; set; }
+        public UInt32 Priority { get; set; }
 
         public override string ToString()
         {
@@ -41,29 +41,29 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
         public override void Serialize(Stream output)
         {
             output.WriteStringBASCII(this.Name);
-            output.WriteValueU32(this.Unknown1);
+            output.WriteValueU32(this.Version);
             output.WriteValueU32(this.Width);
             output.WriteValueU32(this.Height);
-            output.WriteValueU32(this.Format);
-            output.WriteValueU32(this.Unknown5);
-            output.WriteValueU32(this.Unknown6);
-            output.WriteValueU32(this.Unknown7);
-            output.WriteValueU32(this.Unknown8);
-            output.WriteValueU32(this.Unknown9);
+            output.WriteValueU32(this.Bpp);
+            output.WriteValueU32(this.AlphaDepth);
+            output.WriteValueU32(this.NumMipMaps);
+            output.WriteValueU32(this.TextureType);
+            output.WriteValueU32(this.Usage);
+            output.WriteValueU32(this.Priority);
         }
 
         public override void Deserialize(Stream input)
         {
             this.Name = input.ReadStringBASCII();
-            this.Unknown1 = input.ReadValueU32();
+            this.Version = input.ReadValueU32();
             this.Width = input.ReadValueU32();
             this.Height = input.ReadValueU32();
-            this.Format = input.ReadValueU32();
-            this.Unknown5 = input.ReadValueU32();
-            this.Unknown6 = input.ReadValueU32();
-            this.Unknown7 = input.ReadValueU32();
-            this.Unknown8 = input.ReadValueU32();
-            this.Unknown9 = input.ReadValueU32();
+            this.Bpp = input.ReadValueU32();
+            this.AlphaDepth = input.ReadValueU32();
+            this.NumMipMaps = input.ReadValueU32();
+            this.TextureType = input.ReadValueU32();
+            this.Usage = input.ReadValueU32();
+            this.Priority = input.ReadValueU32();
         }
 
         private BaseNode GetSubImageNode()
@@ -71,7 +71,7 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
             return this.Children.SingleOrDefault(candidate => (candidate is TextureDDS) || (candidate is TexturePNG));
         }
 
-        public override System.Drawing.Image Preview()
+        public override object Preview()
         {
             BaseNode node = this.GetSubImageNode();
             if (node == null)

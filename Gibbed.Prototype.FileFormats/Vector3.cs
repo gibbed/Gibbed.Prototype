@@ -13,6 +13,15 @@ namespace Gibbed.Prototype.FileFormats
         public float Y { get; set; }
         public float Z { get; set; }
 
+        public Vector3()
+        {
+        }
+
+        public Vector3(Stream input)
+        {
+            this.Deserialize(input);
+        }
+
         public void Serialize(Stream output)
         {
             output.WriteValueF32(this.X);

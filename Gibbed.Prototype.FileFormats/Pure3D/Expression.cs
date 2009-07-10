@@ -9,10 +9,11 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
     [KnownType(0x00021000)]
     public class Expression : BaseNode
     {
-        public UInt32 Unknown1 { get; set; }
+        public UInt32 Version { get; set; }
         public string Name { get; set; }
-        public List<float> Unknown3 { get; set; }
-        public List<UInt32> Unknown4 { get; set; }
+        public UInt32 Count { get; set; }
+        public float[] Unknown3 { get; set; }
+        public UInt32[] Unknown4 { get; set; }
 
         public override string ToString()
         {
@@ -31,21 +32,20 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
 
         public override void Deserialize(Stream input)
         {
-            this.Unknown1 = input.ReadValueU32();
+            this.Version = input.ReadValueU32();
             this.Name = input.ReadStringBASCII();
-            
-            uint count = input.ReadValueU32();
+            this.Count = input.ReadValueU32();
 
-            this.Unknown3 = new List<float>();
-            for (uint i = 0; i < count; i++)
+            this.Unknown3 = new float[this.Count];
+            for (uint i = 0; i < this.Count; i++)
             {
-                this.Unknown3.Add(input.ReadValueF32());
+                this.Unknown3[i] = input.ReadValueF32();
             }
 
-            this.Unknown4 = new List<UInt32>();
-            for (uint i = 0; i < count; i++)
+            this.Unknown4 = new UInt32[this.Count];
+            for (uint i = 0; i < this.Count; i++)
             {
-                this.Unknown4.Add(input.ReadValueU32());
+                this.Unknown4[i] = input.ReadValueU32();
             }
         }
     }
