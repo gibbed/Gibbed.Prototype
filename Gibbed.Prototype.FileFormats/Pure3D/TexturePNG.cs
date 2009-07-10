@@ -59,14 +59,9 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
             this.Format = input.ReadValueU32();
         }
 
-        private TextureData GetSubImageDataNode()
-        {
-            return (TextureData)this.Children.SingleOrDefault(candidate => candidate is TextureData);
-        }
-
         public override object Preview()
         {
-            TextureData data = this.GetSubImageDataNode();
+            TextureData data = this.GetChildNode<TextureData>();
             if (data == null)
             {
                 return null;
@@ -83,7 +78,7 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
         {
             get
             {
-                BaseNode node = this.GetSubImageDataNode();
+                BaseNode node = this.GetChildNode<TextureData>();
                 if (node == null)
                 {
                     return false;
@@ -94,7 +89,7 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
 
         public override void Export(Stream output)
         {
-            BaseNode node = this.GetSubImageDataNode();
+            BaseNode node = this.GetChildNode<TextureData>();
             if (node == null)
             {
                 throw new InvalidOperationException();
@@ -106,7 +101,7 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
         {
             get
             {
-                BaseNode node = this.GetSubImageDataNode();
+                BaseNode node = this.GetChildNode<TextureData>();
                 if (node == null)
                 {
                     return false;
@@ -117,7 +112,7 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
 
         public override void Import(Stream input)
         {
-            BaseNode node = this.GetSubImageDataNode();
+            BaseNode node = this.GetChildNode<TextureData>();
             if (node == null)
             {
                 throw new InvalidOperationException();

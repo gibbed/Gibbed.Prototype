@@ -121,6 +121,7 @@
     <Compile Include="Pure3D\ShaderTemplate.cs" />
     <Compile Include="Pure3D\Skeleton.cs" />
     <Compile Include="Pure3D\TextBibleStorage.cs" />
+    <Compile Include="Pure3D\TextureGlyph.cs" />
     <Compile Include="Pure3D\TextureSource.cs" />
     <Compile Include="Pure3D\KnownTypeAttribute.cs" />
     <Compile Include="Pure3D\BaseNode.cs" />
@@ -133,14 +134,14 @@
     <Compile Include="Pure3D\NewShader.cs" />
     <Compile Include="Pure3D\ShaderCode.cs" />
     <Compile Include="Pure3D\ShaderGlobalVariable.cs" />
-    <Compile Include="Pure3D\U00010020.cs" />
+    <Compile Include="Pure3D\U00010020_PrimitiveGroup.cs" />
     <Compile Include="Pure3D\U00011016.cs" />
     <Compile Include="Pure3D\U00011017.cs" />
     <Compile Include="Pure3D\U00011018.cs" />
     <Compile Include="Pure3D\U00011020.cs" />
     <Compile Include="Pure3D\U00011115.cs" />
     <Compile Include="Pure3D\U00019008.cs" />
-    <Compile Include="Pure3D\U00022001.cs" />
+    <Compile Include="Pure3D\TextureGlyphList.cs" />
     <Compile Include="Pure3D\TextureData.cs" />
     <Compile Include="Pure3D\U00022004.cs" />
     <Compile Include="Pure3D\U00022005.cs" />
@@ -157,6 +158,7 @@
     <Compile Include="Vector2.cs" />
     <Compile Include="Vector3.cs" />
     <Compile Include="Vector4.cs" />
+    <Compile Include="VectorTypeConverter.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Gibbed.Helpers\Gibbed.Helpers.csproj">

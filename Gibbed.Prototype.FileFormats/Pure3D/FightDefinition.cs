@@ -40,16 +40,11 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
             this.Unknown4 = input.ReadValueU32();
         }
 
-        private FightData GetChildData()
-        {
-            return (FightData)this.Children.SingleOrDefault(candidate => candidate is FightData);
-        }
-
         public override bool Exportable
         {
             get
             {
-                BaseNode node = this.GetChildData();
+                BaseNode node = this.GetChildNode<FightData>();
                 if (node == null)
                 {
                     return false;
@@ -60,7 +55,7 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
 
         public override void Export(Stream output)
         {
-            BaseNode node = this.GetChildData();
+            BaseNode node = this.GetChildNode<FightData>();
             if (node == null)
             {
                 throw new InvalidOperationException();
@@ -72,7 +67,7 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
         {
             get
             {
-                BaseNode node = this.GetChildData();
+                BaseNode node = this.GetChildNode<FightData>();
                 if (node == null)
                 {
                     return false;
@@ -83,7 +78,7 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
 
         public override void Import(Stream input)
         {
-            BaseNode node = this.GetChildData();
+            BaseNode node = this.GetChildNode<FightData>();
             if (node == null)
             {
                 throw new InvalidOperationException();
