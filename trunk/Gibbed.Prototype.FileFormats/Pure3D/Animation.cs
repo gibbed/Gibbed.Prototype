@@ -8,12 +8,12 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
     [KnownType(0x00121000)]
     public class Animation : BaseNode
     {
-        public UInt32 Unknown1 { get; set; }
+        public UInt32 Version { get; set; }
         public string Name { get; set; }
-        public UInt32 Unknown3 { get; set; }
-        public UInt32 Unknown4 { get; set; }
-        public UInt32 Unknown5 { get; set; }
-        public UInt32 Unknown6 { get; set; }
+        public FourCC AnimationType { get; set; }
+        public float NumFrames { get; set; }
+        public float FrameRate { get; set; }
+        public UInt32 Cyclic { get; set; }
 
         public override string ToString()
         {
@@ -27,22 +27,22 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
 
         public override void Serialize(Stream output)
         {
-            output.WriteValueU32(this.Unknown1);
+            output.WriteValueU32(this.Version);
             output.WriteStringBASCII(this.Name);
-            output.WriteValueU32(this.Unknown3);
-            output.WriteValueU32(this.Unknown4);
-            output.WriteValueU32(this.Unknown5);
-            output.WriteValueU32(this.Unknown6);
+            this.AnimationType.Serialize(output);
+            output.WriteValueF32(this.NumFrames);
+            output.WriteValueF32(this.FrameRate);
+            output.WriteValueU32(this.Cyclic);
         }
 
         public override void Deserialize(Stream input)
         {
-            this.Unknown1 = input.ReadValueU32();
+            this.Version = input.ReadValueU32();
             this.Name = input.ReadStringBASCII();
-            this.Unknown3 = input.ReadValueU32();
-            this.Unknown4 = input.ReadValueU32();
-            this.Unknown5 = input.ReadValueU32();
-            this.Unknown6 = input.ReadValueU32();
+            this.AnimationType = new FourCC(input);
+            this.NumFrames = input.ReadValueF32();
+            this.FrameRate = input.ReadValueF32();
+            this.Cyclic = input.ReadValueU32();
         }
     }
 }

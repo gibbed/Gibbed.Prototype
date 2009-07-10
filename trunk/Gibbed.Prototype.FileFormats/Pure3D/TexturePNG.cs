@@ -20,10 +20,10 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
         [Category("Image")]
         public UInt32 Height { get; set; }
 
-        public UInt32 Unknown4 { get; set; }
-        public UInt32 Unknown5 { get; set; }
-        public UInt32 Unknown6 { get; set; }
-        public UInt32 Unknown7 { get; set; }
+        public UInt32 Bpp { get; set; }
+        public UInt32 Palettized { get; set; }
+        public UInt32 HasAlpha { get; set; }
+        public UInt32 Format { get; set; }
 
         public override string ToString()
         {
@@ -41,10 +41,10 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
             output.WriteValueU32(this.Unknown1);
             output.WriteValueU32(this.Width);
             output.WriteValueU32(this.Height);
-            output.WriteValueU32(this.Unknown4);
-            output.WriteValueU32(this.Unknown5);
-            output.WriteValueU32(this.Unknown6);
-            output.WriteValueU32(this.Unknown7);
+            output.WriteValueU32(this.Bpp);
+            output.WriteValueU32(this.Palettized);
+            output.WriteValueU32(this.HasAlpha);
+            output.WriteValueU32(this.Format);
         }
 
         public override void Deserialize(Stream input)
@@ -53,10 +53,10 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
             this.Unknown1 = input.ReadValueU32();
             this.Width = input.ReadValueU32();
             this.Height = input.ReadValueU32();
-            this.Unknown4 = input.ReadValueU32();
-            this.Unknown5 = input.ReadValueU32();
-            this.Unknown6 = input.ReadValueU32();
-            this.Unknown7 = input.ReadValueU32();
+            this.Bpp = input.ReadValueU32();
+            this.Palettized = input.ReadValueU32();
+            this.HasAlpha = input.ReadValueU32();
+            this.Format = input.ReadValueU32();
         }
 
         private TextureData GetSubImageDataNode()
@@ -64,7 +64,7 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
             return (TextureData)this.Children.SingleOrDefault(candidate => candidate is TextureData);
         }
 
-        public override System.Drawing.Image Preview()
+        public override object Preview()
         {
             TextureData data = this.GetSubImageDataNode();
             if (data == null)

@@ -9,7 +9,7 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
     public class ShaderGlobalVariable : BaseNode
     {
         public string Name { get; set; }
-        public UInt32 Unknown1 { get; set; }
+        public ShaderVariableType VariableType { get; set; }
         public UInt32 Register { get; set; }
 
         public override string ToString()
@@ -25,14 +25,14 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
         public override void Serialize(Stream output)
         {
             output.WriteStringBASCII(this.Name);
-            output.WriteValueU32(this.Unknown1);
+            output.WriteValueU32((UInt32)this.VariableType);
             output.WriteValueU32(this.Register);
         }
 
         public override void Deserialize(Stream input)
         {
             this.Name = input.ReadStringBASCII();
-            this.Unknown1 = input.ReadValueU32();
+            this.VariableType = (ShaderVariableType)input.ReadValueU32();
             this.Register = input.ReadValueU32();
         }
     }

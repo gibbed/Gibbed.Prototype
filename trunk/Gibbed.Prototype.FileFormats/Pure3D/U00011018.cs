@@ -8,21 +8,18 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
     public class U00011018 : BaseNode
     {
         public string Name { get; set; }
-        public float ValueA { get; set; }
-        public float ValueB { get; set; }
+        public Vector2 Value { get; set; }
 
         public override void Serialize(Stream output)
         {
             output.WriteStringBASCII(this.Name);
-            output.WriteValueF32(this.ValueA);
-            output.WriteValueF32(this.ValueB);
+            this.Value.Serialize(output);
         }
 
         public override void Deserialize(Stream input)
         {
             this.Name = input.ReadStringBASCII();
-            this.ValueA = input.ReadValueF32();
-            this.ValueB = input.ReadValueF32();
+            this.Value = new Vector2(input);
         }
     }
 }

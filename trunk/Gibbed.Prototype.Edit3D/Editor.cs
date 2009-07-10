@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 using Gibbed.Prototype.FileFormats;
@@ -103,7 +104,18 @@ namespace Gibbed.Prototype.Edit3D
         private void SelectNode(Gibbed.Prototype.FileFormats.Pure3D.BaseNode node)
         {
             this.propertyGrid.SelectedObject = node;
-            this.previewPicture.Image = node.Preview();
+
+            object preview = node.Preview();
+
+            if (preview is Image)
+            {
+                this.previewPicture.Image = (Image)preview;
+            }
+            else
+            {
+                this.previewPicture.Image = null;
+            }
+            
             this.importNodeButton.Enabled = node.Importable;
             this.exportNodeButton.Enabled = node.Exportable;
         }

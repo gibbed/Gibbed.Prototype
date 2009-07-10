@@ -8,10 +8,10 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
     [KnownType(0x00123000)]
     public class CompositeDrawable : BaseNode
     {
-        public UInt32 Unknown1 { get; set; }
+        public UInt32 Version { get; set; }
         public string Name { get; set; }
         public string SkeletonName { get; set; }
-        public UInt32 PolySkinReferenceCount { get; set; }
+        public UInt32 NumPrimitives { get; set; }
 
         public override string ToString()
         {
@@ -25,18 +25,18 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
 
         public override void Serialize(Stream output)
         {
-            output.WriteValueU32(this.Unknown1);
+            output.WriteValueU32(this.Version);
             output.WriteStringBASCII(this.Name);
             output.WriteStringBASCII(this.SkeletonName);
-            output.WriteValueU32(this.PolySkinReferenceCount);
+            output.WriteValueU32(this.NumPrimitives);
         }
 
         public override void Deserialize(Stream input)
         {
-            this.Unknown1 = input.ReadValueU32();
+            this.Version = input.ReadValueU32();
             this.Name = input.ReadStringBASCII();
             this.SkeletonName = input.ReadStringBASCII();
-            this.PolySkinReferenceCount = input.ReadValueU32();
+            this.NumPrimitives = input.ReadValueU32();
         }
     }
 }

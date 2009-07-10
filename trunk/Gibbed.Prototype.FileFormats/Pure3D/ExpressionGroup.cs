@@ -8,9 +8,10 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
     [KnownType(0x00021001)]
     public class ExpressionGroup : BaseNode
     {
-        public UInt32 Unknown1 { get; set; }
+        public UInt32 Version { get; set; }
         public string Name { get; set; }
         public string CompositeDrawableName { get; set; }
+        public Int32 Count { get; set; }
         public UInt32[] Unknown4 { get; set; }
 
         public override string ToString()
@@ -25,7 +26,7 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
 
         public override void Serialize(Stream output)
         {
-            output.WriteValueU32(this.Unknown1);
+            output.WriteValueU32(this.Version);
             output.WriteStringBASCII(this.Name);
             output.WriteStringBASCII(this.CompositeDrawableName);
             output.WriteValueS32(this.Unknown4.Length);
@@ -37,13 +38,13 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
 
         public override void Deserialize(Stream input)
         {
-            this.Unknown1 = input.ReadValueU32();
+            this.Version = input.ReadValueU32();
             this.Name = input.ReadStringBASCII();
             this.CompositeDrawableName = input.ReadStringBASCII();
 
-            int count = input.ReadValueS32();
-            this.Unknown4 = new UInt32[count];
-            for (int i = 0; i < count; i++)
+            this.Count = input.ReadValueS32();
+            this.Unknown4 = new UInt32[this.Count];
+            for (int i = 0; i < this.Count; i++)
             {
                 this.Unknown4[i] = input.ReadValueU32();
             }

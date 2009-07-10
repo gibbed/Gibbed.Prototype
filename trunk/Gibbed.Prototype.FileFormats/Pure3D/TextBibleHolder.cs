@@ -10,7 +10,7 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
     public class TextBibleHolder : BaseNode
     {
         public string Language { get; set; }
-        public UInt32 Unknown2 { get; set; }
+        public UInt32 Version { get; set; }
         public List<String> Keys { get; set; }
         public List<UInt32> StringStarts { get; set; }
         public List<UInt32> StringStops { get; set; }
@@ -23,7 +23,7 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
         public override void Deserialize(Stream input)
         {
             this.Language = input.ReadStringBASCII();
-            this.Unknown2 = input.ReadValueU32();
+            this.Version = input.ReadValueU32();
             
             uint count = input.ReadValueU32();
 

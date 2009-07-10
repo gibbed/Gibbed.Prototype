@@ -10,7 +10,7 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
     {
         public string Name { get; set; }
         public UInt32 Unknown1 { get; set; }
-        public string Unknown2 { get; set; }
+        public string SkeletonName { get; set; }
         public UInt32 Unknown3 { get; set; }
 
         public override string ToString()
@@ -27,7 +27,7 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
         {
             output.WriteStringBASCII(this.Name);
             output.WriteValueU32(this.Unknown1);
-            output.WriteStringBASCII(this.Unknown2);
+            output.WriteStringBASCII(this.SkeletonName);
             output.WriteValueU32(this.Unknown3);
         }
 
@@ -35,7 +35,7 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
         {
             this.Name = input.ReadStringBASCII();
             this.Unknown1 = input.ReadValueU32();
-            this.Unknown2 = input.ReadStringBASCII();
+            this.SkeletonName = input.ReadStringBASCII();
             this.Unknown3 = input.ReadValueU32();
         }
     }

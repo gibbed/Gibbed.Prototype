@@ -88,7 +88,7 @@ namespace Gibbed.Prototype.FileFormats
         }
         #endregion
 
-        private Pure3D.BaseNode DeserializeNode(Stream input)
+        private Pure3D.BaseNode DeserializeNode(Stream input, Pure3D.BaseNode parent)
         {
             UInt32 typeId = input.ReadValueU32();
             UInt32 thisSize = input.ReadValueU32() - 12;
@@ -113,12 +113,16 @@ namespace Gibbed.Prototype.FileFormats
                 node = new Pure3D.Unknown(typeId);
             }
 
+            node.ParentNode = parent;
+            node.ParentFile = this;
+
             Stream nodeStream = input.ReadToMemoryStream(thisSize);
             Stream childrenStream = input.ReadToMemoryStream(childrenSize);
 
             while (childrenStream.Position < childrenStream.Length)
             {
-                node.Children.Add(this.DeserializeNode(childrenStream));
+                Pure3D.BaseNode childNode = this.DeserializeNode(childrenStream, node);
+                node.Children.Add(childNode);
             }
 
             node.Deserialize(nodeStream);
@@ -156,7 +160,7 @@ namespace Gibbed.Prototype.FileFormats
             this.Nodes = new List<Pure3D.BaseNode>();
             while (nodesStream.Position < nodesStream.Length)
             {
-                this.Nodes.Add(this.DeserializeNode(nodesStream));
+                this.Nodes.Add(this.DeserializeNode(nodesStream, null));
             }
         }
     }
