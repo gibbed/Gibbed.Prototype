@@ -6,7 +6,7 @@ using Gibbed.Prototype.Helpers;
 
 namespace Gibbed.Prototype.FileFormats
 {
-    [TypeConverter(typeof(ExpandableObjectConverter))]
+    [TypeConverter(typeof(VectorTypeConverter))]
     public class Vector2
     {
         public float X { get; set; }

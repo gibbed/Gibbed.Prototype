@@ -46,16 +46,11 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
             this.Unknown6 = input.ReadValueU32();
         }
 
-        private MetaObjectData GetChildData()
-        {
-            return (MetaObjectData)this.Children.SingleOrDefault(candidate => candidate is MetaObjectData);
-        }
-
         public override bool Exportable
         {
             get
             {
-                BaseNode node = this.GetChildData();
+                BaseNode node = this.GetChildNode<MetaObjectData>();
                 if (node == null)
                 {
                     return false;
@@ -66,7 +61,7 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
 
         public override void Export(Stream output)
         {
-            BaseNode node = this.GetChildData();
+            BaseNode node = this.GetChildNode<MetaObjectData>();
             if (node == null)
             {
                 throw new InvalidOperationException();
@@ -78,7 +73,7 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
         {
             get
             {
-                BaseNode node = this.GetChildData();
+                BaseNode node = this.GetChildNode<MetaObjectData>();
                 if (node == null)
                 {
                     return false;
@@ -89,7 +84,7 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
 
         public override void Import(Stream input)
         {
-            BaseNode node = this.GetChildData();
+            BaseNode node = this.GetChildNode<MetaObjectData>();
             if (node == null)
             {
                 throw new InvalidOperationException();

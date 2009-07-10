@@ -10,6 +10,16 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
         public string Name { get; set; }
         public Vector2 Value { get; set; }
 
+        public override string ToString()
+        {
+            if (this.Name == null || this.Name.Length == 0)
+            {
+                return base.ToString();
+            }
+
+            return base.ToString() + " (" + this.Name + ")";
+        }
+
         public override void Serialize(Stream output)
         {
             output.WriteStringBASCII(this.Name);
