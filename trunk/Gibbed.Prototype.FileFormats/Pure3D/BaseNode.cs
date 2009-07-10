@@ -93,41 +93,12 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
 
         public T GetChildNode<T>() where T : BaseNode
         {
-            if (this.ChildCount > 0)
-            {
-                foreach (var child in this.Children)
-                {
-                    if (child is T)
-                    {
-                        return (T)child;
-                    }
-                }
-            }
-
-            return null;
+            return (T)this.Children.SingleOrDefault(candidate => candidate is T);
         }
 
         public List<T> GetChildNodes<T>() where T : BaseNode
         {
-            List<T> list = new List<T>();
-            
-            if (this.ChildCount > 0)
-            {
-                foreach (var child in this.Children)
-                {
-                    if (child is T)
-                    {
-                        list.Add(child as T);
-                    }
-                }
-            }
-
-            if (list.Count > 0)
-            {
-                return list;
-            }
-
-            return null;
+            return new List<T>(this.Children.OfType<T>());
         }
     }
 }
