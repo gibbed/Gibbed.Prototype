@@ -1,10 +1,32 @@
-﻿using System;
+﻿/* Copyright (c) 2012 Rick (rick 'at' gibbed 'dot' us)
+ * 
+ * This software is provided 'as-is', without any express or implied
+ * warranty. In no event will the authors be held liable for any damages
+ * arising from the use of this software.
+ * 
+ * Permission is granted to anyone to use this software for any purpose,
+ * including commercial applications, and to alter it and redistribute it
+ * freely, subject to the following restrictions:
+ * 
+ * 1. The origin of this software must not be misrepresented; you must not
+ *    claim that you wrote the original software. If you use this software
+ *    in a product, an acknowledgment in the product documentation would
+ *    be appreciated but is not required.
+ * 
+ * 2. Altered source versions must be plainly marked as such, and must not
+ *    be misrepresented as being the original software.
+ * 
+ * 3. This notice may not be removed or altered from any source
+ *    distribution.
+ */
+
+using System;
+using System.Text;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
-using Gibbed.Helpers;
-using Gibbed.Prototype.Helpers;
+using Gibbed.IO;
 
 namespace Gibbed.Prototype.FileFormats
 {
@@ -14,16 +36,16 @@ namespace Gibbed.Prototype.FileFormats
         public UInt32 Offset;
         public UInt32 Size;
 
-        public void Serialize(Stream output, bool littleEndian)
+        public void Serialize(Stream output, Endian endian)
         {
             throw new NotImplementedException();
         }
 
-        public void Deserialize(Stream input, bool littleEndian)
+        public void Deserialize(Stream input, Endian endian)
         {
-            this.NameHash = input.ReadValueU32(littleEndian);
-            this.Offset = input.ReadValueU32(littleEndian);
-            this.Size = input.ReadValueU32(littleEndian);
+            this.NameHash = input.ReadValueU32(endian);
+            this.Offset = input.ReadValueU32(endian);
+            this.Size = input.ReadValueU32(endian);
         }
     }
 
@@ -35,17 +57,17 @@ namespace Gibbed.Prototype.FileFormats
         public string Name;
         public byte[] Unknown3;
 
-        public void Serialize(Stream output, bool littleEndian)
+        public void Serialize(Stream output, Endian endian)
         {
             throw new NotImplementedException();
         }
 
-        public void Deserialize(Stream input, bool littleEndian)
+        public void Deserialize(Stream input, Endian endian)
         {
             this.TypeHash = input.ReadValueU32();
             this.Alignment = input.ReadValueU32();
             this.Unknown2 = input.ReadValueU32();
-            this.Name = input.ReadStringASCII(input.ReadValueU32(), true);
+            this.Name = input.ReadString(input.ReadValueU32(), true, Encoding.ASCII);
             this.Unknown3 = new byte[3];
             input.Read(this.Unknown3, 0, this.Unknown3.Length);
         }
@@ -58,12 +80,16 @@ namespace Gibbed.Prototype.FileFormats
         {
             [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 24)]
             public string Magic;
+
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 8)]
             private byte[] Padding1;
+
             public byte MajorVersion;
             public byte MinorVersion;
+
             [MarshalAs(UnmanagedType.I1)]
             public bool BigEndian;
+
             public byte Unknown1;
             public UInt32 IndexOffset;
             public UInt32 IndexSize;
@@ -93,7 +119,7 @@ namespace Gibbed.Prototype.FileFormats
 
         public void Deserialize(Stream input)
         {
-            Header header = input.ReadStructure<Header>();
+            var header = input.ReadStructure<Header>();
 
             if (header.Magic != "ATG CORE CEMENT LIBRARY")
             {
@@ -124,8 +150,8 @@ namespace Gibbed.Prototype.FileFormats
             this.Entries = new List<CementEntry>();
             for (int i = 0; i < header.EntryCount; i++)
             {
-                CementEntry entry = new CementEntry();
-                entry.Deserialize(input, header.BigEndian == false);
+                var entry = new CementEntry();
+                entry.Deserialize(input, header.BigEndian == false ? Endian.Little : Endian.Big);
                 this.Entries.Add(entry);
             }
 
@@ -135,8 +161,8 @@ namespace Gibbed.Prototype.FileFormats
             this.Metadatas = new List<CementMetadata>();
             for (int i = 0; i < header.EntryCount; i++)
             {
-                CementMetadata metadata = new CementMetadata();
-                metadata.Deserialize(input, header.BigEndian == false);
+                var metadata = new CementMetadata();
+                metadata.Deserialize(input, header.BigEndian == false ? Endian.Little : Endian.Big);
                 this.Metadatas.Add(metadata);
             }
         }

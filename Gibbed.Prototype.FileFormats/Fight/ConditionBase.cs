@@ -1,11 +1,30 @@
-﻿using System;
+﻿/* Copyright (c) 2012 Rick (rick 'at' gibbed 'dot' us)
+ * 
+ * This software is provided 'as-is', without any express or implied
+ * warranty. In no event will the authors be held liable for any damages
+ * arising from the use of this software.
+ * 
+ * Permission is granted to anyone to use this software for any purpose,
+ * including commercial applications, and to alter it and redistribute it
+ * freely, subject to the following restrictions:
+ * 
+ * 1. The origin of this software must not be misrepresented; you must not
+ *    claim that you wrote the original software. If you use this software
+ *    in a product, an acknowledgment in the product documentation would
+ *    be appreciated but is not required.
+ * 
+ * 2. Altered source versions must be plainly marked as such, and must not
+ *    be misrepresented as being the original software.
+ * 
+ * 3. This notice may not be removed or altered from any source
+ *    distribution.
+ */
+
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-using System.Linq;
-using System.Runtime.InteropServices;
-using Gibbed.Helpers;
-using Gibbed.Prototype.Helpers;
+using Gibbed.IO;
 
 namespace Gibbed.Prototype.FileFormats.Fight
 {
@@ -24,13 +43,13 @@ namespace Gibbed.Prototype.FileFormats.Fight
                 throw new InvalidOperationException("unknown condition type (" + FightHashes.Lookup(hash) + ")");
             }
 
-            UInt32 length = input.ReadValueU32();
+            var length = input.ReadValueU32();
 
             ConditionBase condition;
 
             try
             {
-                condition = (ConditionBase)System.Activator.CreateInstance(type);
+                condition = (ConditionBase)Activator.CreateInstance(type);
             }
             catch (TargetInvocationException e)
             {
@@ -55,11 +74,11 @@ namespace Gibbed.Prototype.FileFormats.Fight
                 throw new Exception();
             }
 
-            List<ConditionBase> conditions = new List<ConditionBase>();
+            var conditions = new List<ConditionBase>();
 
             while (true)
             {
-                UInt64 hash = fight.ReadHash(input);
+                var hash = fight.ReadHash(input);
                 if (hash == 0)
                 {
                     break;

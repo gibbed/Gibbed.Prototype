@@ -1,13 +1,33 @@
-﻿using System;
-using System.Collections.Generic;
+﻿/* Copyright (c) 2012 Rick (rick 'at' gibbed 'dot' us)
+ * 
+ * This software is provided 'as-is', without any express or implied
+ * warranty. In no event will the authors be held liable for any damages
+ * arising from the use of this software.
+ * 
+ * Permission is granted to anyone to use this software for any purpose,
+ * including commercial applications, and to alter it and redistribute it
+ * freely, subject to the following restrictions:
+ * 
+ * 1. The origin of this software must not be misrepresented; you must not
+ *    claim that you wrote the original software. If you use this software
+ *    in a product, an acknowledgment in the product documentation would
+ *    be appreciated but is not required.
+ * 
+ * 2. Altered source versions must be plainly marked as such, and must not
+ *    be misrepresented as being the original software.
+ * 
+ * 3. This notice may not be removed or altered from any source
+ *    distribution.
+ */
+
+using System;
 using System.IO;
-using System.Text;
-using Gibbed.Helpers;
 
 namespace Gibbed.Prototype.FileFormats.Fight.Condition
 {
     public enum ScenarioGameObjectSlot : ulong
     {
+        // ReSharper disable InconsistentNaming
         CollectibleCollectedCollectible = 0x01AC19B7AB696308, // "Collectible Collected - Collectible"
         SpawnerFinishedMessageSpawner = 0x027800DF90A433D2, // "Spawner Finished Message - Spawner"
         EnterAlertPlayer = 0x06DA724E63BD8FE8, // "Enter Alert - player"
@@ -78,6 +98,7 @@ namespace Gibbed.Prototype.FileFormats.Fight.Condition
         TriggerVolumeEnterTrigger = 0xE5CB9C69AC3A588D, // "Trigger Volume Enter - Trigger"
         StreamPackageLoaded = 0xED342ECBFFC87543, // "Stream Package Loaded"
         EnterVehicleMessageVehicle = 0xF120C8BE022DCB16, // "Enter Vehicle Message - Vehicle"
+        // ReSharper restore InconsistentNaming
     }
 
     [KnownCondition(typeof(Context.Scenario), "gameObject")]

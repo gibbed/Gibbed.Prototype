@@ -1,8 +1,29 @@
-﻿using System;
+﻿/* Copyright (c) 2012 Rick (rick 'at' gibbed 'dot' us)
+ * 
+ * This software is provided 'as-is', without any express or implied
+ * warranty. In no event will the authors be held liable for any damages
+ * arising from the use of this software.
+ * 
+ * Permission is granted to anyone to use this software for any purpose,
+ * including commercial applications, and to alter it and redistribute it
+ * freely, subject to the following restrictions:
+ * 
+ * 1. The origin of this software must not be misrepresented; you must not
+ *    claim that you wrote the original software. If you use this software
+ *    in a product, an acknowledgment in the product documentation would
+ *    be appreciated but is not required.
+ * 
+ * 2. Altered source versions must be plainly marked as such, and must not
+ *    be misrepresented as being the original software.
+ * 
+ * 3. This notice may not be removed or altered from any source
+ *    distribution.
+ */
+
+using System;
 using System.Collections.Generic;
 using System.IO;
-using Gibbed.Helpers;
-using Gibbed.Prototype.Helpers;
+using Gibbed.IO;
 
 namespace Gibbed.Prototype.FileFormats.Pure3D
 {
@@ -10,10 +31,10 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
     public class TextBibleHolder : BaseNode
     {
         public string Language { get; set; }
-        public UInt32 Version { get; set; }
-        public List<String> Keys { get; set; }
-        public List<UInt32> StringStarts { get; set; }
-        public List<UInt32> StringStops { get; set; }
+        public uint Version { get; set; }
+        public List<string> Keys { get; set; }
+        public List<uint> StringStarts { get; set; }
+        public List<uint> StringStops { get; set; }
 
         public override void Serialize(Stream output)
         {
@@ -24,8 +45,8 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
         {
             this.Language = input.ReadStringBASCII();
             this.Version = input.ReadValueU32();
-            
-            uint count = input.ReadValueU32();
+
+            var count = input.ReadValueU32();
 
             this.Keys = new List<string>();
             for (uint i = 0; i < count; i++)

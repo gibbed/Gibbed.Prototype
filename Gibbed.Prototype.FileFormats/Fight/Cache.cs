@@ -1,39 +1,61 @@
-﻿using System;
+﻿/* Copyright (c) 2012 Rick (rick 'at' gibbed 'dot' us)
+ * 
+ * This software is provided 'as-is', without any express or implied
+ * warranty. In no event will the authors be held liable for any damages
+ * arising from the use of this software.
+ * 
+ * Permission is granted to anyone to use this software for any purpose,
+ * including commercial applications, and to alter it and redistribute it
+ * freely, subject to the following restrictions:
+ * 
+ * 1. The origin of this software must not be misrepresented; you must not
+ *    claim that you wrote the original software. If you use this software
+ *    in a product, an acknowledgment in the product documentation would
+ *    be appreciated but is not required.
+ * 
+ * 2. Altered source versions must be plainly marked as such, and must not
+ *    be misrepresented as being the original software.
+ * 
+ * 3. This notice may not be removed or altered from any source
+ *    distribution.
+ */
+
+using System;
 using System.Collections.Generic;
 using System.Reflection;
 
 namespace Gibbed.Prototype.FileFormats.Fight
 {
-    internal abstract class Cache<T, A> where A : KnownHashAttribute
+    internal abstract class Cache<TType, TAttribute> where TAttribute : KnownHashAttribute
     {
-        private static Dictionary<UInt64, Type> Lookup = null;
+        private static Dictionary<ulong, Type> Lookup;
 
         private static void BuildLookup()
         {
-            Lookup = new Dictionary<UInt64, Type>();
+            Lookup = new Dictionary<ulong, Type>();
 
-            foreach (Type type in Assembly.GetAssembly(typeof(T)).GetTypes())
+            foreach (Type type in Assembly.GetAssembly(typeof(TType)).GetTypes())
             {
-                if (type.IsSubclassOf(typeof(T)) == true)
+                if (type.IsSubclassOf(typeof(TType)) == true)
                 {
-                    object[] attributes = type.GetCustomAttributes(typeof(A), true);
+                    object[] attributes = type.GetCustomAttributes(typeof(TAttribute), true);
                     foreach (object oattribute in attributes)
                     {
-                        A attribute = (A)oattribute;
+                        var attribute = (TAttribute)oattribute;
                         Lookup.Add(attribute.Hash, type);
                     }
                 }
             }
         }
 
-        public static Type GetType(UInt64 hash)
+        public static Type GetType(ulong hash)
         {
             if (Lookup == null)
             {
                 BuildLookup();
             }
 
-            if (Lookup.ContainsKey(hash) == true)
+            if (Lookup != null && Lookup.ContainsKey(hash) == true)
             {
                 return Lookup[hash];
             }
@@ -42,49 +64,49 @@ namespace Gibbed.Prototype.FileFormats.Fight
         }
     }
 
-    internal abstract class CacheForContext<T, A> where A : KnownHashForContextAttribute
+    internal abstract class CacheForContext<TType, TAttribute> where TAttribute : KnownHashForContextAttribute
     {
-        private static Dictionary<Type, Dictionary<UInt64, Type>> Lookup = null;
+        private static Dictionary<Type, Dictionary<ulong, Type>> _Lookup;
 
         private static void BuildLookup()
         {
-            Lookup = new Dictionary<Type, Dictionary<UInt64, Type>>();
+            _Lookup = new Dictionary<Type, Dictionary<ulong, Type>>();
 
-            foreach (Type type in Assembly.GetAssembly(typeof(T)).GetTypes())
+            foreach (Type type in Assembly.GetAssembly(typeof(TType)).GetTypes())
             {
-                if (type.IsSubclassOf(typeof(T)) == true)
+                if (type.IsSubclassOf(typeof(TType)) == true)
                 {
-                    object[] attributes = type.GetCustomAttributes(typeof(A), true);
+                    object[] attributes = type.GetCustomAttributes(typeof(TAttribute), true);
                     foreach (object oattribute in attributes)
                     {
-                        A attribute = (A)oattribute;
+                        var attribute = (TAttribute)oattribute;
 
-                        if (Lookup.ContainsKey(attribute.Type) == false)
+                        if (_Lookup.ContainsKey(attribute.Type) == false)
                         {
-                            Lookup.Add(attribute.Type, new Dictionary<UInt64, Type>());
+                            _Lookup.Add(attribute.Type, new Dictionary<UInt64, Type>());
                         }
 
-                        Lookup[attribute.Type].Add(attribute.Hash, type);
+                        _Lookup[attribute.Type].Add(attribute.Hash, type);
                     }
                 }
             }
         }
 
-        public static Type GetType(Type type, UInt64 hash)
+        public static Type GetType(Type type, ulong hash)
         {
-            if (Lookup == null)
+            if (_Lookup == null)
             {
                 BuildLookup();
             }
 
-            if (Lookup.ContainsKey(type) == false)
+            if (_Lookup != null && _Lookup.ContainsKey(type) == false)
             {
                 return null;
             }
 
-            if (Lookup[type].ContainsKey(hash) == true)
+            if (_Lookup != null && _Lookup[type].ContainsKey(hash) == true)
             {
-                return Lookup[type][hash];
+                return _Lookup[type][hash];
             }
 
             return null;

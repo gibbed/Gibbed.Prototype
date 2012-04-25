@@ -1,12 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
+﻿/* Copyright (c) 2012 Rick (rick 'at' gibbed 'dot' us)
+ * 
+ * This software is provided 'as-is', without any express or implied
+ * warranty. In no event will the authors be held liable for any damages
+ * arising from the use of this software.
+ * 
+ * Permission is granted to anyone to use this software for any purpose,
+ * including commercial applications, and to alter it and redistribute it
+ * freely, subject to the following restrictions:
+ * 
+ * 1. The origin of this software must not be misrepresented; you must not
+ *    claim that you wrote the original software. If you use this software
+ *    in a product, an acknowledgment in the product documentation would
+ *    be appreciated but is not required.
+ * 
+ * 2. Altered source versions must be plainly marked as such, and must not
+ *    be misrepresented as being the original software.
+ * 
+ * 3. This notice may not be removed or altered from any source
+ *    distribution.
+ */
+
+using System;
 using System.IO;
 using System.Reflection;
-using System.Linq;
-using System.Runtime.InteropServices;
-using Gibbed.Helpers;
-using Gibbed.Prototype.Helpers;
-using System.Xml;
+using System.Text;
+using Gibbed.IO;
 
 namespace Gibbed.Prototype.FileFormats
 {
@@ -14,16 +32,14 @@ namespace Gibbed.Prototype.FileFormats
     {
         public UInt64 ReadHash(Stream stream)
         {
-            if (this.HashesArePrecalculated)
+            if (this.HashesArePrecalculated == true)
             {
                 return stream.ReadValueU64();
             }
-            else
-            {
-                throw new InvalidOperationException("unsure how to handle this");
-                // suspected that this is a uint32 + string rather than the hash
-                return stream.ReadStringASCII(stream.ReadValueU32()).Hash1003F();
-            }
+
+            throw new InvalidOperationException("unsure how to handle this");
+            // suspected that this is a uint32 + string rather than the hash
+            return stream.ReadString(stream.ReadValueU32(), Encoding.ASCII).Hash1003F();
         }
 
         public T ReadPropertyEnum<T>(Stream stream)
@@ -58,16 +74,18 @@ namespace Gibbed.Prototype.FileFormats
 
         public bool ReadPropertyBool(Stream stream)
         {
-            return stream.ReadValueU32() == 0 ? false : true;
+            return stream.ReadValueB32();
         }
 
         public Fight.BranchReference ReadPropertyBranch(Stream stream)
         {
-            Fight.BranchReference rez = new Fight.BranchReference();
+            // ReSharper disable UseObjectOrCollectionInitializer
+            var rez = new Fight.BranchReference();
+            // ReSharper restore UseObjectOrCollectionInitializer
 
             rez.Name = stream.ReadStringAlignedASCII();
 
-            if (rez.Name == null || rez.Name.Length == 0)
+            if (string.IsNullOrEmpty(rez.Name) == true)
             {
                 rez.Index = stream.ReadValueU32();
             }
@@ -76,6 +94,7 @@ namespace Gibbed.Prototype.FileFormats
         }
 
         public UInt32 Flags;
+
         #region public bool HashesArePrecalculated
         public bool HashesArePrecalculated
         {
@@ -107,7 +126,7 @@ namespace Gibbed.Prototype.FileFormats
 
         public void Deserialize(Stream input)
         {
-            if (input.ReadStringASCII(4) != "fig0")
+            if (input.ReadString(4, Encoding.ASCII) != "fig0")
             {
                 throw new FormatException("not a fight file");
             }
@@ -124,7 +143,7 @@ namespace Gibbed.Prototype.FileFormats
             this.Unknown3 = input.ReadValueU32();
 
             this.NameHash = this.ReadHash(input);
-            
+
             UInt64 contextHash = this.ReadHash(input);
 
             this.Path = input.ReadStringAlignedASCII();
@@ -143,7 +162,7 @@ namespace Gibbed.Prototype.FileFormats
 
             try
             {
-                this.Context = (Fight.ContextBase)System.Activator.CreateInstance(contextType);
+                this.Context = (Fight.ContextBase)Activator.CreateInstance(contextType);
             }
             catch (TargetInvocationException e)
             {
