@@ -1,8 +1,27 @@
-﻿using System;
+﻿/* Copyright (c) 2012 Rick (rick 'at' gibbed 'dot' us)
+ * 
+ * This software is provided 'as-is', without any express or implied
+ * warranty. In no event will the authors be held liable for any damages
+ * arising from the use of this software.
+ * 
+ * Permission is granted to anyone to use this software for any purpose,
+ * including commercial applications, and to alter it and redistribute it
+ * freely, subject to the following restrictions:
+ * 
+ * 1. The origin of this software must not be misrepresented; you must not
+ *    claim that you wrote the original software. If you use this software
+ *    in a product, an acknowledgment in the product documentation would
+ *    be appreciated but is not required.
+ * 
+ * 2. Altered source versions must be plainly marked as such, and must not
+ *    be misrepresented as being the original software.
+ * 
+ * 3. This notice may not be removed or altered from any source
+ *    distribution.
+ */
+
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Gibbed.Helpers;
 
 namespace Gibbed.Prototype.FileFormats
 {
@@ -14,42 +33,44 @@ namespace Gibbed.Prototype.FileFormats
         Store = 0x7149C22710BC52F3, // "store"
         Reference = 0x87E400FE4359E3E7, // "reference"
     }
-    
+
     public static class FightHashes
     {
-        private static Dictionary<UInt64, string> RegisteredLookup = null;
-        private static List<Type> RegisteredEnum = null;
+        private static Dictionary<UInt64, string> _RegisteredLookup;
+        private static List<Type> _RegisteredEnum;
 
         public static void Register(string text)
         {
-            if (RegisteredLookup == null)
+            if (_RegisteredLookup == null)
             {
-                RegisteredLookup = new Dictionary<UInt64, string>();
+                _RegisteredLookup = new Dictionary<UInt64, string>();
             }
 
-            RegisteredLookup[text.Hash1003F()] = text;
+            _RegisteredLookup[text.Hash1003F()] = text;
         }
 
         public static string Lookup(UInt64 hash)
         {
-            if (RegisteredLookup != null && RegisteredLookup.ContainsKey(hash) == true)
+            if (_RegisteredLookup != null && _RegisteredLookup.ContainsKey(hash) == true)
             {
-                return "\"" + RegisteredLookup[hash] + "\" == " + hash.ToString("X16");
+                return "\"" + _RegisteredLookup[hash] + "\" == " + hash.ToString("X16");
             }
 
-            if (RegisteredEnum == null)
+            if (_RegisteredEnum == null)
             {
-                RegisteredEnum = new List<Type>();
-                RegisteredEnum.Add(typeof(Fight.Condition.ScenarioGameObjectSlot));
-                RegisteredEnum.Add(typeof(Fight.Condition.ScenarioMessageType));
-                RegisteredEnum.Add(typeof(Fight.Condition.EventWhenType));
-                RegisteredEnum.Add(typeof(Fight.Track.MusicPriority));
-                RegisteredEnum.Add(typeof(FightHash));
+                _RegisteredEnum = new List<Type>
+                {
+                    typeof(Fight.Condition.ScenarioGameObjectSlot),
+                    typeof(Fight.Condition.ScenarioMessageType),
+                    typeof(Fight.Condition.EventWhenType),
+                    typeof(Fight.Track.MusicPriority),
+                    typeof(FightHash)
+                };
             }
 
-            if (RegisteredEnum != null)
+            if (_RegisteredEnum != null)
             {
-                foreach (Type e in RegisteredEnum)
+                foreach (Type e in _RegisteredEnum)
                 {
                     if (Enum.IsDefined(e, hash) == true)
                     {

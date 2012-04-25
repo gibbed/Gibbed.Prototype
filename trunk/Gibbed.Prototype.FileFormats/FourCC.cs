@@ -1,12 +1,39 @@
-﻿using System;
+﻿/* Copyright (c) 2012 Rick (rick 'at' gibbed 'dot' us)
+ * 
+ * This software is provided 'as-is', without any express or implied
+ * warranty. In no event will the authors be held liable for any damages
+ * arising from the use of this software.
+ * 
+ * Permission is granted to anyone to use this software for any purpose,
+ * including commercial applications, and to alter it and redistribute it
+ * freely, subject to the following restrictions:
+ * 
+ * 1. The origin of this software must not be misrepresented; you must not
+ *    claim that you wrote the original software. If you use this software
+ *    in a product, an acknowledgment in the product documentation would
+ *    be appreciated but is not required.
+ * 
+ * 2. Altered source versions must be plainly marked as such, and must not
+ *    be misrepresented as being the original software.
+ * 
+ * 3. This notice may not be removed or altered from any source
+ *    distribution.
+ */
+
+using System;
 using System.IO;
 using System.Text;
 
 namespace Gibbed.Prototype.FileFormats
 {
+    // ReSharper disable InconsistentNaming
     public class FourCC
+        // ReSharper restore InconsistentNaming
     {
-        private byte[] Chars = new byte[] { 0, 0, 0, 0 };
+        private byte[] _Chars = new byte[]
+        {
+            0, 0, 0, 0
+        };
 
         public FourCC()
         {
@@ -19,7 +46,7 @@ namespace Gibbed.Prototype.FileFormats
 
         public override string ToString()
         {
-            return Encoding.ASCII.GetString(Chars).TrimEnd('\0');
+            return Encoding.ASCII.GetString(this._Chars).TrimEnd('\0');
         }
 
         public static implicit operator FourCC(string s)
@@ -28,27 +55,29 @@ namespace Gibbed.Prototype.FileFormats
             {
                 throw new InvalidCastException();
             }
-            
+
             byte[] bytes = Encoding.ASCII.GetBytes(s);
-            return new FourCC() { Chars = bytes };
+            return new FourCC()
+            {
+                _Chars = bytes
+            };
         }
 
         public override int GetHashCode()
         {
-            return this.Chars.GetHashCode();
+            return this._Chars.GetHashCode();
         }
 
         public override bool Equals(object obj)
         {
-            FourCC a = obj as FourCC;
+            var a = obj as FourCC;
 
             if (a != null)
             {
-                return
-                    a.Chars[0] == Chars[0] &&
-                    a.Chars[1] == Chars[1] &&
-                    a.Chars[2] == Chars[2] &&
-                    a.Chars[3] == Chars[3];
+                return a._Chars[0] == this._Chars[0] &&
+                       a._Chars[1] == this._Chars[1] &&
+                       a._Chars[2] == this._Chars[2] &&
+                       a._Chars[3] == this._Chars[3];
             }
 
             return false;
@@ -56,12 +85,12 @@ namespace Gibbed.Prototype.FileFormats
 
         public void Serialize(Stream output)
         {
-            output.Write(Chars, 0, 4);
+            output.Write(this._Chars, 0, 4);
         }
 
         public void Deserialize(Stream input)
         {
-            input.Read(Chars, 0, 4);
+            input.Read(this._Chars, 0, 4);
         }
     }
 }

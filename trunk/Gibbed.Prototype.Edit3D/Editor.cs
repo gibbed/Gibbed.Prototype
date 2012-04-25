@@ -1,4 +1,26 @@
-﻿using System;
+﻿/* Copyright (c) 2012 Rick (rick 'at' gibbed 'dot' us)
+ * 
+ * This software is provided 'as-is', without any express or implied
+ * warranty. In no event will the authors be held liable for any damages
+ * arising from the use of this software.
+ * 
+ * Permission is granted to anyone to use this software for any purpose,
+ * including commercial applications, and to alter it and redistribute it
+ * freely, subject to the following restrictions:
+ * 
+ * 1. The origin of this software must not be misrepresented; you must not
+ *    claim that you wrote the original software. If you use this software
+ *    in a product, an acknowledgment in the product documentation would
+ *    be appreciated but is not required.
+ * 
+ * 2. Altered source versions must be plainly marked as such, and must not
+ *    be misrepresented as being the original software.
+ * 
+ * 3. This notice may not be removed or altered from any source
+ *    distribution.
+ */
+
+using System;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
@@ -21,8 +43,8 @@ namespace Gibbed.Prototype.Edit3D
             }
         }
 
-        public Stream ActiveStream = null;
-        public Pure3DFile ActiveFile = null;
+        public Stream ActiveStream;
+        public Pure3DFile ActiveFile;
 
         private void OnFileOpen(object sender, EventArgs e)
         {
@@ -36,7 +58,10 @@ namespace Gibbed.Prototype.Edit3D
                 this.ActiveStream.Close();
             }
 
-            this.ActiveStream = File.Open(this.openPure3DFileDialog.FileName, FileMode.Open, FileAccess.ReadWrite, FileShare.Read);
+            this.ActiveStream = File.Open(this.openPure3DFileDialog.FileName,
+                                          FileMode.Open,
+                                          FileAccess.ReadWrite,
+                                          FileShare.Read);
             this.ActiveFile = new Pure3DFile();
             this.ActiveFile.Deserialize(this.ActiveStream);
 
@@ -61,13 +86,15 @@ namespace Gibbed.Prototype.Edit3D
             */
         }
 
-        private void UpdateNode(Gibbed.Prototype.FileFormats.Pure3D.BaseNode node, TreeNodeCollection parent)
+        private void UpdateNode(FileFormats.Pure3D.BaseNode node, TreeNodeCollection parent)
         {
-            TreeNode treeNode = new TreeNode();
-            treeNode.Text = node.ToString();
-            treeNode.Tag = node;
+            var treeNode = new TreeNode
+            {
+                Text = node.ToString(),
+                Tag = node,
+            };
 
-            foreach (Gibbed.Prototype.FileFormats.Pure3D.BaseNode child in node.Children)
+            foreach (FileFormats.Pure3D.BaseNode child in node.Children)
             {
                 this.UpdateNode(child, treeNode.Nodes);
             }
@@ -80,10 +107,12 @@ namespace Gibbed.Prototype.Edit3D
             this.nodeView.BeginUpdate();
             this.nodeView.Nodes.Clear();
 
-            TreeNode root = new TreeNode();
-            root.Text = "Root";
+            var root = new TreeNode
+            {
+                Text = "Root",
+            };
 
-            foreach (Gibbed.Prototype.FileFormats.Pure3D.BaseNode node in this.ActiveFile.Nodes)
+            foreach (FileFormats.Pure3D.BaseNode node in this.ActiveFile.Nodes)
             {
                 this.UpdateNode(node, root.Nodes);
             }
@@ -101,7 +130,7 @@ namespace Gibbed.Prototype.Edit3D
             this.exportNodeButton.Enabled = false;
         }
 
-        private void SelectNode(Gibbed.Prototype.FileFormats.Pure3D.BaseNode node)
+        private void SelectNode(FileFormats.Pure3D.BaseNode node)
         {
             this.propertyGrid.SelectedObject = node;
 
@@ -115,31 +144,31 @@ namespace Gibbed.Prototype.Edit3D
             {
                 this.previewPicture.Image = null;
             }
-            
+
             this.importNodeButton.Enabled = node.Importable;
             this.exportNodeButton.Enabled = node.Exportable;
         }
 
         private void OnSelectNode(object sender, TreeViewEventArgs e)
         {
-            if (e.Node == null || e.Node.Tag == null || !(e.Node.Tag is Gibbed.Prototype.FileFormats.Pure3D.BaseNode))
+            if (e.Node == null || e.Node.Tag == null || !(e.Node.Tag is FileFormats.Pure3D.BaseNode))
             {
                 this.SelectNothing();
                 return;
             }
 
-            this.SelectNode((Gibbed.Prototype.FileFormats.Pure3D.BaseNode)e.Node.Tag);
+            this.SelectNode((FileFormats.Pure3D.BaseNode)e.Node.Tag);
         }
 
         private void OnNodeExport(object sender, EventArgs e)
         {
             if (this.propertyGrid.SelectedObject == null ||
-                !(this.propertyGrid.SelectedObject is Gibbed.Prototype.FileFormats.Pure3D.BaseNode))
+                !(this.propertyGrid.SelectedObject is FileFormats.Pure3D.BaseNode))
             {
                 return;
             }
 
-            Gibbed.Prototype.FileFormats.Pure3D.BaseNode node = (Gibbed.Prototype.FileFormats.Pure3D.BaseNode)this.propertyGrid.SelectedObject;
+            var node = (FileFormats.Pure3D.BaseNode)this.propertyGrid.SelectedObject;
             if (node.Exportable == false)
             {
                 throw new InvalidOperationException();
@@ -150,7 +179,10 @@ namespace Gibbed.Prototype.Edit3D
                 return;
             }
 
-            Stream output = File.Open(this.exportNodeFileDialog.FileName, FileMode.Create, FileAccess.Write, FileShare.Read);
+            Stream output = File.Open(this.exportNodeFileDialog.FileName,
+                                      FileMode.Create,
+                                      FileAccess.Write,
+                                      FileShare.Read);
             node.Export(output);
             output.Close();
         }
@@ -158,12 +190,12 @@ namespace Gibbed.Prototype.Edit3D
         private void OnNodeImport(object sender, EventArgs e)
         {
             if (this.propertyGrid.SelectedObject == null ||
-                !(this.propertyGrid.SelectedObject is Gibbed.Prototype.FileFormats.Pure3D.BaseNode))
+                !(this.propertyGrid.SelectedObject is FileFormats.Pure3D.BaseNode))
             {
                 return;
             }
 
-            Gibbed.Prototype.FileFormats.Pure3D.BaseNode node = (Gibbed.Prototype.FileFormats.Pure3D.BaseNode)this.propertyGrid.SelectedObject;
+            var node = (FileFormats.Pure3D.BaseNode)this.propertyGrid.SelectedObject;
             if (node.Importable == false)
             {
                 throw new InvalidOperationException();

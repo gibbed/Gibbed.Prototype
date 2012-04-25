@@ -1,6 +1,29 @@
-﻿using System;
+﻿/* Copyright (c) 2012 Rick (rick 'at' gibbed 'dot' us)
+ * 
+ * This software is provided 'as-is', without any express or implied
+ * warranty. In no event will the authors be held liable for any damages
+ * arising from the use of this software.
+ * 
+ * Permission is granted to anyone to use this software for any purpose,
+ * including commercial applications, and to alter it and redistribute it
+ * freely, subject to the following restrictions:
+ * 
+ * 1. The origin of this software must not be misrepresented; you must not
+ *    claim that you wrote the original software. If you use this software
+ *    in a product, an acknowledgment in the product documentation would
+ *    be appreciated but is not required.
+ * 
+ * 2. Altered source versions must be plainly marked as such, and must not
+ *    be misrepresented as being the original software.
+ * 
+ * 3. This notice may not be removed or altered from any source
+ *    distribution.
+ */
+
+using System;
 using System.IO;
-using Gibbed.Helpers;
+using System.Text;
+using Gibbed.IO;
 using Gibbed.Prototype.FileFormats;
 using Ionic.Zlib;
 using NConsoler;
@@ -11,19 +34,15 @@ namespace Gibbed.Prototype.Cement
     {
         [Action(Description = "Unpack a cement (*.rcf) file")]
         public static void Unpack(
-            [Required(Description = "input cement file")]
-            string inputPath,
-            [Required(Description = "output directory")]
-            string outputPath,
-            [Optional(false, "rz", Description = "unpack compressed data (*.rz)")]
-            bool unpackRz,
-            [Optional(false, "ow", Description = "overwrite existing files")]
-            bool overwrite)
+            [Required(Description = "input cement file")] string inputPath,
+            [Required(Description = "output directory")] string outputPath,
+            [Optional(false, "rz", Description = "unpack compressed data (*.rz)")] bool unpackRz,
+            [Optional(false, "ow", Description = "overwrite existing files")] bool overwrite)
         {
             Stream input = File.OpenRead(inputPath);
             Directory.CreateDirectory(outputPath);
 
-            CementFile cement = new CementFile();
+            var cement = new CementFile();
             cement.Deserialize(input);
 
             Console.WriteLine("{0} files in cement file.", cement.Entries.Count);
@@ -67,10 +86,8 @@ namespace Gibbed.Prototype.Cement
                     skipped++;
                     continue;
                 }
-                else
-                {
-                    Console.WriteLine("{1:D4}/{2:D4} => {0}", partPath, counter, totalCount);
-                }
+
+                Console.WriteLine("{1:D4}/{2:D4} => {0}", partPath, counter, totalCount);
 
                 input.Seek(entry.Offset, SeekOrigin.Begin);
 
@@ -78,7 +95,7 @@ namespace Gibbed.Prototype.Cement
 
                 if (unpacking == true)
                 {
-                    if (input.ReadStringASCII(4, true) != "RZ")
+                    if (input.ReadString(4, true, Encoding.ASCII) != "RZ")
                     {
                         unpacking = false;
                     }
@@ -93,9 +110,9 @@ namespace Gibbed.Prototype.Cement
                             throw new Exception();
                         }
 
-                        ZlibStream zlib = new ZlibStream(input, CompressionMode.Decompress, true);
+                        var zlib = new ZlibStream(input, CompressionMode.Decompress, true);
                         int left = uncompressedSize;
-                        byte[] block = new byte[4096];
+                        var block = new byte[4096];
                         while (left > 0)
                         {
                             int read = zlib.Read(block, 0, Math.Min(block.Length, left));
@@ -114,10 +131,10 @@ namespace Gibbed.Prototype.Cement
                 if (unpacking == false)
                 {
                     long left = entry.Size;
-                    byte[] data = new byte[4096];
+                    var data = new byte[4096];
                     while (left > 0)
                     {
-                        int block = (int)(Math.Min(left, 4096));
+                        var block = (int)(Math.Min(left, 4096));
                         input.Read(data, 0, block);
                         output.Write(data, 0, block);
                         left -= block;

@@ -1,8 +1,30 @@
-﻿using System;
+﻿/* Copyright (c) 2012 Rick (rick 'at' gibbed 'dot' us)
+ * 
+ * This software is provided 'as-is', without any express or implied
+ * warranty. In no event will the authors be held liable for any damages
+ * arising from the use of this software.
+ * 
+ * Permission is granted to anyone to use this software for any purpose,
+ * including commercial applications, and to alter it and redistribute it
+ * freely, subject to the following restrictions:
+ * 
+ * 1. The origin of this software must not be misrepresented; you must not
+ *    claim that you wrote the original software. If you use this software
+ *    in a product, an acknowledgment in the product documentation would
+ *    be appreciated but is not required.
+ * 
+ * 2. Altered source versions must be plainly marked as such, and must not
+ *    be misrepresented as being the original software.
+ * 
+ * 3. This notice may not be removed or altered from any source
+ *    distribution.
+ */
+
+using System;
 using System.ComponentModel;
 using System.IO;
-using Gibbed.Helpers;
-using Gibbed.Prototype.Helpers;
+using System.Text;
+using Gibbed.IO;
 
 namespace Gibbed.Prototype.FileFormats.Pure3D
 {
@@ -40,17 +62,18 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
 
             public void Serialize(Stream output)
             {
-                output.WriteStringASCIIZ(this.Text);
+                output.WriteStringZ(this.Text, Encoding.ASCII);
             }
 
             public void Deserialize(Stream input)
             {
-                this.Text = input.ReadStringASCII((UInt32)(input.Length), true);
+                this.Text = input.ReadString((uint)input.Length, true, Encoding.ASCII);
             }
         }
 
         [DisplayName("Global Variable Count")]
-        public UInt32 GlobalVariableCount { get; set; }
+        public uint GlobalVariableCount { get; set; }
+
         public ICode Code { get; set; }
 
         public override string ToString()
@@ -88,11 +111,11 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
 
         public override void Deserialize(Stream input)
         {
-            UInt32 dataType = input.ReadValueU32();
-            int length = input.ReadValueS32();
+            var dataType = input.ReadValueU32();
+            var length = input.ReadValueS32();
             this.GlobalVariableCount = input.ReadValueU32();
 
-            Stream codeStream = input.ReadToMemoryStream(length);
+            var codeStream = input.ReadToMemoryStream(length);
             ICode code;
 
             if (dataType == 1)
@@ -114,10 +137,7 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
 
         public override bool Exportable
         {
-            get
-            {
-                return this.Code != null;
-            }
+            get { return this.Code != null; }
         }
 
         public override void Export(Stream output)
@@ -128,10 +148,7 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
 
         public override bool Importable
         {
-            get
-            {
-                return this.Code != null;
-            }
+            get { return this.Code != null; }
         }
 
         public override void Import(Stream input)

@@ -1,10 +1,32 @@
-﻿using System.IO;
-using System.Text;
-using Gibbed.Helpers;
+﻿/* Copyright (c) 2012 Rick (rick 'at' gibbed 'dot' us)
+ * 
+ * This software is provided 'as-is', without any express or implied
+ * warranty. In no event will the authors be held liable for any damages
+ * arising from the use of this software.
+ * 
+ * Permission is granted to anyone to use this software for any purpose,
+ * including commercial applications, and to alter it and redistribute it
+ * freely, subject to the following restrictions:
+ * 
+ * 1. The origin of this software must not be misrepresented; you must not
+ *    claim that you wrote the original software. If you use this software
+ *    in a product, an acknowledgment in the product documentation would
+ *    be appreciated but is not required.
+ * 
+ * 2. Altered source versions must be plainly marked as such, and must not
+ *    be misrepresented as being the original software.
+ * 
+ * 3. This notice may not be removed or altered from any source
+ *    distribution.
+ */
 
-namespace Gibbed.Prototype.Helpers
+using System.IO;
+using System.Text;
+using Gibbed.IO;
+
+namespace Gibbed.Prototype.FileFormats
 {
-    public static partial class StreamHelpers
+    public static class StreamHelpers
     {
         public static string ReadStringAlignedASCII(this Stream stream)
         {
@@ -14,8 +36,8 @@ namespace Gibbed.Prototype.Helpers
             {
                 return null;
             }
-            
-            byte[] data = new byte[length];
+
+            var data = new byte[length];
             stream.ReadAligned(data, 0, data.Length, 4);
             return Encoding.ASCII.GetString(data);
         }
@@ -29,7 +51,7 @@ namespace Gibbed.Prototype.Helpers
                 return "";
             }
 
-            byte[] data = new byte[size];
+            var data = new byte[size];
             stream.Read(data, 0, data.Length);
 
             int length = data.Length;
@@ -51,7 +73,8 @@ namespace Gibbed.Prototype.Helpers
                 stream.WriteValueU8(0);
                 return;
             }
-            else if (value.Length > 255)
+
+            if (value.Length > 255)
             {
                 value = value.Substring(0, 255);
             }
@@ -72,10 +95,9 @@ namespace Gibbed.Prototype.Helpers
 
             if (padding > 0)
             {
-                byte[] junk = new byte[padding];
+                var junk = new byte[padding];
                 stream.Write(junk, 0, junk.Length);
             }
         }
     }
-
 }

@@ -1,8 +1,30 @@
-﻿using System;
+﻿/* Copyright (c) 2012 Rick (rick 'at' gibbed 'dot' us)
+ * 
+ * This software is provided 'as-is', without any express or implied
+ * warranty. In no event will the authors be held liable for any damages
+ * arising from the use of this software.
+ * 
+ * Permission is granted to anyone to use this software for any purpose,
+ * including commercial applications, and to alter it and redistribute it
+ * freely, subject to the following restrictions:
+ * 
+ * 1. The origin of this software must not be misrepresented; you must not
+ *    claim that you wrote the original software. If you use this software
+ *    in a product, an acknowledgment in the product documentation would
+ *    be appreciated but is not required.
+ * 
+ * 2. Altered source versions must be plainly marked as such, and must not
+ *    be misrepresented as being the original software.
+ * 
+ * 3. This notice may not be removed or altered from any source
+ *    distribution.
+ */
+
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-using Gibbed.Helpers;
+using Gibbed.IO;
 
 namespace Gibbed.Prototype.FileFormats
 {
@@ -51,11 +73,11 @@ namespace Gibbed.Prototype.FileFormats
         // Lame ass way to do this but, it'll work for now.
         private static class TypeCache
         {
-            private static Dictionary<UInt32, Type> Lookup = null;
+            private static Dictionary<UInt32, Type> _Lookup;
 
             private static void BuildLookup()
             {
-                Lookup = new Dictionary<uint, Type>();
+                _Lookup = new Dictionary<uint, Type>();
 
                 foreach (Type type in Assembly.GetAssembly(typeof(TypeCache)).GetTypes())
                 {
@@ -64,8 +86,8 @@ namespace Gibbed.Prototype.FileFormats
                         object[] attributes = type.GetCustomAttributes(typeof(Pure3D.KnownTypeAttribute), false);
                         if (attributes.Length == 1)
                         {
-                            Pure3D.KnownTypeAttribute attribute = (Pure3D.KnownTypeAttribute)attributes[0];
-                            Lookup.Add(attribute.Id, type);
+                            var attribute = (Pure3D.KnownTypeAttribute)attributes[0];
+                            _Lookup.Add(attribute.Id, type);
                         }
                     }
                 }
@@ -73,14 +95,14 @@ namespace Gibbed.Prototype.FileFormats
 
             public static Type GetType(UInt32 typeId)
             {
-                if (Lookup == null)
+                if (_Lookup == null)
                 {
                     BuildLookup();
                 }
 
-                if (Lookup.ContainsKey(typeId))
+                if (_Lookup != null && _Lookup.ContainsKey(typeId))
                 {
-                    return Lookup[typeId];
+                    return _Lookup[typeId];
                 }
 
                 return null;
@@ -101,7 +123,7 @@ namespace Gibbed.Prototype.FileFormats
             {
                 try
                 {
-                    node = (Pure3D.BaseNode)System.Activator.CreateInstance(type);
+                    node = (Pure3D.BaseNode)Activator.CreateInstance(type);
                 }
                 catch (TargetInvocationException e)
                 {
@@ -143,7 +165,8 @@ namespace Gibbed.Prototype.FileFormats
             {
                 throw new FormatException("no support for big-endian Pure3D files");
             }
-            else if (magic != 0xFF443350)
+
+            if (magic != 0xFF443350)
             {
                 throw new FormatException("not a Pure3D file");
             }
