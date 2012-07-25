@@ -28,7 +28,7 @@ namespace Gibbed.Prototype.FileFormats
 {
     public static class StringHelpers
     {
-        public static UInt32 PrototypeHash(this string input, UInt32 seed)
+        public static uint PrototypeHash(this string input, uint seed)
         {
             if (input.StartsWith("\\") == true)
             {
@@ -43,7 +43,7 @@ namespace Gibbed.Prototype.FileFormats
 
                 if (t < 0x61)
                 {
-                    seed += (UInt32)(0x20 + t);
+                    seed += (uint)(0x20 + t);
                 }
                 else
                 {
@@ -59,8 +59,13 @@ namespace Gibbed.Prototype.FileFormats
             return input.PrototypeHash(0);
         }
 
-        public static UInt64 Hash1003F(this string input)
+        public static ulong HashX65599(this string input)
         {
+            if (string.IsNullOrEmpty(input) == true)
+            {
+                return 0;
+            }
+
             return Enumerable.Aggregate<char, ulong>(input, 0, (current, t) => (current * 65599) ^ t);
         }
     }

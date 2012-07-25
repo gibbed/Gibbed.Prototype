@@ -21,93 +21,27 @@
  */
 
 using System;
-using System.Text;
 using System.Collections.Generic;
+using System.Text;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices;
 using Gibbed.IO;
 
 namespace Gibbed.Prototype.FileFormats
 {
-    public class CementEntry
-    {
-        public UInt32 NameHash;
-        public UInt32 Offset;
-        public UInt32 Size;
-
-        public void Serialize(Stream output, Endian endian)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Deserialize(Stream input, Endian endian)
-        {
-            this.NameHash = input.ReadValueU32(endian);
-            this.Offset = input.ReadValueU32(endian);
-            this.Size = input.ReadValueU32(endian);
-        }
-    }
-
-    public class CementMetadata
-    {
-        public UInt32 TypeHash;
-        public UInt32 Alignment;
-        public UInt32 Unknown2;
-        public string Name;
-        public byte[] Unknown3;
-
-        public void Serialize(Stream output, Endian endian)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Deserialize(Stream input, Endian endian)
-        {
-            this.TypeHash = input.ReadValueU32();
-            this.Alignment = input.ReadValueU32();
-            this.Unknown2 = input.ReadValueU32();
-            this.Name = input.ReadString(input.ReadValueU32(), true, Encoding.ASCII);
-            this.Unknown3 = new byte[3];
-            input.Read(this.Unknown3, 0, this.Unknown3.Length);
-        }
-    }
-
     public class CementFile
     {
-        [StructLayout(LayoutKind.Sequential, Pack = 1, Size = 60, CharSet = CharSet.Ansi)]
-        private struct Header
-        {
-            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 24)]
-            public string Magic;
-
-            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 8)]
-            private byte[] Padding1;
-
-            public byte MajorVersion;
-            public byte MinorVersion;
-
-            [MarshalAs(UnmanagedType.I1)]
-            public bool BigEndian;
-
-            public byte Unknown1;
-            public UInt32 IndexOffset;
-            public UInt32 IndexSize;
-            public UInt32 MetadataOffset;
-            public UInt32 MetadataSize;
-            public UInt32 Unknown2;
-            public UInt32 EntryCount;
-        }
+        public Endian Endian;
 
         public byte MajorVersion;
         public byte MinorVersion;
-        public bool BigEndian;
-        public byte Unknown1;
 
-        public List<CementEntry> Entries;
-        public List<CementMetadata> Metadatas;
+        public List<Cement.Entry> Entries
+            = new List<Cement.Entry>();
+        public List<Cement.Metadata> Metadatas
+            = new List<Cement.Metadata>();
 
-        public CementMetadata GetMetadata(UInt32 hash)
+        public Cement.Metadata GetMetadata(UInt32 hash)
         {
             return this.Metadatas.SingleOrDefault(candidate => candidate.Name.PrototypeHash() == hash);
         }
@@ -119,52 +53,74 @@ namespace Gibbed.Prototype.FileFormats
 
         public void Deserialize(Stream input)
         {
-            var header = input.ReadStructure<Header>();
-
-            if (header.Magic != "ATG CORE CEMENT LIBRARY")
+            var magic = input.ReadString(24, true, Encoding.ASCII);
+            if (magic != "ATG CORE CEMENT LIBRARY")
             {
                 throw new FormatException("not a cement file");
             }
 
-            if (header.MajorVersion != 2 || header.MinorVersion >= 2 || header.Unknown1 == 0)
+            input.ReadBytes(8); // padding
+
+            var majorVersion = input.ReadValueU8();
+            var minorVersion = input.ReadValueU8();
+            var endian = input.ReadValueB8() == false ? Endian.Little : Endian.Big;
+            var unknown1 = input.ReadValueU8();
+
+            if (majorVersion != 2 ||
+                minorVersion != 1 ||
+                unknown1 != 1)
             {
                 throw new FormatException("bad cement version");
             }
 
-            if (header.BigEndian == true)
+            var indexOffset = input.ReadValueU32(endian);
+            var indexSize = input.ReadValueU32(endian);
+            var metadataOffset = input.ReadValueU32(endian);
+            var metadataSize = input.ReadValueU32(endian);
+            var unknown2 = input.ReadValueU32(endian);
+            var entryCount = input.ReadValueU32(endian);
+
+            if (unknown2 != 0)
             {
-                header.IndexOffset = header.IndexOffset.Swap();
-                header.IndexSize = header.IndexSize.Swap();
-                header.MetadataOffset = header.MetadataOffset.Swap();
-                header.MetadataSize = header.MetadataSize.Swap();
-                header.Unknown2 = header.Unknown2.Swap();
-                header.EntryCount = header.EntryCount.Swap();
+                throw new FormatException();
             }
 
-            this.MajorVersion = header.MajorVersion;
-            this.MinorVersion = header.MinorVersion;
-            this.BigEndian = header.BigEndian;
-            this.Unknown1 = header.Unknown1;
+            this.MajorVersion = majorVersion;
+            this.MinorVersion = minorVersion;
 
-            input.Seek(header.IndexOffset, SeekOrigin.Begin);
-            this.Entries = new List<CementEntry>();
-            for (int i = 0; i < header.EntryCount; i++)
+            input.Seek(indexOffset, SeekOrigin.Begin);
+            using (var temp = input.ReadToMemoryStream(indexSize))
             {
-                var entry = new CementEntry();
-                entry.Deserialize(input, header.BigEndian == false ? Endian.Little : Endian.Big);
-                this.Entries.Add(entry);
+                this.Entries.Clear();
+                for (int i = 0; i < entryCount; i++)
+                {
+                    var entry = new Cement.Entry();
+                    entry.Deserialize(temp, endian);
+                    this.Entries.Add(entry);
+                }
+
+                if (temp.Position != temp.Length)
+                {
+                    throw new FormatException();
+                }
             }
 
-            input.Seek(header.MetadataOffset, SeekOrigin.Begin);
-            UInt32 namesAlignment = input.ReadValueU32();
-            UInt32 namesUnknown = input.ReadValueU32();
-            this.Metadatas = new List<CementMetadata>();
-            for (int i = 0; i < header.EntryCount; i++)
+            input.Seek(metadataOffset, SeekOrigin.Begin);
+            using (var temp = input.ReadToMemoryStream(metadataSize))
             {
-                var metadata = new CementMetadata();
-                metadata.Deserialize(input, header.BigEndian == false ? Endian.Little : Endian.Big);
-                this.Metadatas.Add(metadata);
+                var namesAlignment = temp.ReadValueU32(Endian.Little);
+                var namesUnknown = temp.ReadValueU32(Endian.Little);
+
+                this.Metadatas.Clear();
+                for (int i = 0; i < entryCount; i++)
+                {
+                    var metadata = new Cement.Metadata();
+                    metadata.Deserialize(temp, endian);
+                    this.Metadatas.Add(metadata);
+                }
             }
+
+            this.Endian = endian;
         }
     }
 }

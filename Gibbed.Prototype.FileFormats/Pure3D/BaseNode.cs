@@ -56,7 +56,6 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
         }
 
         public BaseNode ParentNode;
-        public Pure3DFile ParentFile;
         public List<BaseNode> Children = new List<BaseNode>();
 
         #region public int ChildCount
