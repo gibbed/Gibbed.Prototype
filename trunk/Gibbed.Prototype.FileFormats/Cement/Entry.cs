@@ -20,47 +20,29 @@
  *    distribution.
  */
 
-using System.ComponentModel;
 using System.IO;
 using Gibbed.IO;
-using System.Runtime.Serialization;
 
-namespace Gibbed.Prototype.FileFormats
+namespace Gibbed.Prototype.FileFormats.Cement
 {
-    [TypeConverter(typeof(VectorTypeConverter))]
-    [DataContract(Namespace = "http://datacontract.gib.me/prototype")]
-    public class Vector3
+    public class Entry
     {
-        [DataMember(Name = "x", Order = 1)]
-        public float X { get; set; }
+        public uint NameHash;
+        public uint Offset;
+        public uint Size;
 
-        [DataMember(Name = "y", Order = 1)]
-        public float Y { get; set; }
-
-        [DataMember(Name = "z", Order = 1)]
-        public float Z { get; set; }
-
-        public Vector3()
+        public void Serialize(Stream output, Endian endian)
         {
+            output.WriteValueU32(this.NameHash, endian);
+            output.WriteValueU32(this.Offset, endian);
+            output.WriteValueU32(this.Size, endian);
         }
 
-        public Vector3(Stream input)
+        public void Deserialize(Stream input, Endian endian)
         {
-            this.Deserialize(input);
-        }
-
-        public void Serialize(Stream output)
-        {
-            output.WriteValueF32(this.X);
-            output.WriteValueF32(this.Y);
-            output.WriteValueF32(this.Z);
-        }
-
-        public void Deserialize(Stream input)
-        {
-            this.X = input.ReadValueF32();
-            this.Y = input.ReadValueF32();
-            this.Z = input.ReadValueF32();
+            this.NameHash = input.ReadValueU32(endian);
+            this.Offset = input.ReadValueU32(endian);
+            this.Size = input.ReadValueU32(endian);
         }
     }
 }

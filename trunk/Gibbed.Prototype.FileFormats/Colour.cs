@@ -20,47 +20,41 @@
  *    distribution.
  */
 
-using System.ComponentModel;
 using System.IO;
 using Gibbed.IO;
 using System.Runtime.Serialization;
 
 namespace Gibbed.Prototype.FileFormats
 {
-    [TypeConverter(typeof(VectorTypeConverter))]
     [DataContract(Namespace = "http://datacontract.gib.me/prototype")]
-    public class Vector3
+    public class Colour
     {
-        [DataMember(Name = "x", Order = 1)]
-        public float X { get; set; }
+        [DataMember(Name = "r", Order = 1)]
+        public float R { get; set; }
 
-        [DataMember(Name = "y", Order = 1)]
-        public float Y { get; set; }
+        [DataMember(Name = "g", Order = 2)]
+        public float G { get; set; }
 
-        [DataMember(Name = "z", Order = 1)]
-        public float Z { get; set; }
+        [DataMember(Name = "b", Order = 3)]
+        public float B { get; set; }
 
-        public Vector3()
-        {
-        }
-
-        public Vector3(Stream input)
-        {
-            this.Deserialize(input);
-        }
+        [DataMember(Name = "a", Order = 4)]
+        public float A { get; set; }
 
         public void Serialize(Stream output)
         {
-            output.WriteValueF32(this.X);
-            output.WriteValueF32(this.Y);
-            output.WriteValueF32(this.Z);
+            output.WriteValueF32(this.R);
+            output.WriteValueF32(this.G);
+            output.WriteValueF32(this.B);
+            output.WriteValueF32(this.A);
         }
 
         public void Deserialize(Stream input)
         {
-            this.X = input.ReadValueF32();
-            this.Y = input.ReadValueF32();
-            this.Z = input.ReadValueF32();
+            this.R = input.ReadValueF32();
+            this.G = input.ReadValueF32();
+            this.B = input.ReadValueF32();
+            this.A = input.ReadValueF32();
         }
     }
 }

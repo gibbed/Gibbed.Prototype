@@ -32,18 +32,10 @@ namespace Gibbed.Prototype.Edit3D
     {
         public Editor()
         {
-            InitializeComponent();
+            this.InitializeComponent();
         }
 
-        ~Editor()
-        {
-            if (this.ActiveStream != null)
-            {
-                this.ActiveStream.Close();
-            }
-        }
-
-        public Stream ActiveStream;
+        public string LastFileName;
         public Pure3DFile ActiveFile;
 
         private void OnFileOpen(object sender, EventArgs e)
@@ -53,17 +45,13 @@ namespace Gibbed.Prototype.Edit3D
                 return;
             }
 
-            if (this.ActiveStream != null)
+            this.LastFileName = this.openPure3DFileDialog.FileName;
+            using (var input = this.openPure3DFileDialog.OpenFile())
             {
-                this.ActiveStream.Close();
+                var pure3D = new Pure3DFile();
+                pure3D.Deserialize(input);
+                this.ActiveFile = pure3D;
             }
-
-            this.ActiveStream = File.Open(this.openPure3DFileDialog.FileName,
-                                          FileMode.Open,
-                                          FileAccess.ReadWrite,
-                                          FileShare.Read);
-            this.ActiveFile = new Pure3DFile();
-            this.ActiveFile.Deserialize(this.ActiveStream);
 
             this.UpdateNodeTree();
             this.SelectNothing();
@@ -71,14 +59,16 @@ namespace Gibbed.Prototype.Edit3D
 
         private void OnFileSave(object sender, EventArgs e)
         {
-            if (this.ActiveFile == null || this.ActiveStream == null)
+            if (this.ActiveFile == null ||
+                this.LastFileName == null)
             {
                 return;
             }
 
-            this.ActiveStream.SetLength(0);
-            this.ActiveFile.Serialize(this.ActiveStream);
-            this.ActiveStream.Flush();
+            using (var output = File.Create(this.LastFileName))
+            {
+                this.ActiveFile.Serialize(output);
+            }
 
             /*
             this.UpdateNodeTree();
@@ -94,7 +84,7 @@ namespace Gibbed.Prototype.Edit3D
                 Tag = node,
             };
 
-            foreach (FileFormats.Pure3D.BaseNode child in node.Children)
+            foreach (var child in node.Children)
             {
                 this.UpdateNode(child, treeNode.Nodes);
             }
@@ -112,7 +102,7 @@ namespace Gibbed.Prototype.Edit3D
                 Text = "Root",
             };
 
-            foreach (FileFormats.Pure3D.BaseNode node in this.ActiveFile.Nodes)
+            foreach (var node in this.ActiveFile.Nodes)
             {
                 this.UpdateNode(node, root.Nodes);
             }
@@ -179,12 +169,10 @@ namespace Gibbed.Prototype.Edit3D
                 return;
             }
 
-            Stream output = File.Open(this.exportNodeFileDialog.FileName,
-                                      FileMode.Create,
-                                      FileAccess.Write,
-                                      FileShare.Read);
-            node.Export(output);
-            output.Close();
+            using (var output = this.exportNodeFileDialog.OpenFile())
+            {
+                node.Export(output);
+            }
         }
 
         private void OnNodeImport(object sender, EventArgs e)
@@ -206,9 +194,10 @@ namespace Gibbed.Prototype.Edit3D
                 return;
             }
 
-            Stream input = File.Open(this.importNodeFileDialog.FileName, FileMode.Open, FileAccess.Read, FileShare.Read);
-            node.Import(input);
-            input.Close();
+            using (var input = this.importNodeFileDialog.OpenFile())
+            {
+                node.Import(input);
+            }
         }
     }
 }

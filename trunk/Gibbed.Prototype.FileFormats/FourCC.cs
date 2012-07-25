@@ -30,13 +30,25 @@ namespace Gibbed.Prototype.FileFormats
     public class FourCC
         // ReSharper restore InconsistentNaming
     {
-        private byte[] _Chars = new byte[]
-        {
-            0, 0, 0, 0
-        };
+        private readonly byte[] _Chars = new byte[] { 0, 0, 0, 0 };
 
         public FourCC()
         {
+        }
+
+        public FourCC(byte[] chars)
+        {
+            if (chars == null)
+            {
+                throw new ArgumentNullException("chars");
+            }
+
+            if (chars.Length != 4)
+            {
+                throw new ArgumentException("chars must have a length of 4");
+            }
+
+            Array.Copy(chars, this._Chars, 4);
         }
 
         public FourCC(Stream input)
@@ -51,16 +63,13 @@ namespace Gibbed.Prototype.FileFormats
 
         public static implicit operator FourCC(string s)
         {
-            if (s.Length != 4)
+            var chars = Encoding.ASCII.GetBytes(s);
+            if (chars.Length != 4)
             {
                 throw new InvalidCastException();
             }
 
-            byte[] bytes = Encoding.ASCII.GetBytes(s);
-            return new FourCC()
-            {
-                _Chars = bytes
-            };
+            return new FourCC(chars);
         }
 
         public override int GetHashCode()

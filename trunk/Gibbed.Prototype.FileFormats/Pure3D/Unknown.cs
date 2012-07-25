@@ -65,13 +65,12 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
 
         public override void Serialize(Stream output)
         {
-            output.Write(this.Data, 0, this.Data.Length);
+            throw new NotSupportedException();
         }
 
         public override void Deserialize(Stream input)
         {
-            this.Data = new byte[input.Length];
-            input.Read(this.Data, 0, Data.Length);
+            throw new NotSupportedException();
         }
 
         public override bool Exportable

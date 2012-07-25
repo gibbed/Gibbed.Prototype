@@ -30,7 +30,8 @@ namespace Gibbed.Prototype.FileFormats
 {
     public class Pure3DFile
     {
-        public List<Pure3D.BaseNode> Nodes;
+        public Endian Endian;
+        public List<Pure3D.BaseNode> Nodes = new List<Pure3D.BaseNode>();
 
         private void SerializeNode(Stream output, Pure3D.BaseNode node)
         {
@@ -69,122 +70,90 @@ namespace Gibbed.Prototype.FileFormats
             output.WriteFromStream(nodesStream, nodesStream.Length);
         }
 
-        #region TypeCache
-        // Lame ass way to do this but, it'll work for now.
-        private static class TypeCache
+        private static Pure3D.BaseNode DeserializeNode(Stream input, Endian endian, Pure3D.BaseNode parent)
         {
-            private static Dictionary<UInt32, Type> _Lookup;
+            var start = input.Position;
 
-            private static void BuildLookup()
+            var typeId = input.ReadValueU32(endian);
+            var headerSize = input.ReadValueU32(endian);
+            var totalSize = input.ReadValueU32(endian);
+
+            var current = Pure3D.NodeFactory.CreateNode(typeId);
+            
+            if (current != null)
             {
-                _Lookup = new Dictionary<uint, Type>();
-
-                foreach (Type type in Assembly.GetAssembly(typeof(TypeCache)).GetTypes())
-                {
-                    if (type.IsSubclassOf(typeof(Pure3D.BaseNode)) == true)
-                    {
-                        object[] attributes = type.GetCustomAttributes(typeof(Pure3D.KnownTypeAttribute), false);
-                        if (attributes.Length == 1)
-                        {
-                            var attribute = (Pure3D.KnownTypeAttribute)attributes[0];
-                            _Lookup.Add(attribute.Id, type);
-                        }
-                    }
-                }
-            }
-
-            public static Type GetType(UInt32 typeId)
-            {
-                if (_Lookup == null)
-                {
-                    BuildLookup();
-                }
-
-                if (_Lookup != null && _Lookup.ContainsKey(typeId))
-                {
-                    return _Lookup[typeId];
-                }
-
-                return null;
-            }
-        }
-        #endregion
-
-        private Pure3D.BaseNode DeserializeNode(Stream input, Pure3D.BaseNode parent)
-        {
-            UInt32 typeId = input.ReadValueU32();
-            UInt32 thisSize = input.ReadValueU32() - 12;
-            UInt32 childrenSize = input.ReadValueU32() - thisSize - 12;
-
-            Pure3D.BaseNode node;
-            Type type = TypeCache.GetType(typeId);
-
-            if (type != null)
-            {
-                try
-                {
-                    node = (Pure3D.BaseNode)Activator.CreateInstance(type);
-                }
-                catch (TargetInvocationException e)
-                {
-                    throw e.InnerException;
-                }
+                current.Deserialize(input);
             }
             else
             {
-                node = new Pure3D.Unknown(typeId);
+                var unknown = new Pure3D.Unknown(typeId);
+                unknown.Data = input.ReadBytes(headerSize - 12);
+                current = unknown;
             }
 
-            node.ParentNode = parent;
-            node.ParentFile = this;
+            current.ParentNode = parent;
 
-            Stream nodeStream = input.ReadToMemoryStream(thisSize);
-            Stream childrenStream = input.ReadToMemoryStream(childrenSize);
-
-            while (childrenStream.Position < childrenStream.Length)
+            if (input.Position != start + headerSize)
             {
-                Pure3D.BaseNode childNode = this.DeserializeNode(childrenStream, node);
-                node.Children.Add(childNode);
+                throw new FormatException();
             }
 
-            node.Deserialize(nodeStream);
+            var end = start + totalSize;
 
-            if (nodeStream.Position != nodeStream.Length)
+            while (input.Position < end)
             {
-                throw new Exception();
+                var child = DeserializeNode(input, endian, current);
+                current.Children.Add(child);
             }
 
-            return node;
+            if (input.Position != end)
+            {
+                throw new FormatException();
+            }
+
+            return current;
         }
+
+        public const uint Signature = 0xFF443350; // 'P3D\xFF'
 
         public void Deserialize(Stream input)
         {
-            UInt32 magic = input.ReadValueU32();
+            var start = input.Position;
 
-            if (magic == 0x503344FF)
-            {
-                throw new FormatException("no support for big-endian Pure3D files");
-            }
-
-            if (magic != 0xFF443350)
+            var magic = input.ReadValueU32(Endian.Little);
+            if (magic != Signature &&
+                magic.Swap() != Signature)
             {
                 throw new FormatException("not a Pure3D file");
             }
+            var endian = magic == Signature ? Endian.Little : Endian.Big;
 
-            UInt32 headerSize = input.ReadValueU32();
+            var headerSize = input.ReadValueU32(endian);
             if (headerSize != 12)
             {
                 throw new FormatException("invalid header size");
             }
 
-            UInt32 dataSize = input.ReadValueU32();
-
-            Stream nodesStream = input.ReadToMemoryStream(dataSize - 12);
-            this.Nodes = new List<Pure3D.BaseNode>();
-            while (nodesStream.Position < nodesStream.Length)
+            var totalSize = input.ReadValueU32(endian);
+            if (start + totalSize > input.Length)
             {
-                this.Nodes.Add(this.DeserializeNode(nodesStream, null));
+                throw new FormatException();
             }
+
+            var end = start + totalSize;
+
+            this.Nodes.Clear();
+            while (input.Position < end)
+            {
+                this.Nodes.Add(DeserializeNode(input, endian, null));
+            }
+
+            if (input.Position != end)
+            {
+                throw new FormatException();
+            }
+
+            this.Endian = endian;
         }
     }
 }
