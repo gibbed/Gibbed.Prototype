@@ -95,8 +95,6 @@ namespace Gibbed.Prototype.Unpack
             var inputPath = Path.GetFullPath(extras[0]);
             var outputPath = extras.Count > 1 ? extras[1] : Path.ChangeExtension(inputPath, null) + "_unpack";
 
-            var block = new byte[0x40000];
-
             using (var input = File.OpenRead(inputPath))
             {
                 var cement = new CementFile();
@@ -114,6 +112,7 @@ namespace Gibbed.Prototype.Unpack
 
                     bool unpacking = false;
                     string entryName;
+
                     if (metadata == null)
                     {
                         entryName = Path.Combine("__UNKNOWN", entry.NameHash.ToString("X8"));
@@ -177,23 +176,11 @@ namespace Gibbed.Prototype.Unpack
 
                                 if (unknown1 != 0 || unknown2 != 0)
                                 {
-                                    throw new Exception();
+                                    throw new FormatException();
                                 }
 
                                 var zlib = new InflaterInputStream(input);
-
-                                int left = uncompressedSize;
-                                while (left > 0)
-                                {
-                                    int read = zlib.Read(block, 0, Math.Min(block.Length, left));
-                                    if (read == 0)
-                                    {
-                                        break;
-                                    }
-
-                                    output.Write(block, 0, read);
-                                    left -= read;
-                                }
+                                output.WriteFromStream(zlib, uncompressedSize);
                             }
                         }
                     }

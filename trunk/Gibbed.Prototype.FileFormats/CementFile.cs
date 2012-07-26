@@ -43,7 +43,7 @@ namespace Gibbed.Prototype.FileFormats
 
         public Cement.Metadata GetMetadata(UInt32 hash)
         {
-            return this.Metadatas.SingleOrDefault(candidate => candidate.Name.PrototypeHash() == hash);
+            return this.Metadatas.SingleOrDefault(candidate => candidate.Name.HashFileName() == hash);
         }
 
         public void Serialize(Stream output)
