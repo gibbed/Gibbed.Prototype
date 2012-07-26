@@ -71,7 +71,6 @@
   <ItemGroup>
     <Compile Include="CementFile.cs" />
     <Compile Include="Cement\Entry.cs" />
-    <Compile Include="Cement\Header.cs" />
     <Compile Include="Cement\Metadata.cs" />
     <Compile Include="Colour.cs" />
     <Compile Include="FourCC.cs" />

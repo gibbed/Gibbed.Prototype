@@ -28,16 +28,14 @@ namespace Gibbed.Prototype.FileFormats
 {
     public static class StringHelpers
     {
-        public static uint PrototypeHash(this string input, uint seed)
+        public static uint HashFileName(this string input, uint seed)
         {
-            if (input.StartsWith("\\") == true)
+            if (input.StartsWith(@"\") == true)
             {
                 input = input.Substring(1);
             }
 
-            byte[] data = Encoding.ASCII.GetBytes(input);
-
-            foreach (byte t in data)
+            foreach (var t in Encoding.ASCII.GetBytes(input))
             {
                 seed = (seed << 5) - seed;
 
@@ -54,9 +52,9 @@ namespace Gibbed.Prototype.FileFormats
             return seed;
         }
 
-        public static UInt32 PrototypeHash(this string input)
+        public static uint HashFileName(this string input)
         {
-            return input.PrototypeHash(0);
+            return input.HashFileName(0);
         }
 
         public static ulong HashX65599(this string input)
