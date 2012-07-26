@@ -34,13 +34,13 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
         public override void Serialize(Stream output)
         {
             output.WriteValueU32(this.Unknown1);
-            output.WriteStringBASCII(this.ExpressionMixerName);
+            output.WriteStringAlignedU8(this.ExpressionMixerName);
         }
 
         public override void Deserialize(Stream input)
         {
             this.Unknown1 = input.ReadValueU32();
-            this.ExpressionMixerName = input.ReadStringBASCII();
+            this.ExpressionMixerName = input.ReadStringAlignedU8();
         }
     }
 }

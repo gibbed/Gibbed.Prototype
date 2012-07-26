@@ -53,7 +53,7 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
         public override void Deserialize(Stream input)
         {
             this.Version = input.ReadValueU32();
-            this.Name = input.ReadStringBASCII();
+            this.Name = input.ReadStringAlignedU8();
             this.Count = input.ReadValueU32();
 
             this.Unknown3 = new float[this.Count];

@@ -45,17 +45,17 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
 
         public override void Serialize(Stream output)
         {
-            output.WriteStringBASCII(this.Name);
+            output.WriteStringAlignedU8(this.Name);
             output.WriteValueU32(this.Unknown2);
-            output.WriteStringBASCII(this.ShaderTemplateName);
+            output.WriteStringAlignedU8(this.ShaderTemplateName);
             output.WriteValueU32(this.Unknown4);
         }
 
         public override void Deserialize(Stream input)
         {
-            this.Name = input.ReadStringBASCII();
+            this.Name = input.ReadStringAlignedU8();
             this.Unknown2 = input.ReadValueU32();
-            this.ShaderTemplateName = input.ReadStringBASCII();
+            this.ShaderTemplateName = input.ReadStringAlignedU8();
             this.Unknown4 = input.ReadValueU32();
         }
     }

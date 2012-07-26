@@ -31,6 +31,17 @@ namespace Gibbed.Prototype.FileFormats.Cement
         public uint Offset;
         public uint Size;
 
+        public int ByteSize
+        {
+            get
+            {
+                return
+                    4 + // NameHash
+                    4 + // Offset
+                    4; // Size
+            }
+        }
+
         public void Serialize(Stream output, Endian endian)
         {
             output.WriteValueU32(this.NameHash, endian);

@@ -20,6 +20,7 @@
  *    distribution.
  */
 
+using System;
 using System.IO;
 using System.Text;
 using Gibbed.IO;
@@ -28,76 +29,70 @@ namespace Gibbed.Prototype.FileFormats
 {
     public static class StreamHelpers
     {
-        public static string ReadStringAlignedASCII(this Stream stream)
+        public static string ReadStringU32(this Stream stream, Endian endian)
         {
-            int length = stream.ReadValueS32();
-
-            if (length == 0)
-            {
-                return null;
-            }
-
-            var data = new byte[length];
-            stream.ReadAligned(data, 0, data.Length, 4);
-            return Encoding.ASCII.GetString(data);
-        }
-
-        public static string ReadStringBASCII(this Stream stream)
-        {
-            byte size = stream.ReadValueU8();
-
+            var size = stream.ReadValueU32(endian);
             if (size == 0)
             {
                 return "";
             }
 
-            var data = new byte[size];
-            stream.Read(data, 0, data.Length);
-
-            int length = data.Length;
-            for (; length > 0; length--)
-            {
-                if (data[length - 1] != 0)
-                {
-                    break;
-                }
-            }
-
-            return Encoding.ASCII.GetString(data, 0, length);
+            return stream.ReadString(size, true, Encoding.ASCII);
         }
 
-        public static void WriteStringBASCII(this Stream stream, string value)
+        public static void WriteStringU32(this Stream stream, string value, Endian endian)
         {
-            if (value.Length == 0)
+            if (string.IsNullOrEmpty(value) == true)
+            {
+                stream.WriteValueU32(0, endian);
+                return;
+            }
+
+            var byteCount = Encoding.ASCII.GetByteCount(value);
+            stream.WriteValueS32(byteCount + 1, endian);
+            stream.WriteStringZ(value, Encoding.ASCII);
+        }
+
+        public static string ReadStringAlignedU8(this Stream stream)
+        {
+            var size = stream.ReadValueU8();
+            if (size == 0)
+            {
+                return "";
+            }
+
+            return stream.ReadString(size, true, Encoding.ASCII);
+        }
+
+        public static void WriteStringAlignedU8(this Stream stream, string value)
+        {
+            if (string.IsNullOrEmpty(value) == true)
             {
                 stream.WriteValueU8(0);
                 return;
             }
 
-            if (value.Length > 255)
+            var byteCount = Encoding.ASCII.GetByteCount(value);
+            
+            if (byteCount > 255)
             {
-                value = value.Substring(0, 255);
+                throw new ArgumentException("value is too long", "value");
             }
 
-            int padding = value.Length % 4;
+            int padding = 4 - (byteCount % 4);
             if (padding > 0)
             {
-                padding = 4 - padding;
-                if (value.Length + padding >= 255)
+                if (byteCount + padding > 255)
                 {
-                    padding = 255 - value.Length;
+                    throw new ArgumentException("value is too long (due to padding)", "value");
                 }
             }
 
-            stream.WriteValueU8((byte)(value.Length + padding));
-            byte[] data = Encoding.ASCII.GetBytes(value);
-            stream.Write(data, 0, data.Length);
+            stream.WriteValueU8((byte)(byteCount + padding));
 
-            if (padding > 0)
-            {
-                var junk = new byte[padding];
-                stream.Write(junk, 0, junk.Length);
-            }
+            var data = Encoding.ASCII.GetBytes(value);
+            Array.Resize(ref data, byteCount + padding);
+            stream.Write(data, 0, data.Length);
         }
     }
 }

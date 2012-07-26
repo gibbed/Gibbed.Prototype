@@ -48,7 +48,7 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
         public override void Serialize(Stream output)
         {
             output.WriteValueU32(this.Version);
-            output.WriteStringBASCII(this.Name);
+            output.WriteStringAlignedU8(this.Name);
             this.AnimationType.Serialize(output);
             output.WriteValueF32(this.NumFrames);
             output.WriteValueF32(this.FrameRate);
@@ -58,7 +58,7 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
         public override void Deserialize(Stream input)
         {
             this.Version = input.ReadValueU32();
-            this.Name = input.ReadStringBASCII();
+            this.Name = input.ReadStringAlignedU8();
             this.AnimationType = new FourCC(input);
             this.NumFrames = input.ReadValueF32();
             this.FrameRate = input.ReadValueF32();
