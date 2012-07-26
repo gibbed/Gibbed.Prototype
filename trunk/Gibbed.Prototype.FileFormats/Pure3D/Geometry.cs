@@ -44,14 +44,14 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
 
         public override void Serialize(Stream output)
         {
-            output.WriteStringBASCII(this.Name);
+            output.WriteStringAlignedU8(this.Name);
             output.WriteValueU32(this.Version);
             output.WriteValueU32(this.NumPrimitiveGroups);
         }
 
         public override void Deserialize(Stream input)
         {
-            this.Name = input.ReadStringBASCII();
+            this.Name = input.ReadStringAlignedU8();
             this.Version = input.ReadValueU32();
             this.NumPrimitiveGroups = input.ReadValueU32();
         }

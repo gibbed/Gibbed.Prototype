@@ -38,6 +38,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Misc", "Misc", "{163B6FFA-A
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Archives", "Archives", "{1A093815-4EAD-4F05-97A9-24FEC2A23BB0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gibbed.Prototype.Pack", "Gibbed.Prototype.Pack\Gibbed.Prototype.Pack.csproj", "{9FBF791D-B2EF-4A6B-AD76-4CE187705AA1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -158,6 +160,16 @@ Global
 		{FCA76938-AF02-4460-B52B-559D1ECF1E47}.Release|Mixed Platforms.Build.0 = Release|x86
 		{FCA76938-AF02-4460-B52B-559D1ECF1E47}.Release|x86.ActiveCfg = Release|x86
 		{FCA76938-AF02-4460-B52B-559D1ECF1E47}.Release|x86.Build.0 = Release|x86
+		{9FBF791D-B2EF-4A6B-AD76-4CE187705AA1}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{9FBF791D-B2EF-4A6B-AD76-4CE187705AA1}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{9FBF791D-B2EF-4A6B-AD76-4CE187705AA1}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{9FBF791D-B2EF-4A6B-AD76-4CE187705AA1}.Debug|x86.ActiveCfg = Debug|x86
+		{9FBF791D-B2EF-4A6B-AD76-4CE187705AA1}.Debug|x86.Build.0 = Debug|x86
+		{9FBF791D-B2EF-4A6B-AD76-4CE187705AA1}.Release|Any CPU.ActiveCfg = Release|x86
+		{9FBF791D-B2EF-4A6B-AD76-4CE187705AA1}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{9FBF791D-B2EF-4A6B-AD76-4CE187705AA1}.Release|Mixed Platforms.Build.0 = Release|x86
+		{9FBF791D-B2EF-4A6B-AD76-4CE187705AA1}.Release|x86.ActiveCfg = Release|x86
+		{9FBF791D-B2EF-4A6B-AD76-4CE187705AA1}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -177,5 +189,6 @@ Global
 		{1A093815-4EAD-4F05-97A9-24FEC2A23BB0} = {1A991195-A835-4219-937F-78FA5128781E}
 		{9686AD77-C4A0-4E9F-A96E-10924D5DD19A} = {163B6FFA-A8EC-48AA-A261-7F281218C24C}
 		{B2136567-CE11-4357-AF76-12F892467CE3} = {1A093815-4EAD-4F05-97A9-24FEC2A23BB0}
+		{9FBF791D-B2EF-4A6B-AD76-4CE187705AA1} = {1A093815-4EAD-4F05-97A9-24FEC2A23BB0}
 	EndGlobalSection
 EndGlobal

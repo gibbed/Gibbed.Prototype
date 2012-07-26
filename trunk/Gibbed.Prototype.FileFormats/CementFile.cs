@@ -36,19 +36,104 @@ namespace Gibbed.Prototype.FileFormats
         public byte MajorVersion;
         public byte MinorVersion;
 
-        public List<Cement.Entry> Entries
-            = new List<Cement.Entry>();
-        public List<Cement.Metadata> Metadatas
-            = new List<Cement.Metadata>();
+        public readonly List<Cement.Entry> Entries = new List<Cement.Entry>();
+        public readonly List<Cement.Metadata> Metadatas = new List<Cement.Metadata>();
 
         public Cement.Metadata GetMetadata(UInt32 hash)
         {
             return this.Metadatas.SingleOrDefault(candidate => candidate.Name.HashFileName() == hash);
         }
 
+        public int EstimateHeaderSize()
+        {
+            int size = 0;
+
+            size += 24; // magic
+            size += 8; // padding
+            size += 1 + 1 + 1 + 1 + 4 + 4 + 4 + 4 + 4 + 4; // header
+            
+            size += this.EstimateEntryTableSize();
+            size = size.Align(2048);
+
+            size += this.EstimateMetadataTableSize();
+            size = size.Align(2048);
+
+            return size;
+        }
+
+        public int EstimateEntryTableSize()
+        {
+            return this.Entries.Sum(e => e.ByteSize);
+        }
+
+        public int EstimateMetadataTableSize()
+        {
+            return 4 + 4 + this.Metadatas.Sum(e => e.ByteSize);
+        }
+
         public void Serialize(Stream output)
         {
-            throw new NotImplementedException();
+            var endian = this.Endian;
+
+            output.WriteString("ATG CORE CEMENT LIBRARY", 24, Encoding.ASCII);
+            output.Seek(8, SeekOrigin.Current);
+            
+            output.WriteValueU8(2); // majorVersion
+            output.WriteValueU8(1); // minorVersion
+
+            switch (endian)
+            {
+                case Endian.Little:
+                {
+                    output.WriteValueB8(false);
+                    break;
+                }
+
+                case Endian.Big:
+                {
+                    output.WriteValueB8(true);
+                    break;
+                }
+
+                default:
+                {
+                    throw new InvalidOperationException("unsupported endian");
+                }
+            }
+
+            output.WriteValueU8(1); // unknown1
+
+            var offset = 0x3C;
+            
+            var indexSize = this.EstimateEntryTableSize();
+            output.WriteValueS32(offset, endian); // indexOffset
+            output.WriteValueS32(indexSize, endian); // indexSize
+            offset += indexSize;
+            offset = offset.Align(2048);
+
+            var metadataSize = this.EstimateMetadataTableSize();
+            output.WriteValueS32(offset, endian); // metadataOffset
+            output.WriteValueS32(metadataSize, endian); // metadataSize
+            //offset += metadataSize;
+
+            output.WriteValueU32(0, endian); // unknown2
+            output.WriteValueS32(this.Entries.Count, endian); // entryCount
+
+            foreach (var entry in this.Entries)
+            {
+                entry.Serialize(output, endian);
+            }
+
+            output.Seek(output.Position.Align(2048), SeekOrigin.Begin);
+
+            output.WriteValueU32(2048, Endian.Little);
+            output.WriteValueU32(0, Endian.Little);
+            foreach (var metadata in this.Metadatas)
+            {
+                metadata.Serialize(output, endian);
+            }
+
+            output.Seek(output.Position.Align(2048), SeekOrigin.Begin);
         }
 
         public void Deserialize(Stream input)

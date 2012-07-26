@@ -50,8 +50,8 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
         public override void Serialize(Stream output)
         {
             output.WriteValueU32(this.Version);
-            output.WriteStringBASCII(this.Name);
-            output.WriteStringBASCII(this.NewShaderName);
+            output.WriteStringAlignedU8(this.Name);
+            output.WriteStringAlignedU8(this.NewShaderName);
             output.WriteValueU32(this.CutOffEnabled);
             output.WriteValueU32(this.ZTest);
             output.WriteValueU32(this.ZWrite);
@@ -62,8 +62,8 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
         public override void Deserialize(Stream input)
         {
             this.Version = input.ReadValueU32();
-            this.Name = input.ReadStringBASCII();
-            this.NewShaderName = input.ReadStringBASCII();
+            this.Name = input.ReadStringAlignedU8();
+            this.NewShaderName = input.ReadStringAlignedU8();
             this.CutOffEnabled = input.ReadValueU32();
             this.ZTest = input.ReadValueU32();
             this.ZWrite = input.ReadValueU32();

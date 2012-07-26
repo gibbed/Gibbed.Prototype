@@ -57,7 +57,7 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
 
         public override void Serialize(Stream output)
         {
-            output.WriteStringBASCII(this.Name);
+            output.WriteStringAlignedU8(this.Name);
             output.WriteValueU32(this.Unknown02);
             output.WriteValueU32(this.NumPasses);
             output.WriteValueU32(this.Unknown04);
@@ -77,7 +77,7 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
 
         public override void Deserialize(Stream input)
         {
-            this.Name = input.ReadStringBASCII();
+            this.Name = input.ReadStringAlignedU8();
             this.Unknown02 = input.ReadValueU32();
             this.NumPasses = input.ReadValueU32();
             this.Unknown04 = input.ReadValueU32();

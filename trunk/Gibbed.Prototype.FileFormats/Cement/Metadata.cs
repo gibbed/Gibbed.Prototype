@@ -33,14 +33,28 @@ namespace Gibbed.Prototype.FileFormats.Cement
         public uint Alignment;
         public uint Unknown2;
         public string Name;
-        public byte[] Unknown3;
+        public readonly byte[] Unknown3 = new byte[3];
+
+        public int ByteSize
+        {
+            get
+            {
+                return
+                    4 + // TypeHash
+                    4 + // Alignment
+                    4 + // Unknown2
+                    4 + Encoding.ASCII.GetByteCount(this.Name) + 1 + // Name
+                    3; // Unknown3
+            }
+        }
 
         public void Serialize(Stream output, Endian endian)
         {
             output.WriteValueU32(this.TypeHash, Endian.Little);
             output.WriteValueU32(this.Alignment, Endian.Little);
-            output.WriteValueU32(0, Endian.Little);
-            throw new NotImplementedException();
+            output.WriteValueU32(0, Endian.Little); // unknown2
+            output.WriteStringU32(this.Name, endian);
+            output.WriteBytes(this.Unknown3);
         }
 
         public void Deserialize(Stream input, Endian endian)
@@ -54,12 +68,16 @@ namespace Gibbed.Prototype.FileFormats.Cement
                 throw new FormatException();
             }
 
-            this.Name = input.ReadString(input.ReadValueU32(Endian.Little), true, Encoding.ASCII);
+            this.Name = input.ReadStringU32(Endian.Little);
             
-            var unknown3 = input.ReadBytes(3);
-            if (unknown3[0] != 0 ||
-                unknown3[1] != 0 ||
-                unknown3[2] != 0)
+            if (input.Read(this.Unknown3, 0, 3) != 3)
+            {
+                throw new EndOfStreamException();
+            }
+
+            if (this.Unknown3[0] != 0 ||
+                this.Unknown3[1] != 0 ||
+                this.Unknown3[2] != 0)
             {
                 throw new FormatException();
             }

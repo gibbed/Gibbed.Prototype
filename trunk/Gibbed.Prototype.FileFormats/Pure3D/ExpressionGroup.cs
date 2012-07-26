@@ -47,8 +47,8 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
         public override void Serialize(Stream output)
         {
             output.WriteValueU32(this.Version);
-            output.WriteStringBASCII(this.Name);
-            output.WriteStringBASCII(this.CompositeDrawableName);
+            output.WriteStringAlignedU8(this.Name);
+            output.WriteStringAlignedU8(this.CompositeDrawableName);
             output.WriteValueS32(this.Unknown4.Length);
             // ReSharper disable ForCanBeConvertedToForeach
             for (int i = 0; i < this.Unknown4.Length; i++) // ReSharper restore ForCanBeConvertedToForeach
@@ -60,8 +60,8 @@ namespace Gibbed.Prototype.FileFormats.Pure3D
         public override void Deserialize(Stream input)
         {
             this.Version = input.ReadValueU32();
-            this.Name = input.ReadStringBASCII();
-            this.CompositeDrawableName = input.ReadStringBASCII();
+            this.Name = input.ReadStringAlignedU8();
+            this.CompositeDrawableName = input.ReadStringAlignedU8();
 
             this.Count = input.ReadValueS32();
             this.Unknown4 = new uint[this.Count];
